@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "test-coverage-mcp"
 version = "0.0.0"
 description = "🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments."
-authors = [{ name = "test", email = "test@test.com" }]
+authors = [{ name = "Chisanan232", email = "chi10211201@cycu.org.tw" }]
 requires-python = ">=3.12,<4.0"
 readme = "README.md"
 license = { file = "LICENSE" }
