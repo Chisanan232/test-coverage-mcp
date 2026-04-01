@@ -11,9 +11,15 @@ requires-python = ">=3.12,<4.0"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = [
+    "test",
+    "test-coverage",
+    "coverage-report",
+    "test-coverage-report",
     "mcp",
     "mcp-server",
-    "template",
+    "test-coverage-mcp",
+    "test-coverage-mcp-server",
+    "provider-extensible",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
