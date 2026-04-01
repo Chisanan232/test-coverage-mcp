@@ -6,7 +6,7 @@ import remarkMdxCodeMeta from 'remark-mdx-code-meta';
 
 const config: Config = {
   title: 'test-coverage-mcp',
-  tagline: '🐍 Just a template of Python bases and UV managed MCP server project.',
+  tagline: '🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.',
   favicon: 'img/python_logo_icon.png',
 
   // Set the production url of your site here

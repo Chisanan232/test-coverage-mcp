@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "test-coverage-mcp"
 version = "0.0.0"
-description = "🐍 Just a template of Python bases and UV managed MCP server project."
+description = "🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments."
 authors = [{ name = "test", email = "test@test.com" }]
 requires-python = ">=3.12,<4.0"
 readme = "README.md"
