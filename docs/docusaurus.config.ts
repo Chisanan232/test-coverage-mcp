@@ -5,14 +5,14 @@ import remarkGfm from 'remark-gfm';
 import remarkMdxCodeMeta from 'remark-mdx-code-meta';
 
 const config: Config = {
-  title: 'mcp-server-template',
+  title: 'test-coverage-mcp',
   tagline: '🐍 Just a template of Python bases and UV managed MCP server project.',
   favicon: 'img/python_logo_icon.png',
 
   // Set the production url of your site here
   url: 'https://chisanan232.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/Template-Python-Base-MCP-Server/',
+  baseUrl: '/test-coverage-mcp/',
   projectName: 'chisanan232.github.io',
   organizationName: 'Chisanan232',
   trailingSlash: false,
@@ -66,7 +66,7 @@ const config: Config = {
         showLastUpdateTime: true,
         showLastUpdateAuthor: true,
         editUrl:
-          'https://github.com/Chisanan232/Template-Python-Base-MCP-Server/tree/master/docs/',
+          'https://github.com/Chisanan232/test-coverage-mcp/tree/master/docs/',
         versions: {
           current: {
             label: 'Next',
@@ -90,7 +90,7 @@ const config: Config = {
         showLastUpdateTime: true,
         showLastUpdateAuthor: true,
         editUrl:
-          'https://github.com/Chisanan232/Template-Python-Base-MCP-Server/tree/master/docs/',
+          'https://github.com/Chisanan232/test-coverage-mcp/tree/master/docs/',
         versions: {
           current: {
             label: 'Next',
@@ -111,7 +111,7 @@ const config: Config = {
         routeBasePath: 'blog',
         showReadingTime: true,
         editUrl:
-          'https://github.com/Chisanan232/Template-Python-Base-MCP-Server/tree/master/docs/',
+          'https://github.com/Chisanan232/test-coverage-mcp/tree/master/docs/',
       },
     ],
     [
@@ -182,7 +182,7 @@ const config: Config = {
           dropdownItemsAfter: [],
         },
         {
-          href: 'https://github.com/Chisanan232/Template-Python-Base-MCP-Server',
+          href: 'https://github.com/Chisanan232/test-coverage-mcp',
           label: 'GitHub',
           position: 'right',
         },
@@ -213,11 +213,11 @@ const config: Config = {
           items: [
             {
               label: 'GitHub Issues',
-              href: 'https://github.com/Chisanan232/Template-Python-Base-MCP-Server/issues',
+              href: 'https://github.com/Chisanan232/test-coverage-mcp/issues',
             },
             {
               label: 'GitHub Discussions',
-              href: 'https://github.com/Chisanan232/Template-Python-Base-MCP-Server/discussions',
+              href: 'https://github.com/Chisanan232/test-coverage-mcp/discussions',
             },
           ],
         },
@@ -226,12 +226,12 @@ const config: Config = {
           items: [
             {
               label: 'GitHub Repository',
-              href: 'https://github.com/Chisanan232/Template-Python-Base-MCP-Server',
+              href: 'https://github.com/Chisanan232/test-coverage-mcp',
             },
           ],
         },
       ],
-      copyright: `Copyright ${new Date().getFullYear()} - PRESENT, mcp-server-template is owned by <a href="https://github.com/Chisanan232">@Chisanan232</a>.<br />Built with <a href="https://docusaurus.io/">Docusaurus</a>.`,
+      copyright: `Copyright ${new Date().getFullYear()} - PRESENT, test-coverage-mcp is owned by <a href="https://github.com/Chisanan232">@Chisanan232</a>.<br />Built with <a href="https://docusaurus.io/">Docusaurus</a>.`,
     },
     prism: {
       theme: prismThemes.github,
@@ -247,7 +247,7 @@ const config: Config = {
       tagName: 'link',
       attributes: {
         rel: 'canonical',
-        href: 'https://chisanan232.github.io/Template-Python-Base-MCP-Server/docs/introduction',
+        href: 'https://chisanan232.github.io/test-coverage-mcp/docs/introduction',
       },
     },
   ],

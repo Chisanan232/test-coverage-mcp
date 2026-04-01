@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mcp-server-template"
+name = "test-coverage-mcp"
 version = "0.0.0"
 description = "🐍 Just a template of Python bases and UV managed MCP server project."
 authors = [{ name = "test", email = "test@test.com" }]
@@ -30,11 +30,11 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/Chisanan232/Template-Python-Base-MCP-Server"
-Repository = "https://github.com/Chisanan232/Template-Python-Base-MCP-Server"
+Homepage = "https://github.com/Chisanan232/test-coverage-mcp"
+Repository = "https://github.com/Chisanan232/test-coverage-mcp"
 
 [project.scripts]
-mcp-server-template = "src.entry:main"
+test-coverage-mcp = "src.entry:main"
 
 [project.optional-dependencies]
 # MCP core feature set supports SSE/Streamable transports (but doesn't support integrated mode)
