@@ -292,7 +292,7 @@ The integrated server manages dependencies:
 .. code-block:: python
 
     from src.integrate import integrated_factory
-    from src.mcp import mcp_factory
+    from src.mcp_server import mcp_factory
     from src.web_server import web_factory
 
     # Create integrated server

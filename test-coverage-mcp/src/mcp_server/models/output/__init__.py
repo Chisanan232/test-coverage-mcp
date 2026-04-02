@@ -105,8 +105,8 @@ To add custom MCP tool output models:
    .. code-block:: python
 
        from fastmcp import Tool
-       from src.mcp.models.input.calculator_input import CalculatorInput
-       from src.mcp.models.output.calculator_output import CalculatorOutput
+       from src.mcp_server.models.input.calculator_input import CalculatorInput
+       from src.mcp_server.models.output.calculator_output import CalculatorOutput
 
        @mcp_factory.get().tool()
        def calculate(input: CalculatorInput) -> CalculatorOutput:
@@ -218,7 +218,7 @@ Test output models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.mcp.models.output.calculator_output import CalculatorOutput
+    from src.mcp_server.models.output.calculator_output import CalculatorOutput
 
     def test_calculator_output_valid():
         output = CalculatorOutput(
@@ -247,7 +247,7 @@ Output models support JSON serialization for MCP protocol:
 
 .. code-block:: python
 
-    from src.mcp.models.output.calculator_output import CalculatorOutput
+    from src.mcp_server.models.output.calculator_output import CalculatorOutput
 
     # Create output
     output = CalculatorOutput(result=4.0, expression="2 + 2")

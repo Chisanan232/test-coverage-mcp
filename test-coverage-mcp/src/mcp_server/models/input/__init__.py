@@ -104,8 +104,8 @@ To add custom MCP tool input models:
    .. code-block:: python
 
        from fastmcp import Tool
-       from src.mcp.models.input.calculator_input import CalculatorInput
-       from src.mcp.models.output.calculator_output import CalculatorOutput
+       from src.mcp_server.models.input.calculator_input import CalculatorInput
+       from src.mcp_server.models.output.calculator_output import CalculatorOutput
 
        @mcp_factory.get().tool()
        def calculate(input: CalculatorInput) -> CalculatorOutput:
@@ -215,7 +215,7 @@ Test input models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.mcp.models.input.calculator_input import CalculatorInput
+    from src.mcp_server.models.input.calculator_input import CalculatorInput
 
     def test_calculator_input_valid():
         input_data = CalculatorInput(expression="2 + 2")
@@ -238,7 +238,7 @@ Input models provide clear validation errors:
 .. code-block:: python
 
     from pydantic import ValidationError
-    from src.mcp.models.input.calculator_input import CalculatorInput
+    from src.mcp_server.models.input.calculator_input import CalculatorInput
 
     try:
         input_data = CalculatorInput(expression=123)

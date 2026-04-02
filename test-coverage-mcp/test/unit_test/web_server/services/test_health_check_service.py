@@ -54,7 +54,7 @@ class TestHealthCheckService:
         assert result.uptime_seconds >= 0
 
     @pytest.mark.asyncio
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_mcp_server_health_success(
         self, mock_mcp_factory: MagicMock, service: HealthCheckService
     ) -> None:
@@ -74,7 +74,7 @@ class TestHealthCheckService:
         assert result.response_time_ms >= 0
 
     @pytest.mark.asyncio
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_mcp_server_health_unavailable(
         self, mock_mcp_factory: MagicMock, service: HealthCheckService
     ) -> None:
@@ -91,7 +91,7 @@ class TestHealthCheckService:
         assert result.response_time_ms is not None
 
     @pytest.mark.asyncio
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_mcp_server_health_exception(
         self, mock_mcp_factory: MagicMock, service: HealthCheckService
     ) -> None:
@@ -163,7 +163,7 @@ class TestHealthCheckService:
 
     @pytest.mark.asyncio
     @patch("src.web_server.app.web_factory")
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_detailed_health_all_healthy(
         self,
         mock_mcp_factory: MagicMock,
@@ -187,7 +187,7 @@ class TestHealthCheckService:
 
     @pytest.mark.asyncio
     @patch("src.web_server.app.web_factory")
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_detailed_health_one_unhealthy(
         self,
         mock_mcp_factory: MagicMock,
@@ -206,7 +206,7 @@ class TestHealthCheckService:
 
     @pytest.mark.asyncio
     @patch("src.web_server.app.web_factory")
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_detailed_health_all_unhealthy(
         self,
         mock_mcp_factory: MagicMock,
@@ -236,7 +236,7 @@ class TestHealthCheckService:
 
     @pytest.mark.asyncio
     @patch("src.web_server.app.web_factory")
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_readiness_all_ready(
         self,
         mock_mcp_factory: MagicMock,
@@ -260,7 +260,7 @@ class TestHealthCheckService:
 
     @pytest.mark.asyncio
     @patch("src.web_server.app.web_factory")
-    @patch("src.mcp.app.mcp_factory")
+    @patch("src.mcp_server.app.mcp_factory")
     async def test_check_readiness_not_ready(
         self,
         mock_mcp_factory: MagicMock,

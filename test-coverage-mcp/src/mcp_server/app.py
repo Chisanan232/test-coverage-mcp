@@ -19,7 +19,7 @@ Usage Examples
 
     .. code-block:: python
 
-        from src.mcp.app import mcp_factory
+        from src.mcp_server.app import mcp_factory
 
         # Get the default instance (already created)
         mcp_server = mcp_factory.get()
@@ -33,7 +33,7 @@ Usage Examples
 
     .. code-block:: python
 
-        from src.mcp.app import mcp_factory
+        from src.mcp_server.app import mcp_factory
 
         mcp_server = mcp_factory.get()
         sse_app = mcp_server.sse_app(mount_path="/mcp")
@@ -103,7 +103,7 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
 
     .. code-block:: python
 
-        from src.mcp.app import mcp_factory
+        from src.mcp_server.app import mcp_factory
 
         # Create the server (usually done at module import)
         mcp_server = mcp_factory.create()
@@ -150,7 +150,7 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
         --------
         .. code-block:: python
 
-            from src.mcp.app import mcp_factory
+            from src.mcp_server.app import mcp_factory
 
             mcp_server = mcp_factory.create()
             print(mcp_server.name)  # "TemplateMCPServer"
@@ -183,7 +183,7 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
         --------
         .. code-block:: python
 
-            from src.mcp.app import mcp_factory
+            from src.mcp_server.app import mcp_factory
 
             mcp_server = mcp_factory.get()
 
@@ -211,7 +211,7 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
         --------
         .. code-block:: python
 
-            from src.mcp.app import mcp_factory
+            from src.mcp_server.app import mcp_factory
 
             # In test setup
             mcp_factory.reset()
@@ -251,7 +251,7 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
         .. code-block:: python
 
             from fastapi import FastAPI
-            from src.mcp.app import mcp_factory
+            from src.mcp_server.app import mcp_factory
 
             mcp_factory.create()
             app = FastAPI(lifespan=mcp_factory.lifespan())

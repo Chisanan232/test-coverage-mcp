@@ -120,8 +120,8 @@ To extend this template with custom MCP tools:
    .. code-block:: python
 
        from fastmcp import Tool
-       from src.mcp.models.input.calculator_input import CalculatorInput
-       from src.mcp.models.output.calculator_output import CalculatorOutput
+       from src.mcp_server.models.input.calculator_input import CalculatorInput
+       from src.mcp_server.models.output.calculator_output import CalculatorOutput
 
        @mcp_factory.get().tool()
        def calculate(input: CalculatorInput) -> CalculatorOutput:
@@ -133,7 +133,7 @@ To extend this template with custom MCP tools:
 
    .. code-block:: python
 
-       from src.mcp.app import mcp_factory
+       from src.mcp_server.app import mcp_factory
 
        # Create server instance
        server = mcp_factory.create()
@@ -146,7 +146,7 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.mcp import MCPServerFactory, mcp_factory
+    from src.mcp_server import MCPServerFactory, mcp_factory
 
     # Create MCP server instance (singleton)
     server = mcp_factory.create()
@@ -210,7 +210,7 @@ For testing, use the reset functionality:
 
 .. code-block:: python
 
-    from src.mcp import mcp_factory
+    from src.mcp_server import mcp_factory
     import pytest
 
     @pytest.fixture
