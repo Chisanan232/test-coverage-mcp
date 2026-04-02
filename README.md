@@ -1,24 +1,73 @@
-# Your lib name
+# test-coverage-mcp
+
+🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.
 
 ## Overview
 
-🚧 Clear brief of your lib
+`test-coverage-mcp` provides intelligent test coverage analysis through the Model Context Protocol (MCP). It features a provider-extensible architecture that supports multiple coverage platforms (Codecov, Coveralls, etc.) while maintaining a stable tool interface.
 
+### Key Features
 
-## Python versions support
+- **Provider-Extensible Architecture**: Plugin system for coverage providers
+- **Capability-Driven Design**: Tools adapt to provider capabilities
+- **11 MCP Tools**: Comprehensive coverage analysis and recommendations
+- **Multiple Transports**: stdio, HTTP, SSE support
+- **Web API**: FastAPI-based REST interface
 
-🚧 The required Python versions of this library
+## Python Versions Support
 
-[![Supported Versions](https://img.shields.io/pypi/pyversions/<you lib name>.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/<you lib name>)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/test-coverage-mcp.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/test-coverage-mcp)
 
+Requires Python 3.12 or higher (3.12, 3.13, 3.14)
 
-## Quickly Start
+## Workspace Architecture
 
-🚧 The details of quickly start as simple demonstration for users
+This project uses a **uv workspace** monorepo structure:
+
+```
+test-coverage-mcp/           # Root workspace
+├── test-coverage-mcp/       # Core package
+│   ├── src/                 # Core source code
+│   ├── test/                # Core tests
+│   └── pyproject.toml       # Package config
+├── test-coverage-mcp-codecov/  # Codecov provider plugin
+│   ├── src/                 # Provider source code
+│   ├── test/                # Provider tests
+│   └── pyproject.toml       # Plugin config
+└── pyproject.toml           # Workspace config
+```
+
+## Quick Start
+
+### Installation
+
+```bash
+# Install core package
+pip install test-coverage-mcp
+
+# Install with Codecov provider
+pip install test-coverage-mcp test-coverage-mcp-codecov
+```
+
+### Development Setup
+
+```bash
+# Clone repository
+git clone https://github.com/Chisanan232/test-coverage-mcp.git
+cd test-coverage-mcp
+
+# Install workspace with uv
+uv sync
+
+# Run tests
+cd test-coverage-mcp && uv run pytest
+```
 
 ## Documentation
 
-🚧 The details of documentation ...
+📚 Full documentation: [Coming Soon]
+
+See `CONTRIBUTING.md` for development workflow and workspace details.
 
 ## Reusable GitHub Actions Workflows & Actions
 
