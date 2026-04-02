@@ -31,6 +31,9 @@ dependencies = [
     "httpx>=0.28.1",
 ]
 
+[tool.uv.sources]
+test-coverage-mcp = { workspace = true }
+
 [project.urls]
 Homepage = "https://github.com/Chisanan232/test-coverage-mcp"
 Repository = "https://github.com/Chisanan232/test-coverage-mcp"
