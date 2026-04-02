@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from src.mcp.app import MCPServerFactory
+from src.mcp_server.app import MCPServerFactory
 from src.web_server.app import WebServerFactory
 
 

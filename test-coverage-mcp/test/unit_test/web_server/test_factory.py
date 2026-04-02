@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from src._base import BaseServerFactory
-from src.mcp.app import MCPServerFactory
+from src.mcp_server.app import MCPServerFactory
 from src.models.cli import MCPTransportType
 from src.web_server.app import WebServerFactory, web_factory
 

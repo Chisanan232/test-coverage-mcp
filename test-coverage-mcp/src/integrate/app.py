@@ -43,7 +43,7 @@ from typing import Final, TypedDict, Unpack
 from fastapi import FastAPI
 
 from .._base import BaseServerFactory
-from ..mcp.app import mcp_factory
+from ..mcp_server.app import mcp_factory
 from ..models.cli import MCPTransportType
 from ..web_server.app import web_factory
 

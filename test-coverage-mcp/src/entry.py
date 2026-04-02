@@ -112,7 +112,7 @@ from pydantic import ValidationError
 
 from .config import GetSettingsKwargs, Settings, get_settings
 from .integrate.app import integrated_factory
-from .mcp.app import mcp_factory
+from .mcp_server.app import mcp_factory
 from .models.cli import LogLevel, MCPTransportType, ServerConfig
 
 _LOG = logging.getLogger(__name__)

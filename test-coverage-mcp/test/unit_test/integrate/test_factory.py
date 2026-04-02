@@ -10,7 +10,7 @@ from src.integrate.app import (
     integrated_factory,
     integrated_server_lifecycle,
 )
-from src.mcp.app import MCPServerFactory
+from src.mcp_server.app import MCPServerFactory
 from src.models.cli import MCPTransportType
 from src.web_server.app import WebServerFactory
 

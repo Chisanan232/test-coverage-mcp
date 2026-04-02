@@ -51,7 +51,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .._base import BaseServerFactory
 from ..config import get_settings
-from ..mcp.app import mcp_factory
+from ..mcp_server.app import mcp_factory
 from ..models.cli import MCPTransportType, ServerConfig
 from .routers import health_check_router
 
