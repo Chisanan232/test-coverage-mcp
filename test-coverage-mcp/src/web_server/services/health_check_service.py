@@ -79,7 +79,7 @@ class HealthCheckService:
         """
         start_time = time.time()
         try:
-            from ...mcp.app import mcp_factory
+            from ...mcp_server.app import mcp_factory
 
             mcp_server = mcp_factory.get()
             is_healthy = mcp_server is not None
