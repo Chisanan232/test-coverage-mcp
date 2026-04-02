@@ -2,6 +2,27 @@ version = 1
 revision = 2
 requires-python = ">=3.12, <4.0"
 
+[manifest]
+members = [
+    "test-coverage-mcp",
+    "test-coverage-mcp-codecov",
+]
+
+[manifest.dependency-groups]
+dev = [
+    { name = "aiohttp", specifier = ">=3.12.15" },
+    { name = "coverage", specifier = ">=7.10.6" },
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-asyncio", specifier = ">=1.1.0" },
+    { name = "pytest-cov", specifier = ">=5.0.0,<8" },
+    { name = "pytest-rerunfailures", specifier = ">=16.0.1" },
+]
+pre-commit-ci = [
+    { name = "mypy", specifier = ">=1.17.1" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
+    { name = "ruff", specifier = ">=0.14.14" },
+]
+
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
@@ -1213,7 +1234,7 @@ wheels = [
 [[package]]
 name = "test-coverage-mcp"
 version = "0.0.0"
-source = { editable = "." }
+source = { editable = "test-coverage-mcp" }
 dependencies = [
     { name = "fastapi" },
     { name = "httpx" },
@@ -1221,21 +1242,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "uvicorn" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "aiohttp" },
-    { name = "coverage" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-cov" },
-    { name = "pytest-rerunfailures" },
-]
-pre-commit-ci = [
-    { name = "mypy" },
-    { name = "pre-commit" },
-    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -1248,19 +1254,19 @@ requires-dist = [
     { name = "uvicorn", specifier = ">=0.40.0" },
 ]
 
-[package.metadata.requires-dev]
-dev = [
-    { name = "aiohttp", specifier = ">=3.12.15" },
-    { name = "coverage", specifier = ">=7.10.6" },
-    { name = "pytest", specifier = ">=8.4.2" },
-    { name = "pytest-asyncio", specifier = ">=1.1.0" },
-    { name = "pytest-cov", specifier = ">=5.0.0,<8" },
-    { name = "pytest-rerunfailures", specifier = ">=16.0.1" },
+[[package]]
+name = "test-coverage-mcp-codecov"
+version = "0.0.0"
+source = { editable = "test-coverage-mcp-codecov" }
+dependencies = [
+    { name = "httpx" },
+    { name = "test-coverage-mcp" },
 ]
-pre-commit-ci = [
-    { name = "mypy", specifier = ">=1.17.1" },
-    { name = "pre-commit", specifier = ">=4.3.0" },
-    { name = "ruff", specifier = ">=0.14.14" },
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "test-coverage-mcp", editable = "test-coverage-mcp" },
 ]
 
 [[package]]
