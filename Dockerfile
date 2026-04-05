@@ -1,7 +1,6 @@
 # Build stage
 FROM python:3.13-slim AS builder
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=off \
@@ -10,47 +9,49 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Set working directory
 WORKDIR /app
 
-# Copy only requirements files first to leverage Docker cache
-COPY pyproject.toml uv.lock LICENSE README.md ./
+# Copy workspace configuration
+COPY pyproject.toml uv.lock ./
+COPY LICENSE README.md ./
 
-# Create virtual environment and install dependencies
+# Copy all package directories
+COPY test-coverage-mcp/ ./test-coverage-mcp/
+COPY test-coverage-mcp-codecov/ ./test-coverage-mcp-codecov/
+
+# Create virtual environment and install all workspace packages
 RUN uv venv /app/.venv && \
     . /app/.venv/bin/activate && \
-    uv sync --locked --all-extras
+    uv sync --locked
 
 # Final stage
 FROM python:3.13-slim
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH" \
     SERVER_PORT=8000
 
-# Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Copy virtual environment from builder stage
+# Copy virtual environment from builder
 COPY --from=builder /app/.venv /app/.venv
 
-# Copy application code
-COPY . .
+# Copy workspace
+COPY --from=builder /app/test-coverage-mcp ./test-coverage-mcp
+COPY --from=builder /app/test-coverage-mcp-codecov ./test-coverage-mcp-codecov
+COPY pyproject.toml uv.lock ./
 
-# Create a non-root user to run the app and set permissions
+# Create non-root user
 RUN groupadd -r appuser && \
     useradd -r -g appuser -d /app appuser && \
     chown -R appuser:appuser /app
 
-# Switch to non-root user
 USER appuser
 
-# Expose port from environment variable
 EXPOSE ${SERVER_PORT}
 
-# Set the entry point
-CMD ["bash", "./scripts/docker/run-server.sh"]
+# Entry point runs core package
+CMD ["test-coverage-mcp", "serve"]
