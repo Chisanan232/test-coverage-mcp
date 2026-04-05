@@ -20,17 +20,82 @@ test-coverage-mcp/                    # Root workspace
 │   │   ├── unit_test/                # Unit tests
 │   │   └── integration_test/         # Integration tests
 │   ├── pyproject.toml                # Package configuration
-│   ├── pytest.ini                    # Pytest config
-│   └── .coveragerc                   # Coverage config
+│   ├── pytest.ini                    # Pytest config (per-package)
+│   ├── .coveragerc                   # Coverage config (per-package)
+│   └── .env.example                  # Environment vars (per-package)
 ├── test-coverage-mcp-codecov/        # Codecov provider plugin
-│   ├── src/test_coverage_mcp_codecov/
+│   ├── src/                          # Flat structure (no nested package dir)
+│   │   └── __init__.py
 │   ├── test/
-│   └── pyproject.toml
+│   ├── pyproject.toml                # Package configuration
+│   ├── pytest.ini                    # Pytest config (per-package)
+│   ├── .coveragerc                   # Coverage config (per-package)
+│   └── .env.example                  # Environment vars (per-package)
 ├── pyproject.toml                    # Workspace configuration
-├── mypy.ini                          # Type checking config
-├── ruff.toml                         # Linting config
-└── .pre-commit-config.yaml           # Pre-commit hooks
+├── mypy.ini                          # Type checking (workspace-wide)
+├── ruff.toml                         # Linting (workspace-wide)
+├── sonar-project.properties          # SonarQube (multi-module monorepo)
+├── Dockerfile                        # Docker build (workspace build)
+├── .pre-commit-config.yaml           # Pre-commit hooks (workspace-wide)
+└── .env.example                      # Workspace overview (points to package configs)
 ```
+
+## Configuration Hierarchy
+
+The workspace uses a **two-level configuration hierarchy**:
+
+### Workspace-Wide Configurations (Root Level)
+
+These configurations apply to **all packages** in the workspace:
+
+- **`ruff.toml`** - Code linting and formatting rules
+  - Defines style rules, import ordering, per-file ignores for all packages
+  - Uses `known-first-party` to recognize workspace packages
+
+- **`mypy.ini`** - Type checking configuration
+  - Checks all package source code
+  - Uses `explicit_package_bases` for multiple `src/` directories
+  - Per-package overrides available if needed
+
+- **`.pre-commit-config.yaml`** - Pre-commit hooks
+  - Runs ruff, mypy across workspace
+  - Configured with workspace-aware file paths
+
+- **`sonar-project.properties`** - SonarQube quality analysis
+  - Multi-module configuration with `sonar.modules=core,codecov`
+  - Each module has separate source, test, and coverage paths
+
+- **`Dockerfile`** - Container build
+  - Builds entire workspace with all packages
+  - Entry point runs core package
+
+- **`.env.example`** - Workspace overview
+  - Points developers to package-specific `.env.example` files
+
+### Per-Package Configurations
+
+Each package has its **own isolated configurations**:
+
+- **`pyproject.toml`** - Package metadata, dependencies, build config
+- **`pytest.ini`** - Package-specific test configuration
+- **`.coveragerc`** - Package-specific coverage settings
+- **`.env.example`** - Package-specific environment variables
+- **`README.md`** - Package documentation
+
+### When to Edit Which Config
+
+| Task | Configuration File | Level |
+|------|-------------------|-------|
+| Add/change linting rules | `ruff.toml` | Workspace |
+| Add type checking rules | `mypy.ini` | Workspace |
+| Add pre-commit hook | `.pre-commit-config.yaml` | Workspace |
+| Add SonarQube module | `sonar-project.properties` | Workspace |
+| Add package dependency | `<package>/pyproject.toml` | Per-package |
+| Change test settings | `<package>/pytest.ini` | Per-package |
+| Change coverage settings | `<package>/.coveragerc` | Per-package |
+| Add environment variable | `<package>/.env.example` | Per-package |
+
+**Golden Rule**: If it affects code quality/style across the workspace, edit the root config. If it's specific to how one package works, edit the package config.
 
 ## Development Setup
 
