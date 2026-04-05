@@ -3,7 +3,6 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from src._base import BaseServerFactory
 from src.mcp_server.app import MCPServerFactory
 from src.models.cli import MCPTransportType

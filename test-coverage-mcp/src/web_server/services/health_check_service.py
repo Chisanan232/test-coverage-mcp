@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Literal
 
 from ..models.response.health_check import (
@@ -63,7 +63,7 @@ class HealthCheckService:
         """
         return HealthyCheckResponseDto(
             status="healthy",
-            timestamp=datetime.now(timezone.utc).isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
             version="0.1.0",
             uptime_seconds=self.get_uptime_seconds(),
         )
@@ -90,7 +90,7 @@ class HealthCheckService:
                 name="mcp_server",
                 status="healthy" if is_healthy else "unhealthy",
                 message="MCP server is running" if is_healthy else "MCP server is not available",
-                last_check=datetime.now(timezone.utc),
+                last_check=datetime.now(UTC),
                 response_time_ms=response_time,
             )
         except Exception as e:
@@ -99,8 +99,8 @@ class HealthCheckService:
             return ComponentHealthStatus(
                 name="mcp_server",
                 status="unhealthy",
-                message=f"MCP server check failed: {str(e)}",
-                last_check=datetime.now(timezone.utc),
+                message=f"MCP server check failed: {e!s}",
+                last_check=datetime.now(UTC),
                 response_time_ms=response_time,
             )
 
@@ -126,7 +126,7 @@ class HealthCheckService:
                 name="web_server",
                 status="healthy" if is_healthy else "unhealthy",
                 message="Web server is running" if is_healthy else "Web server is not available",
-                last_check=datetime.now(timezone.utc),
+                last_check=datetime.now(UTC),
                 response_time_ms=response_time,
             )
         except Exception as e:
@@ -135,8 +135,8 @@ class HealthCheckService:
             return ComponentHealthStatus(
                 name="web_server",
                 status="unhealthy",
-                message=f"Web server check failed: {str(e)}",
-                last_check=datetime.now(timezone.utc),
+                message=f"Web server check failed: {e!s}",
+                last_check=datetime.now(UTC),
                 response_time_ms=response_time,
             )
 
@@ -174,7 +174,7 @@ class HealthCheckService:
 
         return DetailedHealthCheckResponseDto(
             status=overall_status,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             version="0.1.0",
             uptime_seconds=self.get_uptime_seconds(),
             components=components,
@@ -194,7 +194,7 @@ class HealthCheckService:
         """
         return LivenessCheckResponseDto(
             alive=True,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
         )
 
     async def check_readiness(self) -> ReadinessCheckResponseDto:
@@ -223,7 +223,7 @@ class HealthCheckService:
 
         return ReadinessCheckResponseDto(
             ready=all_ready,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             message=message,
             components_ready=components_ready,
         )

@@ -2,7 +2,6 @@
 
 import pytest
 from pydantic import ValidationError
-
 from src.models.cli import LogLevel, MCPTransportType, ServerConfig
 from src.web_server.models.response.health_check import HealthyCheckResponseDto
 

@@ -4,7 +4,6 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from src.web_server.models.response.health_check import (
     ComponentHealthStatus,
     DetailedHealthCheckResponseDto,

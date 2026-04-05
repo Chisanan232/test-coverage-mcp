@@ -5,7 +5,6 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
-
 from src.web_server.dependencies.health_check import get_health_check_service
 from src.web_server.models.response.health_check import (
     ComponentHealthStatus,

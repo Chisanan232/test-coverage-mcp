@@ -4,7 +4,6 @@ from argparse import Namespace
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from src.entry import (
     configure_logging,
     create_server_config,
