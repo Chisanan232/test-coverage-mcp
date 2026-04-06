@@ -199,14 +199,40 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [lint.isort]
-known-first-party = ["gearmeshing_ai"]
+known-first-party = [
+    "test_coverage_mcp",
+    "test_coverage_mcp_codecov"
+]
 known-third-party = ["pytest", "testcontainers", "httpx", "pydantic", "sqlalchemy"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 split-on-trailing-comma = true
 force-single-line = false
 
 [lint.per-file-ignores]
-# Tests can have more relaxed rules
-"test/**/*.py" = [
+# Tests can have more relaxed rules - workspace packages
+"test-coverage-mcp/test/**/*.py" = [
+    "S101",  # assert statements
+    "S106",  # hardcoded passwords
+    "S108",  # hardcoded tmp dirs
+    "S311",  # random generators
+    "S607",  # start a process with a partial path
+    "ANN001",  # missing type annotation
+    "ANN002",  # missing type annotation for *args
+    "ANN003",  # missing type annotation for **kwargs
+    "ANN201",  # missing return type annotation
+    "ANN202",  # missing return type annotation
+    "D",  # missing docstrings
+    "SLF001",  # private member access
+    "PT001",  # pytest fixture rules
+    "PT011",  # pytest raises
+    "PT012",  # pytest raises with multiple exceptions
+    "PT013",  # pytest incorrect import
+    "PT015",  # pytest assertion always true
+    "PT017",  # pytest assertion in nested block
+    "PT018",  # pytest composite assertion
+]
+
+"test-coverage-mcp-codecov/test/**/*.py" = [
     "S101",  # assert statements
     "S106",  # hardcoded passwords
     "S108",  # hardcoded tmp dirs
@@ -261,7 +287,7 @@ force-single-line = false
     "ANN201",  # missing return type annotation
 ]
 
-# Type definitions module - allow module name shadowing
-"src/types.py" = [
+# Type definitions module - allow module name shadowing (renamed to type_defs.py)
+"test-coverage-mcp/src/type_defs.py" = [
     "A005",  # module name shadowing
 ]

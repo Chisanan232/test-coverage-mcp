@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "test-coverage-mcp-codecov"
+version = "0.0.0"
+description = "Codecov provider plugin for test-coverage-mcp"
+authors = [{ name = "Chisanan232", email = "chi10211201@cycu.org.tw" }]
+requires-python = ">=3.12,<4.0"
+readme = "README.md"
+license = { file = "../LICENSE" }
+keywords = [
+    "test-coverage",
+    "codecov",
+    "mcp",
+    "provider",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "test-coverage-mcp",
+    "httpx>=0.28.1",
+]
+
+[tool.uv.sources]
+test-coverage-mcp = { workspace = true }
+
+[project.urls]
+Homepage = "https://github.com/Chisanan232/test-coverage-mcp"
+Repository = "https://github.com/Chisanan232/test-coverage-mcp"
+
+[project.entry-points."test_coverage_mcp.providers"]
+codecov = "test_coverage_mcp_codecov:CodecovProvider"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/"]
+packages = ["src"]
+
+[tool.hatch.build.targets.wheel]
+include = ["src/"]
+packages = ["src"]

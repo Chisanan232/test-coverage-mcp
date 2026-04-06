@@ -27,13 +27,18 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
-        package: src,test
-  #      exclude: ^test/unit_test.{1,64}.py
+        name: mypy
+        entry: mypy
+        language: system
+        # Check both packages
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.py$
+#        exclude: |
+#          (?x)^(
+#            test-coverage-mcp/test/unit_test/.*\.py|
+#            test-coverage-mcp-codecov/test/unit_test/.*\.py
+#          )$
         args:
-  #        - --strict
-          - --ignore-missing-imports
-          - --show-traceback
-        additional_dependencies: [types-PyYAML>=6.0.12.9]
+          - --config-file=mypy.ini
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
