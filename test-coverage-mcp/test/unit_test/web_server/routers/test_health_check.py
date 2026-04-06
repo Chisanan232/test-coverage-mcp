@@ -63,9 +63,7 @@ def client(mock_health_service: MagicMock) -> TestClient:
 class TestHealthCheckRouter:
     """Test cases for health check router endpoints."""
 
-    def test_basic_health_check_success(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_basic_health_check_success(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test basic health check endpoint returns success."""
         mock_health_service.check_basic_health.return_value = HealthyCheckResponseDto(
             status="healthy",
@@ -83,9 +81,7 @@ class TestHealthCheckRouter:
         assert data["uptime_seconds"] == 3600.0
         mock_health_service.check_basic_health.assert_called_once()
 
-    def test_detailed_health_check_success(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_detailed_health_check_success(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test detailed health check endpoint returns success."""
         mock_health_service.check_detailed_health.return_value = DetailedHealthCheckResponseDto(
             status="healthy",
@@ -124,9 +120,7 @@ class TestHealthCheckRouter:
         assert data["components"][1]["status"] == "healthy"
         mock_health_service.check_detailed_health.assert_called_once()
 
-    def test_detailed_health_check_degraded(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_detailed_health_check_degraded(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test detailed health check endpoint returns degraded status."""
         mock_health_service.check_detailed_health.return_value = DetailedHealthCheckResponseDto(
             status="degraded",
@@ -158,9 +152,7 @@ class TestHealthCheckRouter:
         assert data["status"] == "degraded"
         assert len(data["components"]) == 2
 
-    def test_liveness_check_success(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_liveness_check_success(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test liveness check endpoint returns success."""
         mock_health_service.check_liveness.return_value = LivenessCheckResponseDto(
             alive=True,
@@ -175,9 +167,7 @@ class TestHealthCheckRouter:
         assert "timestamp" in data
         mock_health_service.check_liveness.assert_called_once()
 
-    def test_readiness_check_ready(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_readiness_check_ready(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test readiness check endpoint returns ready status."""
         mock_health_service.check_readiness.return_value = ReadinessCheckResponseDto(
             ready=True,
@@ -199,9 +189,7 @@ class TestHealthCheckRouter:
         assert data["components_ready"]["web_server"] is True
         mock_health_service.check_readiness.assert_called_once()
 
-    def test_readiness_check_not_ready(
-        self, client: TestClient, mock_health_service: MagicMock
-    ) -> None:
+    def test_readiness_check_not_ready(self, client: TestClient, mock_health_service: MagicMock) -> None:
         """Test readiness check endpoint returns not ready status."""
         mock_health_service.check_readiness.return_value = ReadinessCheckResponseDto(
             ready=False,

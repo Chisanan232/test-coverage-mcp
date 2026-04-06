@@ -34,9 +34,10 @@ class TestHealthCheckEndpointsIntegration:
             FastAPI test client
 
         """
-        with patch("src.web_server.app.mcp_factory") as mock_mcp_factory, patch(
-            "src.web_server.app.get_settings"
-        ) as mock_get_settings:
+        with (
+            patch("src.web_server.app.mcp_factory") as mock_mcp_factory,
+            patch("src.web_server.app.get_settings") as mock_get_settings,
+        ):
             mock_settings = MagicMock()
             mock_settings.cors_allow_origins = ["*"]
             mock_settings.cors_allow_credentials = True
@@ -77,9 +78,7 @@ class TestHealthCheckEndpointsIntegration:
         response = client.get("/health/detailed")
         assert response.status_code == 200
 
-    def test_detailed_health_endpoint_response_structure(
-        self, client: TestClient
-    ) -> None:
+    def test_detailed_health_endpoint_response_structure(self, client: TestClient) -> None:
         """Test that detailed health endpoint returns correct structure."""
         response = client.get("/health/detailed")
         assert response.status_code == 200
@@ -158,9 +157,7 @@ class TestHealthCheckEndpointsIntegration:
             assert "timestamp" in data
             assert data["timestamp"] is not None
 
-    def test_detailed_health_includes_component_checks(
-        self, client: TestClient
-    ) -> None:
+    def test_detailed_health_includes_component_checks(self, client: TestClient) -> None:
         """Test that detailed health check includes component checks."""
         response = client.get("/health/detailed")
         assert response.status_code == 200

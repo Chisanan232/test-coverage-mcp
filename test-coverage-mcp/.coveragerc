@@ -1,6 +1,6 @@
 [run]
 source = src
-omit = 
+omit =
     */test/*
     */tests/*
     */__pycache__/*
