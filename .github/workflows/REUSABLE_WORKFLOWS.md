@@ -10,6 +10,97 @@ All reusable workflows are prefixed with `rw_` and can be called from external r
 uses: Chisanan232/Template-Python-UV-Project/.github/workflows/rw_<workflow_name>.yaml@master
 ```
 
+## Monorepo Workflows
+
+This project uses a UV workspace monorepo with 2 packages:
+- **test-coverage-mcp** (core) - MCP server package
+- **test-coverage-mcp-codecov** (codecov) - Codecov provider plugin
+
+### Monorepo CI Workflow
+
+**File**: `ci-monorepo.yaml`
+
+**Features**:
+- Per-package change detection using `dorny/paths-filter`
+- Matrix testing across Python 3.12, 3.13, 3.14
+- Parallel execution on ubuntu-latest, macos-latest
+- Direct calls to upstream reusable workflows with `project_name` parameter
+- Package-specific coverage flags (e.g., `core,unit-test`)
+
+**Example**:
+```yaml
+# Automatically detects changed packages and runs tests
+# Manual package selection not needed - auto-detected from PR changes
+```
+
+### Monorepo Release Workflows
+
+The project uses **3 orchestrator workflows** for releases:
+
+#### 1. Validation Release (`release-validate-monorepo.yml`)
+- **Auto-trigger**: On PR to master with release-affecting changes
+- **Manual trigger**: With package selection
+- **Behavior**: Always dry-run (validates without releasing)
+- **Use case**: Pre-release validation
+
+**Example**:
+```yaml
+# Trigger manually with packages selection
+workflow_dispatch:
+  inputs:
+    packages: '["core", "codecov"]'
+    level: 'patch'
+```
+
+#### 2. Staging Release (`release-staging-monorepo.yml`)
+- **Auto-trigger**: None (manual only)
+- **Manual trigger**: With package selection
+- **Behavior**: Releases to TestPyPI, creates RC tags (e.g., `core/v1.0.0-rc.1`)
+- **Use case**: Test releases before production
+
+**Example**:
+```yaml
+# Manual trigger for staging
+workflow_dispatch:
+  inputs:
+    packages: '["core"]'
+    level: 'minor'
+```
+
+#### 3. Production Release (`release-monorepo.yml`)
+- **Auto-trigger**: On `.github/tag_and_release/release-**` file changes
+- **Manual trigger**: With package selection
+- **Behavior**: Releases to PyPI, creates version tags, GitHub releases
+- **Use case**: Production releases
+
+**Example**:
+```yaml
+# Manual trigger for production
+workflow_dispatch:
+  inputs:
+    packages: '["core", "codecov"]'
+    level: 'auto'
+```
+
+### Package Configuration
+
+Packages are defined in `.github/tag_and_release/intent.yaml`:
+
+```yaml
+packages:
+  - name: core
+    package_name: test-coverage-mcp
+    working_directory: ./test-coverage-mcp
+    tag_prefix: core/
+  
+  - name: codecov
+    package_name: test-coverage-mcp-codecov
+    working_directory: ./test-coverage-mcp-codecov
+    tag_prefix: codecov/
+```
+
+**Scalability**: Adding a 3rd package requires only updating `intent.yaml` (no new workflow files needed!)
+
 ## Reusable Actions
 
 In addition to workflows, this template also provides **reusable actions** that can be called from external repositories. Actions provide reusable functionality that can be used across multiple workflow steps.
