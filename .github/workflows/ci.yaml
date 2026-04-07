@@ -1,4 +1,8 @@
-name: CI
+# ⚠️ DEPRECATED: This workflow will be removed in Phase 5
+# Use ci-monorepo.yaml instead for monorepo per-package testing
+# This workflow is kept temporarily during migration for backward compatibility
+
+name: CI (DEPRECATED)
 
 on:
   # No matter for push or pull request events, it would trigger CI for safely saving the source code.

@@ -1,0 +1,195 @@
+name: CI - Monorepo
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      # Workspace-level changes
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/**"
+      
+      # Package changes
+      - "test-coverage-mcp/**"
+      - "test-coverage-mcp-codecov/**"
+      
+      # Configuration changes
+      - "mypy.ini"
+      - "ruff.toml"
+      - "sonar-project.properties"
+
+permissions:
+  contents: read
+  packages: read
+  id-token: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Detect which packages changed
+  detect-changes:
+    name: Detect Changed Packages
+    runs-on: ubuntu-latest
+    outputs:
+      core: ${{ steps.filter.outputs.core }}
+      codecov: ${{ steps.filter.outputs.codecov }}
+      packages: ${{ steps.set-matrix.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            core:
+              - 'test-coverage-mcp/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - '.github/workflows/**'
+              - 'mypy.ini'
+              - 'ruff.toml'
+            codecov:
+              - 'test-coverage-mcp-codecov/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - '.github/workflows/**'
+              - 'mypy.ini'
+              - 'ruff.toml'
+      
+      - name: Set package matrix
+        id: set-matrix
+        run: |
+          PACKAGES="[]"
+          if [ "${{ steps.filter.outputs.core }}" == "true" ]; then
+            PACKAGES=$(echo $PACKAGES | jq '. + ["core"]')
+          fi
+          if [ "${{ steps.filter.outputs.codecov }}" == "true" ]; then
+            PACKAGES=$(echo $PACKAGES | jq '. + ["codecov"]')
+          fi
+          echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+          echo "Packages to test: $PACKAGES"
+
+  # Run tests per package
+  test-packages:
+    name: Test ${{ matrix.package }} on ${{ matrix.os }} - Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.12", "3.13", "3.14"]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "working_dir=./test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "codecov_flag=core" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "working_dir=./test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
+          fi
+      
+      # Unit Tests
+      - name: Run Unit Tests
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: unit-test
+          test_folder: ./test/unit_test
+          python-versions: '["${{ matrix.python-version }}"]'
+          operating-systems: '["${{ matrix.os }}"]'
+      
+      # Integration Tests
+      - name: Run Integration Tests
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: integration-test
+          test_folder: ./test/integration_test
+          python-versions: '["${{ matrix.python-version }}"]'
+          operating-systems: '["${{ matrix.os }}"]'
+      
+      # Contract Tests
+      - name: Run Contract Tests
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: contract-test
+          test_folder: ./test/contract_test
+          python-versions: '["${{ matrix.python-version }}"]'
+          operating-systems: '["${{ matrix.os }}"]'
+      
+      # Organize coverage reports
+      - name: Organize Coverage Reports
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+      
+      # Upload to Codecov
+      - name: Upload to Codecov
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: unit-test
+          codecov_name: ${{ steps.pkg-info.outputs.project_name }}
+          codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},unit-test
+        secrets:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+      
+      - name: Upload Integration Coverage
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: integration-test
+          codecov_name: ${{ steps.pkg-info.outputs.project_name }}
+          codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},integration-test
+        secrets:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+      
+      # Upload to SonarQube (only on master branch)
+      - name: Upload to SonarQube
+        if: github.ref_name == 'master'
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: all
+          sonarqube_enable: true
+          sonarqube_name: ${{ steps.pkg-info.outputs.project_name }}
+        secrets:
+          sonar_token: ${{ secrets.SONAR_TOKEN }}
+
+  # Summary job
+  ci-summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: always()
+    steps:
+      - name: Check CI Status
+        run: |
+          echo "=== Monorepo CI Summary ==="
+          echo ""
+          echo "Changed Packages: ${{ needs.detect-changes.outputs.packages }}"
+          echo "Core Changed: ${{ needs.detect-changes.outputs.core }}"
+          echo "Codecov Changed: ${{ needs.detect-changes.outputs.codecov }}"
+          echo "Test Status: ${{ needs.test-packages.result }}"
+          echo ""
+          
+          if [ "${{ needs.test-packages.result }}" == "success" ] || [ "${{ needs.test-packages.result }}" == "skipped" ]; then
+            echo "✅ CI passed successfully!"
+          else
+            echo "❌ CI failed. Check test results above."
+            exit 1
+          fi

@@ -12,10 +12,10 @@ on:
     paths:
 #     For GitHub Action
       - ".github/workflows/ci_includes_e2e_test.yaml"
-      - ".github/workflows/rw_build_and_test.yaml"
-      - ".github/workflows/rw_run_all_test_and_record.yaml"
-#     For test code
-      - "test/e2e_test/**/*.py"
+      - ".github/workflows/ci-monorepo.yaml"
+#     For test code (monorepo paths)
+      - "test-coverage-mcp/test/e2e_test/**/*.py"
+      - "test-coverage-mcp-codecov/test/e2e_test/**/*.py"
 #     For configurations for test or CI
       - ".coveragerc"
       - "codecov.yml"
