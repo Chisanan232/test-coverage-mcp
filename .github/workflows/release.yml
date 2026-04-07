@@ -1,6 +1,10 @@
+# ⚠️ DEPRECATED: This workflow will be removed in Phase 5
+# Use release-monorepo.yml instead for monorepo production releases
+# This workflow is kept temporarily during migration for backward compatibility
+
 # Production Release
 # This workflow calls the centralized release process from the template project
-name: release
+name: release (DEPRECATED)
 
 on:
   push:

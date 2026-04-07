@@ -1,4 +1,8 @@
-name: Release Validation (Dry Run)
+# ⚠️ DEPRECATED: This workflow will be removed in Phase 5
+# Use release-validate-monorepo.yml instead for monorepo release validation
+# This workflow is kept temporarily during migration for backward compatibility
+
+name: Release Validation (Dry Run) (DEPRECATED)
 # This workflow calls the centralized validation process from the template project
 
 on:

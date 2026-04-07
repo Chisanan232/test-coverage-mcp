@@ -1,4 +1,8 @@
-name: Staging Release
+# ⚠️ DEPRECATED: This workflow will be removed in Phase 5
+# Use release-staging-monorepo.yml instead for monorepo staging releases
+# This workflow is kept temporarily during migration for backward compatibility
+
+name: Staging Release (DEPRECATED)
 # This workflow calls the centralized staging release process from the template project
 
 on:
