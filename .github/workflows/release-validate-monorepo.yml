@@ -12,7 +12,7 @@ on:
       - '.github/workflows/release-*.yml'
       - 'pyproject.toml'
       - 'uv.lock'
-  
+
   # Manual trigger: With package selection and level
   workflow_dispatch:
     inputs:
@@ -95,7 +95,7 @@ jobs:
           echo "Validation Status: ${{ needs.validate-releases.result }}"
           echo "Packages Validated: ${{ needs.validate-releases.outputs.packages_validated }}"
           echo ""
-          
+
           if [[ "${{ needs.validate-releases.result }}" == "success" ]]; then
             echo "✅ Release validation passed!"
             echo ""

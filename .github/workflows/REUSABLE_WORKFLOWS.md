@@ -92,7 +92,7 @@ packages:
     package_name: test-coverage-mcp
     working_directory: ./test-coverage-mcp
     tag_prefix: core/
-  
+
   - name: codecov
     package_name: test-coverage-mcp-codecov
     working_directory: ./test-coverage-mcp-codecov
@@ -121,7 +121,7 @@ A composite action that sets up Python, installs UV, and optionally installs pro
 steps:
   - name: Checkout
     uses: actions/checkout@v5
-  
+
   - name: Setup Python with UV
     uses: Chisanan232/Template-Python-UV-Project/.github/actions/setup-python-uv@master
     with:

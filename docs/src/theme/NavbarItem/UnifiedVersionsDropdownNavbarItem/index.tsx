@@ -1,6 +1,6 @@
 /**
  * UnifiedVersionsDropdownNavbarItem - Custom Docusaurus component
- * 
+ *
  * Combines version dropdowns from multiple docs plugins into a single dropdown
  * with grouped version options by plugin.
  */
@@ -113,7 +113,7 @@ export default function UnifiedVersionsDropdownNavbarItem({
         // Ignore errors if hooks fail
         console.error(`Error getting preferred version for ${pluginId}:`, e);
       }
-      
+
       // Get latest version safely (usually the one with name='current' or the first one)
       let latestDocVersion = null;
       if (versions && versions.length > 0) {
@@ -147,15 +147,15 @@ export default function UnifiedVersionsDropdownNavbarItem({
         hasActiveVersion,
       };
     });
-  
+
   // Create dropdown items
   const dropdownItems: JSX.Element[] = [];
-  
+
   // Add items specified to come before
   if (dropdownItemsBefore.length > 0) {
     dropdownItems.push(...dropdownItemsBefore);
   }
-  
+
   // For each plugin, add its versions
   pluginsVersionInfo.forEach((pluginInfo, pluginIndex) => {
     const {
@@ -177,7 +177,7 @@ export default function UnifiedVersionsDropdownNavbarItem({
           value: `<div class="${styles.divider}"></div>`,
         });
       }
-      
+
       // Add plugin title as a header
       dropdownItems.push({
         type: 'html',
@@ -189,22 +189,22 @@ export default function UnifiedVersionsDropdownNavbarItem({
       versions.forEach((version) => {
         // Skip if version is invalid
         if (!version) return;
-        
+
         // Is this the active version for the current plugin?
-        const isActivePluginVersion = hasActiveVersion && 
+        const isActivePluginVersion = hasActiveVersion &&
           activeVersion?.name === version.name;
-          
+
         // Is this the latest version?
         const isLatest = latestDocVersion && version.name === latestDocVersion.name;
-          
+
         // Create version label with badges if needed
         let versionLabel = version.label || version.name;
-        
+
         // URL for this version - ensure we have a valid path
         const firstDocPath = version.docs?.[0]?.path;
         const fallbackPath = `/docs/${version.path || ''}`;
         const versionUrl = firstDocPath || fallbackPath;
-        
+
         // For badge rendering, we need to handle it differently
         if (showBadges && isLatest && showNextLabel && version.name === 'current') {
           // Use HTML for badge (with proper classes for styling)
@@ -254,7 +254,7 @@ export default function UnifiedVersionsDropdownNavbarItem({
       });
     }
   });
-  
+
   // Add divider before "All versions" link
   if (dropdownItems.length > 0) {
     dropdownItems.push({
@@ -262,7 +262,7 @@ export default function UnifiedVersionsDropdownNavbarItem({
       key: 'divider-all-versions',
       value: `<div class="${styles.allVersionsSeparator}"></div>`,
     });
-    
+
     // Add "All versions" link at the bottom
     dropdownItems.push({
       type: 'default',
@@ -276,7 +276,7 @@ export default function UnifiedVersionsDropdownNavbarItem({
       isDropdownItem: true,
     });
   }
-  
+
   // Add items specified to come after
   if (dropdownItemsAfter.length > 0) {
     if (showDividers && pluginsVersionInfo.some(info => info.versions.length > 0)) {

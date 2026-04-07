@@ -36,7 +36,7 @@ The documentation workflow uses a **sophisticated dual-trigger system** to solve
 on:
   push:
     branches: ["master"]
-    paths: 
+    paths:
       - "docs/**"
       - "*.md"
       - "README*.md"
@@ -85,7 +85,7 @@ graph TD
     F --> G{Docs Updated?}
     G -->|Yes| H[Deploy Documentation]
     G -->|No| I[Skip Deployment]
-    
+
     J[Direct Doc Push] --> H
 ```
 
@@ -107,7 +107,7 @@ check_docs_changes:
       with:
         name: release-docs-flag
         run-id: ${{ github.event.workflow_run.id }}
-    
+
     - name: Check release workflow success and docs update flag
       id: check_flag
       run: |
@@ -117,11 +117,11 @@ check_docs_changes:
           echo "should_deploy=false" >> $GITHUB_OUTPUT
           exit 0
         fi
-        
-        # Read docs update flag from artifact  
+
+        # Read docs update flag from artifact
         DOCS_UPDATED=$(cat docs_updated.txt)
         echo "Documentation update flag: $DOCS_UPDATED"
-        
+
         if [[ "$DOCS_UPDATED" == "true" ]]; then
           echo "Documentation was updated during release. Proceeding with deployment."
           echo "should_deploy=true" >> $GITHUB_OUTPUT
@@ -146,7 +146,7 @@ The main deployment job runs conditionally based on the trigger type:
 deploy_documentation:
   # Run for direct push OR workflow_run with docs changes
   if: |
-    github.event_name == 'push' || 
+    github.event_name == 'push' ||
     (github.event_name == 'workflow_run' && needs.check_docs_changes.outputs.should_deploy == 'true')
   needs: [check_docs_changes]
   runs-on: ubuntu-latest
@@ -172,8 +172,8 @@ Uses existing `DOCS_UPDATED` flag from bump step logic that already determines i
 DOCS_UPDATED=false
 
 # Check if documentation files that reference versions need updating
-if [[ -f "docs/contents/development/ci-cd/index.mdx" ]] || 
-   [[ -f "docs/contents/document/installation.md" ]] || 
+if [[ -f "docs/contents/development/ci-cd/index.mdx" ]] ||
+   [[ -f "docs/contents/document/installation.md" ]] ||
    [[ -f "docs/contents/document/README.md" ]]; then
     DOCS_UPDATED=true
 fi
@@ -182,7 +182,7 @@ fi
 #### 2. Updates Version References
 Automatically updates documentation files that reference the package version:
 - `docs/contents/development/ci-cd/index.mdx`
-- `docs/contents/document/installation.md`  
+- `docs/contents/document/installation.md`
 - `docs/contents/document/README.md`
 
 #### 3. Sets Output Flag
@@ -283,12 +283,12 @@ The documentation deployment uses modern Node.js tooling:
 
 ## Key Benefits
 
-✅ **Reliable Triggering**: Documentation deploys automatically after releases that update docs  
-✅ **No Infinite Loops**: Guard job prevents unnecessary deployments  
-✅ **Efficient**: Only deploys when documentation actually changes  
-✅ **Backward Compatible**: Direct push functionality remains unchanged  
-✅ **Intelligent**: Uses existing business logic to determine if docs need updating  
-✅ **Fast**: Leverages pnpm caching for quick builds  
+✅ **Reliable Triggering**: Documentation deploys automatically after releases that update docs
+✅ **No Infinite Loops**: Guard job prevents unnecessary deployments
+✅ **Efficient**: Only deploys when documentation actually changes
+✅ **Backward Compatible**: Direct push functionality remains unchanged
+✅ **Intelligent**: Uses existing business logic to determine if docs need updating
+✅ **Fast**: Leverages pnpm caching for quick builds
 ✅ **Robust**: Multiple fallback mechanisms and error handling
 
 ## Advanced Features
@@ -325,7 +325,7 @@ sequenceDiagram
     participant R as Release Workflow
     participant A as GitHub Artifacts
     participant D as Documentation Workflow
-    
+
     R->>R: Determine DOCS_UPDATED
     R->>A: Upload docs_updated.txt
     R->>D: Trigger via workflow_run
@@ -353,7 +353,7 @@ sequenceDiagram
 # Check release workflow status
 gh run list --workflow=release.yml --limit=1
 
-# Check documentation workflow status  
+# Check documentation workflow status
 gh run list --workflow=documentation.yaml --limit=1
 
 # View specific run logs
@@ -453,7 +453,7 @@ gh run view <run-id> --log
 
 **Release Integration Checklist**:
 - ✅ Release workflow outputs `DOCS_UPDATED` flag
-- ✅ Release workflow uploads `release-docs-flag` artifact  
+- ✅ Release workflow uploads `release-docs-flag` artifact
 - ✅ Documentation workflow has `workflow_run` trigger
 - ✅ Guard job correctly evaluates flag
 - ✅ Deployment job has proper conditional logic

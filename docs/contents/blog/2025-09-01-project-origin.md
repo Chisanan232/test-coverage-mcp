@@ -100,6 +100,6 @@ Since starting this project, it has evolved far beyond my initial vision. What b
 - **Comprehensive documentation** with migration guides and troubleshooting
 - **Real-world examples** covering every common use case
 
-This blog will continue to document the evolution of this template, sharing insights about modern Python development practices, CI/CD automation, and the pursuit of developer happiness through better tooling. 
+This blog will continue to document the evolution of this template, sharing insights about modern Python development practices, CI/CD automation, and the pursuit of developer happiness through better tooling.
 
 **The goal remains simple: help Python developers spend more time building amazing things and less time fighting with infrastructure.**

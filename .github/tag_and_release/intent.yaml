@@ -16,10 +16,10 @@ artifacts:
     mode: auto          # auto | force | skip - How to handle docs versioning
     sections:           # Array of Docusaurus plugin IDs to version
       - docs            # Main documentation section
-      - dev             # Development/contributor documentation  
+      - dev             # Development/contributor documentation
 #      - api             # API reference documentation
     strategy: always   # changed | always - When to version sections
-    
+
   # Legacy format (still supported for backward compatibility):
   # docs: auto    # auto | force | skip
 
@@ -42,7 +42,7 @@ packages:
         port: 8000
         path: "/health"
       run_options: "-e API_TOKEN=test_token -e DEBUG=true"
-  
+
   - name: codecov
     package_name: test-coverage-mcp-codecov
     working_directory: ./test-coverage-mcp-codecov
@@ -58,14 +58,14 @@ defaults:
     commit:
       name: "GitHub Actions Bot"
       email: "actions@github.com"
-  
+
   python:
     auth_method: token
-  
+
   validation:
     version: "1.0.0-validation"
     test_version: "validation-test"
-  
+
   docs:
     paths:
       ci_cd: "docs/CI_CD.md"
@@ -109,21 +109,21 @@ defaults:
 #    # Legacy format (backward compatible):
 #    artifacts:
 #      docs: auto
-#    
+#
 #    # Enhanced format - version all sections:
 #    artifacts:
 #      docs:
 #        mode: force
 #        sections: ["docs", "dev", "api"]
 #        strategy: always
-#    
+#
 #    # Only version changed sections (recommended):
 #    artifacts:
 #      docs:
 #        mode: auto
 #        sections: ["docs", "dev"]
 #        strategy: changed
-#    
+#
 #    # Skip docs versioning entirely:
 #    artifacts:
 #      docs: skip

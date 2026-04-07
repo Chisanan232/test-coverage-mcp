@@ -9,11 +9,11 @@ on:
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/**"
-      
+
       # Package changes
       - "test-coverage-mcp/**"
       - "test-coverage-mcp-codecov/**"
-      
+
       # Configuration changes
       - "mypy.ini"
       - "ruff.toml"
@@ -39,7 +39,7 @@ jobs:
       packages: ${{ steps.set-matrix.outputs.packages }}
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -58,7 +58,7 @@ jobs:
               - '.github/workflows/**'
               - 'mypy.ini'
               - 'ruff.toml'
-      
+
       - name: Set package matrix
         id: set-matrix
         run: |
@@ -84,10 +84,10 @@ jobs:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.12", "3.13", "3.14"]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set package info
         id: pkg-info
         run: |
@@ -100,7 +100,7 @@ jobs:
             echo "working_dir=./test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
             echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
           fi
-      
+
       # Unit Tests
       - name: Run Unit Tests
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
@@ -110,7 +110,7 @@ jobs:
           test_folder: ./test/unit_test
           python-versions: '["${{ matrix.python-version }}"]'
           operating-systems: '["${{ matrix.os }}"]'
-      
+
       # Integration Tests
       - name: Run Integration Tests
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
@@ -120,7 +120,7 @@ jobs:
           test_folder: ./test/integration_test
           python-versions: '["${{ matrix.python-version }}"]'
           operating-systems: '["${{ matrix.os }}"]'
-      
+
       # Contract Tests
       - name: Run Contract Tests
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
@@ -130,13 +130,13 @@ jobs:
           test_folder: ./test/contract_test
           python-versions: '["${{ matrix.python-version }}"]'
           operating-systems: '["${{ matrix.os }}"]'
-      
+
       # Organize coverage reports
       - name: Organize Coverage Reports
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
         with:
           project_name: ${{ steps.pkg-info.outputs.project_name }}
-      
+
       # Upload to Codecov
       - name: Upload to Codecov
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
@@ -147,7 +147,7 @@ jobs:
           codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},unit-test
         secrets:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
-      
+
       - name: Upload Integration Coverage
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
         with:
@@ -157,7 +157,7 @@ jobs:
           codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},integration-test
         secrets:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
-      
+
       # Upload to SonarQube (only on master branch)
       - name: Upload to SonarQube
         if: github.ref_name == 'master'
@@ -186,7 +186,7 @@ jobs:
           echo "Codecov Changed: ${{ needs.detect-changes.outputs.codecov }}"
           echo "Test Status: ${{ needs.test-packages.result }}"
           echo ""
-          
+
           if [ "${{ needs.test-packages.result }}" == "success" ] || [ "${{ needs.test-packages.result }}" == "skipped" ]; then
             echo "✅ CI passed successfully!"
           else

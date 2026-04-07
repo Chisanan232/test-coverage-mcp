@@ -82,7 +82,7 @@ jobs:
           echo "Staging Status: ${{ needs.staging-releases.result }}"
           echo "Packages Released: ${{ needs.staging-releases.outputs.packages_released }}"
           echo ""
-          
+
           if [[ "${{ needs.staging-releases.result }}" == "success" ]]; then
             echo "🎭 Staging release completed successfully!"
             echo ""
