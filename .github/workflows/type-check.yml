@@ -83,7 +83,7 @@ jobs:
       - name: Build package and verify py.typed inclusion
         run: |
           uv build --sdist --wheel
-          
+
           # Check sdist
           echo "Checking source distribution..."
           if tar -tzf dist/*.tar.gz | grep -q "slack_mcp/py.typed"; then
@@ -92,7 +92,7 @@ jobs:
             echo "❌ Error: py.typed not found in source distribution!"
             exit 1
           fi
-          
+
           # Check wheel
           echo "Checking wheel distribution..."
           if unzip -l dist/*.whl | grep -q "slack_mcp/py.typed"; then
@@ -101,7 +101,7 @@ jobs:
             echo "❌ Error: py.typed not found in wheel distribution!"
             exit 1
           fi
-          
+
           # Check types.py in distributions
           echo "Checking types.py in distributions..."
           if tar -tzf dist/*.tar.gz | grep -q "slack_mcp/types.py"; then
@@ -110,7 +110,7 @@ jobs:
             echo "❌ Error: types.py not found in source distribution!"
             exit 1
           fi
-          
+
           if unzip -l dist/*.whl | grep -q "slack_mcp/types.py"; then
             echo "✅ types.py found in wheel distribution"
           else
@@ -155,14 +155,14 @@ jobs:
         run: |
           uv run python -c "
           from slack_mcp import types
-          
+
           # Test JSON types
           assert hasattr(types, 'JSONValue')
           assert hasattr(types, 'JSONDict')
           assert hasattr(types, 'JSONList')
           assert hasattr(types, 'JSONPrimitive')
           print('✅ JSON types accessible')
-          
+
           # Test Slack types
           assert hasattr(types, 'SlackChannelID')
           assert hasattr(types, 'SlackUserID')
@@ -170,12 +170,12 @@ jobs:
           assert hasattr(types, 'SlackToken')
           assert hasattr(types, 'SlackEventPayload')
           print('✅ Slack types accessible')
-          
+
           # Test Protocol types
           assert hasattr(types, 'EventHandlerProtocol')
           assert hasattr(types, 'QueueBackendProtocol')
           print('✅ Protocol types accessible')
-          
+
           # Test type guards
           assert hasattr(types, 'is_slack_channel_id')
           assert hasattr(types, 'is_slack_user_id')
@@ -187,19 +187,19 @@ jobs:
         run: |
           uv run python -c "
           from slack_mcp import types
-          
+
           # Test channel ID validation
           assert types.is_slack_channel_id('C1234567890') == True
           assert types.is_slack_channel_id('#general') == True
           assert types.is_slack_channel_id('invalid') == False
           print('✅ Channel ID type guard works')
-          
+
           # Test user ID validation
           assert types.is_slack_user_id('U1234567890') == True
           assert types.is_slack_user_id('W1234567890') == True
           assert types.is_slack_user_id('invalid') == False
           print('✅ User ID type guard works')
-          
+
           # Test timestamp validation
           assert types.is_slack_timestamp('1234567890.123456') == True
           assert types.is_slack_timestamp('invalid') == False
@@ -219,19 +219,19 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "ℹ️ **Note**: MyPy source code checking is handled by pre-commit hooks" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ needs.verify-pep561-compliance.result }}" == "success" ]; then
             echo "✅ PEP 561 compliance: **PASSED**" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ PEP 561 compliance: **FAILED**" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ "${{ needs.test-type-imports.result }}" == "success" ]; then
             echo "✅ Type imports: **PASSED**" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Type imports: **FAILED**" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### PEP Standards Verified" >> $GITHUB_STEP_SUMMARY
           echo "- PEP 561: Distributing and Packaging Type Information" >> $GITHUB_STEP_SUMMARY

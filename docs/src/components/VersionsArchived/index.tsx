@@ -26,7 +26,7 @@ interface PluginVersionInfo {
 export default function VersionsArchived(): JSX.Element {
   // Get all docs plugin data
   const allDocsData = useAllDocsData();
-  
+
   // Configuration - you can customize these in docusaurus.config.ts
   const pluginTitles = {
     docs: 'User Guide',
@@ -41,10 +41,10 @@ export default function VersionsArchived(): JSX.Element {
   const pluginsVersionInfo = Object.keys(allDocsData).map((pluginId) => {
     const docsData = allDocsData[pluginId];
     const versions = docsData.versions;
-    
+
     // Get the latest stable version (the first non-next version)
     const latestVersion = versions.find((version) => version.name !== 'current') || versions[0];
-    
+
     return {
       pluginId,
       pluginTitle: pluginTitles[pluginId] || pluginId,
@@ -178,7 +178,7 @@ export default function VersionsArchived(): JSX.Element {
                 {/* Use regular text with no translation for dynamic content */}
                 Here you can find documentation for previous versions of {pluginInfo.pluginTitle}.
               </p>
-              
+
               {pluginInfo.versions
                 .filter(version => version.name !== 'current' && version.name !== 'next')
                 .map(version => (

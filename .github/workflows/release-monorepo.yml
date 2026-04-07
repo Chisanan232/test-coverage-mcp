@@ -7,7 +7,7 @@ on:
       - master
     paths:
       - .github/tag_and_release/release-**
-  
+
   # Manual trigger: With package selection and options
   workflow_dispatch:
     inputs:
@@ -94,7 +94,7 @@ jobs:
           echo "Release Status: ${{ needs.production-releases.result }}"
           echo "Packages Released: ${{ needs.production-releases.outputs.packages_released }}"
           echo ""
-          
+
           if [[ "${{ needs.production-releases.result }}" == "success" && "${{ needs.production-releases.outputs.release_performed }}" == "true" ]]; then
             echo "🎉 Production release completed successfully!"
             echo ""

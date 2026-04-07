@@ -69,19 +69,19 @@ jobs:
         if: github.event_name == 'workflow_run'
         run: |
           set -euo pipefail
-          
+
           # Verify release workflow succeeded
           if [[ "${{ github.event.workflow_run.conclusion }}" != "success" ]]; then
             echo "Release workflow failed, skipping documentation deployment"
             echo "should_deploy=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Read docs update flag from artifact
           DOCS_UPDATED=$(cat docs_updated.txt)
-          
+
           echo "Documentation updated flag: $DOCS_UPDATED"
-          
+
           if [[ "$DOCS_UPDATED" == "true" ]]; then
             echo "Documentation was updated during release, proceeding with deployment"
             echo "should_deploy=true" >> $GITHUB_OUTPUT

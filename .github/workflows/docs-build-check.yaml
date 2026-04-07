@@ -61,16 +61,16 @@ jobs:
       - name: Validate build quality
         run: |
           cd docs_with_docusarus/build
-          
+
           # Count HTML files
           HTML_COUNT=$(find . -name "*.html" | wc -l)
           echo "🔍 HTML files generated: $HTML_COUNT"
-          
+
           if [ "$HTML_COUNT" -lt 5 ]; then
             echo "⚠️  Warning: Very few HTML files generated ($HTML_COUNT)"
             echo "This might indicate a build issue"
           fi
-          
+
           # Check for critical files
           CRITICAL_FILES=("index.html" "404.html")
           for file in "${CRITICAL_FILES[@]}"; do
@@ -89,7 +89,7 @@ jobs:
             BUILD_SIZE=$(du -sh docs/build | cut -f1)
             FILE_COUNT=$(find docs/build -type f | wc -l)
             HTML_COUNT=$(find docs/build -name "*.html" | wc -l)
-            
+
             echo "✅ **Build Status**: Success" >> $GITHUB_STEP_SUMMARY
             echo "📁 **Build Size**: $BUILD_SIZE" >> $GITHUB_STEP_SUMMARY
             echo "📄 **Total Files**: $FILE_COUNT" >> $GITHUB_STEP_SUMMARY

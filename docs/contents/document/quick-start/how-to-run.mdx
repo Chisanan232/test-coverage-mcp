@@ -201,14 +201,14 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.12", "3.13"]  # Customize Python versions
-    
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up uv
         uses: ./.github/actions/setup-python-uv
         with:
           python-version: ${{ matrix.python-version }}
-      
+
       # Your custom test steps here
 ```
 
@@ -286,6 +286,6 @@ uv sync --dev
 ## Next Steps
 
 - Set up your IDE/editor with Python and uv support
-- Configure additional development tools as needed  
+- Configure additional development tools as needed
 - Start building your amazing Python project!
 - Consider setting up automated releases using the included GitHub Actions
