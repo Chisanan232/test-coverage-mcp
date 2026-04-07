@@ -11,18 +11,18 @@ import styles from './index.module.css';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
-  
+
   // Get all versions from the docs plugin
   const allDocs = useLatestVersion('docs');
   const docsBasePath = '/docs';
-  
+
   // Find the latest stable version (not "next")
   const stableVersion = allDocs?.versions?.find(version => version.name !== 'current' && version.name !== 'next');
-  
+
   // Calculate the path to the stable documentation with fallbacks
-  const stableDocsPath = stableVersion?.path || 
+  const stableDocsPath = stableVersion?.path ||
     (stableVersion?.name ? `${docsBasePath}/${stableVersion.name}/introduction` : `${docsBasePath}/next/introduction`);
-  
+
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">

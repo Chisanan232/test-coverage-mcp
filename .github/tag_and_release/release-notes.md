@@ -5,9 +5,9 @@
     >>> something-cli --help
     usage: something-cli [-h] [--host HOST] [--port PORT] [--log-level {debug,info,warning,error,critical}] [--reload] [--env ENV_FILE] [--token TOKEN]
                          [--transport {sse,http-streaming}]
-    
+
     Run the something I don\'t know what it is FastAPI server
-    
+
     options:
       -h, --help            show this help message and exit
       --host HOST           Host to bind the server to

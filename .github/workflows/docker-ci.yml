@@ -3,12 +3,12 @@ name: docker-ci
 on:
   push:
     branches:
-      - "<your_base_branch>"
+      - "master"
     paths:
 #     For GitHub Action
       - ".github/workflows/docker-ci.yml"
-#     For source code and test
-      - "<your_package_name>/**/*.py"
+#     For source code and test (monorepo - core package only has Dockerfile)
+      - "test-coverage-mcp/**/*.py"
       - "!**/__pkg_info__.py"
 #     For docker configuration and shell script for running by Docker
       - "Dockerfile"
@@ -21,12 +21,12 @@ on:
   # or other checking, i.e., record the test report by CodeCov and check the code quality by SonarQube.
   pull_request:
     branches:
-      - "<your_base_branch>"
+      - "master"
     paths:
 #     For GitHub Action
       - ".github/workflows/docker-ci.yml"
-#     For source code and test
-      - "<your_package_name>/**/*.py"
+#     For source code and test (monorepo - core package only)
+      - "test-coverage-mcp/**/*.py"
       - "!**/__pkg_info__.py"
 #     For docker configuration and shell script for running by Docker
       - "Dockerfile"
@@ -36,8 +36,8 @@ on:
       - "uv.lock"
 
 env:
-  TEST_TAG: user/<your_project_name>:test
-  TEST_CONTAINER_NAME: <your_project_name>
+  TEST_TAG: chisanan232/test-coverage-mcp:test
+  TEST_CONTAINER_NAME: test-coverage-mcp
 
 jobs:
   image-check:

@@ -1,5 +1,5 @@
 ---
-id: continuous-integration  
+id: continuous-integration
 title: Continuous Integration
 sidebar_position: 1
 ---
@@ -31,28 +31,28 @@ The new CI system features a **3-tier modular architecture** that provides maxim
 graph TD
     A[Main CI Workflows] --> B[ci.yaml - Regular CI]
     A --> C[ci_includes_e2e_test.yaml - E2E CI]
-    
+
     B --> D[rw_run_all_test_and_record.yaml]
     C --> D
-    
+
     D --> E[rw_build_and_test.yaml]
     D --> F[Coverage Reporting Jobs]
-    
+
     E --> G[rw_uv_run_test_with_multi_py_versions.yaml]
     E --> H[5 Test Types]
-    
+
     G --> I[Multi-Platform Matrix]
     G --> J[Multi-Python Version Matrix]
-    
+
     H --> K[Unit Tests]
-    H --> L[Integration Tests] 
+    H --> L[Integration Tests]
     H --> M[E2E Tests]
     H --> N[Contract Tests]
     H --> O[CI Script Tests]
-    
+
     F --> P[Codecov Upload]
     F --> Q[SonarCloud Scan]
-    
+
     style A fill:#4CAF50
     style D fill:#2196F3
     style E fill:#FF9800
@@ -61,11 +61,11 @@ graph TD
 
 ### Architecture Benefits
 
-✅ **Modular Design**: Clear separation of concerns across workflow layers  
-✅ **Flexible Configuration**: Configurable Python versions and operating systems  
-✅ **Comprehensive Testing**: 5 different test types with matrix execution  
-✅ **Multi-Platform Support**: Ubuntu (latest, 22.04) and macOS (latest, 14)  
-✅ **Scalable**: Easy to add new test types or platforms  
+✅ **Modular Design**: Clear separation of concerns across workflow layers
+✅ **Flexible Configuration**: Configurable Python versions and operating systems
+✅ **Comprehensive Testing**: 5 different test types with matrix execution
+✅ **Multi-Platform Support**: Ubuntu (latest, 22.04) and macOS (latest, 14)
+✅ **Scalable**: Easy to add new test types or platforms
 ✅ **Maintainable**: Single workflow changes affect all consuming workflows
 
 ## Workflow Triggers & Configuration
@@ -190,9 +190,9 @@ python-versions: '["3.13"]'  # Default, easily configurable
 **Operating Systems (Multi-Platform):**
 ```yaml
 operating-systems: '[
-  "ubuntu-latest", 
-  "ubuntu-22.04", 
-  "macos-latest", 
+  "ubuntu-latest",
+  "ubuntu-22.04",
+  "macos-latest",
   "macos-14"
 ]'
 ```
@@ -245,9 +245,9 @@ operating-systems: '["ubuntu-latest"]'
 **Full Cross-Platform:**
 ```yaml
 operating-systems: '[
-  "ubuntu-latest", 
-  "ubuntu-22.04", 
-  "macos-latest", 
+  "ubuntu-latest",
+  "ubuntu-22.04",
+  "macos-latest",
   "macos-14",
   "windows-latest"
 ]'

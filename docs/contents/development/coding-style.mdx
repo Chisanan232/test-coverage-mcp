@@ -35,13 +35,13 @@ We use type annotations throughout the codebase to improve code readability and 
 def get_task(task_id: str) -> SampleDataModel:
     """
     Retrieve a task by its ID.
-    
+
     Args:
         task_id: The ID of the task to retrieve
-        
+
     Returns:
         ClickUpTask: The retrieved task object
-        
+
     Raises:
         TaskNotFoundError: If the task doesn't exist
     """
@@ -194,16 +194,16 @@ We use Google-style docstrings:
 ```python
 def function_name(param1: type, param2: type) -> return_type:
     """Short description of the function.
-    
+
     Longer description if necessary, explaining details.
-    
+
     Args:
         param1: Description of param1
         param2: Description of param2
-        
+
     Returns:
         Description of the return value
-        
+
     Raises:
         ExceptionType: When and why this exception is raised
     """

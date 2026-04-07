@@ -1,0 +1,109 @@
+name: Release Validation - Monorepo
+
+on:
+  # Auto-trigger: On PR to master with release-affecting changes
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'test-coverage-mcp/**'
+      - 'test-coverage-mcp-codecov/**'
+      - '.github/tag_and_release/**'
+      - '.github/workflows/release-*.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+  # Manual trigger: With package selection and level
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'Packages to validate (JSON array, e.g., ["core", "codecov"]). Leave empty for auto-detect.'
+        required: false
+        default: '[]'
+        type: string
+      level:
+        description: 'Release level to test'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - patch
+          - minor
+          - major
+      python:
+        description: 'Python package release'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - force
+          - skip
+      docker:
+        description: 'Docker image release'
+        required: false
+        default: 'skip'
+        type: choice
+        options:
+          - auto
+          - force
+          - skip
+      docs:
+        description: 'Documentation versioning'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - force
+          - skip
+
+permissions:
+  contents: read      # Validation doesn't write
+  packages: read
+  id-token: write     # For OIDC if needed
+
+concurrency:
+  group: release-validate-${{ github.ref }}
+  cancel-in-progress: true  # Can cancel validation if new changes
+
+jobs:
+  validate-releases:
+    name: Validate Release Process
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_monorepo_release_orchestrator.yaml@master
+    with:
+      packages: ${{ inputs.packages || '[]' }}
+      level: ${{ inputs.level || 'auto' }}
+      python: ${{ inputs.python || 'auto' }}
+      docker: ${{ inputs.docker || 'skip' }}
+      docs: ${{ inputs.docs || 'auto' }}
+      dry-run: true              # Always dry-run for validation
+      release-mode: 'sequential'
+    secrets: inherit
+
+  validation-summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs: validate-releases
+    if: always()
+    steps:
+      - name: Report validation results
+        run: |
+          echo "=== Release Validation Summary ==="
+          echo ""
+          echo "Validation Status: ${{ needs.validate-releases.result }}"
+          echo "Packages Validated: ${{ needs.validate-releases.outputs.packages_validated }}"
+          echo ""
+
+          if [[ "${{ needs.validate-releases.result }}" == "success" ]]; then
+            echo "✅ Release validation passed!"
+            echo ""
+            echo "📦 Validated Packages:"
+            echo "${{ needs.validate-releases.outputs.validation_details }}"
+            echo ""
+            echo "Ready for staging or production release."
+          else
+            echo "❌ Release validation failed. Fix issues before releasing."
+            exit 1
+          fi

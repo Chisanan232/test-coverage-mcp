@@ -258,12 +258,95 @@ To add a new coverage provider:
 
 ## CI/CD
 
-The project uses GitHub Actions for CI/CD:
+The project uses GitHub Actions for monorepo CI/CD with per-package workflows:
 
-- **Linting**: ruff, mypy on every push
-- **Testing**: pytest on Python 3.12, 3.13, 3.14
-- **Coverage**: Uploaded to Codecov
-- **Quality**: SonarCloud analysis
+### Running Tests in Monorepo
+
+#### Test All Packages
+```bash
+uv run pytest
+```
+
+#### Test Core Package Only
+```bash
+cd test-coverage-mcp
+uv run pytest test/unit_test/ -v
+```
+
+#### Test Codecov Plugin Only
+```bash
+cd test-coverage-mcp-codecov
+uv run pytest test/unit_test/ -v
+```
+
+### CI Workflow
+
+**File**: `.github/workflows/ci-monorepo.yaml`
+
+- **Per-package testing**: Automatically detects which packages changed
+- **Matrix testing**: Python 3.12, 3.13, 3.14 on ubuntu-latest, macos-latest
+- **Coverage**: Uploaded to Codecov with package-specific flags (e.g., `core,unit-test`)
+- **Quality**: SonarQube multi-module analysis
+
+### Release Process
+
+The project uses 3 release orchestrator workflows:
+
+#### Validation (Pre-Release Check)
+1. Automatically runs on PRs modifying package code
+2. Or manually trigger: `.github/workflows/release-validate-monorepo.yml`
+3. Validates build, tests, and version bumps (dry-run only)
+
+#### Staging Release (TestPyPI)
+1. Manually trigger: `.github/workflows/release-staging-monorepo.yml`
+2. Select packages: `["core"]` or `["codecov"]` or `["core", "codecov"]`
+3. Publishes to TestPyPI with RC tags (e.g., `core/v1.0.0-rc.1`)
+4. Test installations before production
+
+#### Production Release (PyPI)
+1. **Auto-trigger**: Push changes to `.github/tag_and_release/release-**`
+2. **Manual trigger**: `.github/workflows/release-monorepo.yml`
+   - Select packages: `["core"]` or `["codecov"]` or both
+   - Select release level (auto/patch/minor/major)
+3. Creates version tags (e.g., `core/v1.0.0`)
+4. Publishes to PyPI
+5. Creates GitHub releases
+
+### Releasing Specific Package
+
+To release only the core package:
+```bash
+# Trigger release-monorepo.yml manually
+# Input: packages = ["core"]
+# Input: level = patch (or minor/major)
+```
+
+To release both packages:
+```bash
+# Input: packages = ["core", "codecov"]
+# Or leave empty for auto-detection
+```
+
+### Adding a New Package to CI/CD
+
+When adding a new package (e.g., `test-coverage-mcp-sonarqube`):
+
+1. Update `.github/tag_and_release/intent.yaml`:
+   ```yaml
+   packages:
+     - name: core
+       # ... existing config
+     - name: codecov
+       # ... existing config
+     - name: sonarqube
+       package_name: test-coverage-mcp-sonarqube
+       working_directory: ./test-coverage-mcp-sonarqube
+       tag_prefix: sonarqube/
+   ```
+
+2. **That's it!** No new workflow files needed. All 3 orchestrators automatically handle the new package.
+
+3. The CI workflow will also auto-detect changes to the new package directory.
 
 ## Questions?
 
