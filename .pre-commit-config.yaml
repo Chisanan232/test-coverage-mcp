@@ -26,7 +26,7 @@ repos:
         files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.pyi?$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v1.20.0
     hooks:
       - id: mypy
         name: MyPy Type Checking (Backend Packages)
@@ -84,7 +84,7 @@ repos:
         args: [--autofix]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.10.0.1
+    rev: v0.11.0.1
     hooks:
       - id: shellcheck
         name: ShellCheck (Scripts)
@@ -99,7 +99,7 @@ repos:
 
   # Frontend Documentation Hooks (Docusaurus)
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.22.0
+    rev: v10.2.0
     hooks:
       - id: eslint
         name: ESLint (Documentation Frontend)
@@ -114,7 +114,7 @@ repos:
           - --config=docs/.eslintrc.json
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.5.3
+    rev: v3.1.0
     hooks:
       - id: prettier
         name: Prettier (Documentation Frontend)
