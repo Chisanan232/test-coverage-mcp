@@ -144,7 +144,7 @@ repos:
 
   # Advanced Infrastructure Hooks
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.13.2-beta
+    rev: v2.13.1
     hooks:
       - id: hadolint-docker
         name: Hadolint (Dockerfile)
