@@ -25,51 +25,54 @@ artifacts:
 
 notes: "Automatic release based on semantic versioning and enhanced release with multi-section docs versioning"
 
-# === PROJECT CONFIGURATION ===
-project:
-  name: ~                           # Defaults to repository name if not set
-  package_name: ~                   # Defaults to repository name if not set
-  base_branch: master               # Main/default branch for the project
-
-# === PYTHON PACKAGE CONFIGURATION ===
-python:
-  auth_method: token                 # oidc | token - Authentication method for PyPI uploads
-  # OIDC (Trusted Publisher) - More secure, no secrets needed (recommended)
-  # Token - Traditional API token authentication (requires PYPI_API_TOKEN secret)
-
-# === GIT CONFIGURATION ===
-git:
-  commit:
-    name: "GitHub Actions Bot"      # Git commit author name
-    email: "actions@github.com"     # Git commit author email
-
-# === DOCKER CONFIGURATION ===
-docker:
-  registries:
-    dockerhub: docker.io           # DockerHub registry URL
-    ghcr: ghcr.io                  # GitHub Container Registry URL
+# === MONOREPO PACKAGE CONFIGURATION ===
+packages:
+  - name: core
+    package_name: test-coverage-mcp
+    working_directory: ./test-coverage-mcp
+    base_branch: master
+    tag_prefix: core/
+    python:
+      auth_method: token
+    docker:
+      registries:
+        dockerhub: docker.io/chisanan232/test-coverage-mcp
+        ghcr: ghcr.io/chisanan232/test-coverage-mcp
+      health_check:
+        port: 8000
+        path: "/health"
+      run_options: "-e API_TOKEN=test_token -e DEBUG=true"
   
-  health_check:
-    port: 8000                     # Port for container health checks
-    path: "/health"                # Health check endpoint path
-  
-  # Flexible Docker run options - supports multiple env vars, volumes, networks, etc.
-  run_options: "-e API_TOKEN=test_token -e DEBUG=true"  # Custom Docker run options for testing
+  - name: codecov
+    package_name: test-coverage-mcp-codecov
+    working_directory: ./test-coverage-mcp-codecov
+    base_branch: master
+    tag_prefix: codecov/
+    python:
+      auth_method: token
+    # No docker or docs for codecov plugin (uses core's infrastructure)
 
-# === VALIDATION CONFIGURATION ===
-validation:
-  version: "1.0.0-validation"      # Version tag for validation runs
-  test_version: "validation-test"  # Version tag for validation testing
-
-# === DOCUMENTATION CONFIGURATION ===
-docs:
-  paths:
-    ci_cd: "docs/CI_CD.md"         # CI/CD documentation path
-    installation: "docs/INSTALLATION.md"  # Installation guide path
-    readme: "README.md"            # Main README file path
+# === DEFAULTS (applied to all packages unless overridden) ===
+defaults:
+  git:
+    commit:
+      name: "GitHub Actions Bot"
+      email: "actions@github.com"
   
-  preview:
-    branch: "docs-preview"         # Branch for documentation previews
+  python:
+    auth_method: token
+  
+  validation:
+    version: "1.0.0-validation"
+    test_version: "validation-test"
+  
+  docs:
+    paths:
+      ci_cd: "docs/CI_CD.md"
+      installation: "docs/INSTALLATION.md"
+      readme: "README.md"
+    preview:
+      branch: "docs-preview"
 
 # === CONFIGURATION EXAMPLES ===
 #
