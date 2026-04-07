@@ -3,6 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import remarkGfm from 'remark-gfm';
 import remarkMdxCodeMeta from 'remark-mdx-code-meta';
+import searchLocal from '@easyops-cn/docusaurus-search-local';
 
 const config: Config = {
   title: 'test-coverage-mcp',
@@ -115,12 +116,12 @@ const config: Config = {
       },
     ],
     [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
+      searchLocal,
       {
         // Options for docusaurus-search-local
         hashed: true,
         language: ['en'],
-        docsRouteBasePath: ['/uv-template'],
+        docsRouteBasePath: ['/test-coverage-mcp'],
         docsDir: ['./contents/document', './contents/development'],
         blogDir: ['./contents/blog'],
         highlightSearchTermsOnTargetPage: true,
