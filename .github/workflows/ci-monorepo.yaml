@@ -132,12 +132,52 @@ jobs:
           operating-systems: '["${{ matrix.os }}"]'
 
       # Organize coverage reports
-      - name: Organize Coverage Reports
+      - name: Organize Unit Test Coverage Reports
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
         with:
           project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: unit-test
 
-      # Upload to Codecov
+      - name: Organize Integration Test Coverage Reports
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: integration-test
+
+      - name: Organize Contract Test Coverage Reports
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: contract-test
+
+      - name: Organize All Test Coverage Reports
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: all
+
+  # Upload coverage reports jobs
+  upload-unit-coverage:
+    name: Upload Unit Coverage - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    steps:
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "codecov_flag=core" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload to Codecov
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
         with:
@@ -147,6 +187,27 @@ jobs:
           codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},unit-test
         secrets:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
+
+  upload-integration-coverage:
+    name: Upload Integration Coverage - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    steps:
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "codecov_flag=core" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload Integration Coverage
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
@@ -158,9 +219,86 @@ jobs:
         secrets:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
-      # Upload to SonarQube (only on master branch)
+  upload-contract-coverage:
+    name: Upload Contract Coverage - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    steps:
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "codecov_flag=core" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload Contract Coverage
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: contract-test
+          codecov_name: ${{ steps.pkg-info.outputs.project_name }}
+          codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},contract-test
+        secrets:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+
+  upload-all-coverage:
+    name: Upload All Coverage - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    steps:
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+            echo "codecov_flag=core" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload All Coverage
+        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+        with:
+          project_name: ${{ steps.pkg-info.outputs.project_name }}
+          test_type: all
+          codecov_name: ${{ steps.pkg-info.outputs.project_name }}
+          codecov_flags: ${{ steps.pkg-info.outputs.codecov_flag }},all
+        secrets:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+
+  upload-sonarqube:
+    name: Upload to SonarQube - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-packages]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success' && github.ref_name == 'master'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    steps:
+      - name: Set package info
+        id: pkg-info
+        run: |
+          if [ "${{ matrix.package }}" == "core" ]; then
+            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package }}" == "codecov" ]; then
+            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload to SonarQube
-        if: github.ref_name == 'master'
         uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
         with:
           project_name: ${{ steps.pkg-info.outputs.project_name }}
@@ -174,7 +312,7 @@ jobs:
   ci-summary:
     name: CI Summary
     runs-on: ubuntu-latest
-    needs: [detect-changes, test-packages]
+    needs: [detect-changes, test-packages, upload-unit-coverage, upload-integration-coverage, upload-contract-coverage, upload-all-coverage, upload-sonarqube]
     if: always()
     steps:
       - name: Check CI Status
@@ -185,9 +323,19 @@ jobs:
           echo "Core Changed: ${{ needs.detect-changes.outputs.core }}"
           echo "Codecov Changed: ${{ needs.detect-changes.outputs.codecov }}"
           echo "Test Status: ${{ needs.test-packages.result }}"
+          echo "Unit Coverage Upload: ${{ needs.upload-unit-coverage.result }}"
+          echo "Integration Coverage Upload: ${{ needs.upload-integration-coverage.result }}"
+          echo "Contract Coverage Upload: ${{ needs.upload-contract-coverage.result }}"
+          echo "All Coverage Upload: ${{ needs.upload-all-coverage.result }}"
+          echo "SonarQube Upload: ${{ needs.upload-sonarqube.result }}"
           echo ""
 
-          if [ "${{ needs.test-packages.result }}" == "success" ] || [ "${{ needs.test-packages.result }}" == "skipped" ]; then
+          if ([ "${{ needs.test-packages.result }}" == "success" ] || [ "${{ needs.test-packages.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-unit-coverage.result }}" == "success" ] || [ "${{ needs.upload-unit-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-integration-coverage.result }}" == "success" ] || [ "${{ needs.upload-integration-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-contract-coverage.result }}" == "success" ] || [ "${{ needs.upload-contract-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-all-coverage.result }}" == "success" ] || [ "${{ needs.upload-all-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-sonarqube.result }}" == "success" ] || [ "${{ needs.upload-sonarqube.result }}" == "skipped" ]); then
             echo "✅ CI passed successfully!"
           else
             echo "❌ CI failed. Check test results above."
