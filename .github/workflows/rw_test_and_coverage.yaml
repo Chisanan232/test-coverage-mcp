@@ -64,123 +64,38 @@ on:
 jobs:
   run-tests:
     name: Run ${{ inputs.test_type }} - ${{ inputs.package }}
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ${{ fromJson(inputs.python_versions) }}
-        os: ${{ fromJson(inputs.operating_systems) }}
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install UV
-        uses: astral-sh/setup-uv@v2
-
-      - name: Run ${{ inputs.test_type }} tests
-        working-directory: ${{ inputs.test_working_directory }}
-        run: |
-          uv sync
-          uv run pytest ${{ inputs.test_folder }} --cov-config=../.coveragerc
-
-      - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: coverage_${{ inputs.project_name }}_${{ inputs.test_type }}_${{ matrix.os }}_${{ matrix.python-version }}
-          path: ${{ inputs.test_working_directory }}/.coverage*
-          if-no-files-found: ignore
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
+      test_folder: ${{ inputs.test_folder }}
+      python-versions: ${{ inputs.python_versions }}
+      operating-systems: ${{ inputs.operating_systems }}
 
   organize-coverage:
     name: Organize ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
     needs: run-tests
-    if: always() && needs.run-tests.result != 'skipped'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Download coverage artifacts
-        uses: actions/download-artifact@v8
-        with:
-          pattern: coverage_${{ inputs.project_name }}_${{ inputs.test_type }}_*
-          path: ${{ inputs.test_working_directory }}
-          merge-multiple: true
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install coverage tools
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install coverage
-
-      - name: Combine coverage reports
-        working-directory: ${{ inputs.test_working_directory }}
-        run: |
-          mkdir -p ./scripts/ci/
-          echo "Download shell script for combining coverage reports ..."
-          curl https://raw.githubusercontent.com/Chisanan232/GitHub-Action_Reusable_Workflows-Python/develop/scripts/ci/combine_coverage_reports.sh --output ./scripts/ci/combine_coverage_reports.sh
-          bash ./scripts/ci/combine_coverage_reports.sh ${{ inputs.test_type }} .coverage.
-
-      - name: Upload combined coverage report
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ inputs.project_name }}_${{ inputs.test_type }}_coverage_data_file
-          path: ${{ inputs.test_working_directory }}.coverage
-          if-no-files-found: error
-          include-hidden-files: true
-
-      - name: Upload coverage XML report
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ inputs.project_name }}_${{ inputs.test_type }}_coverage_xml_report
-          path: ${{ inputs.test_working_directory }}coverage**xml
-          if-no-files-found: error
-          include-hidden-files: true
+    if: always() && needs.run-tests.result == 'success'
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
 
   upload-coverage:
     name: Upload ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
     needs: organize-coverage
     if: always() && needs.organize-coverage.result == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Download coverage reports
-        uses: actions/download-artifact@v8
-        with:
-          pattern: ${{ inputs.project_name }}_${{ inputs.test_type }}_coverage_*
-          path: ${{ inputs.test_working_directory }}
-          merge-multiple: true
-
-      - name: Upload to Codecov
-        if: secrets.codecov_token != ''
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.codecov_token }}
-          files: ${{ inputs.test_working_directory }}/coverage.xml
-          flags: ${{ inputs.package }},${{ inputs.test_type }}
-          name: ${{ inputs.project_name }}
-          fail_ci_if_error: false
-
-      - name: Upload to SonarQube
-        if: secrets.sonar_token != '' && github.ref_name == 'master' && inputs.test_type == 'unit-test'
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.sonar_token }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ inputs.project_name }}
-            -Dsonar.sources=${{ inputs.test_working_directory }}/src
-            -Dsonar.coverage.exclusions=${{ inputs.test_working_directory }}/test/**
-            -Dsonar.coverageReportPaths=${{ inputs.test_working_directory }}/coverage.xml
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
+      codecov_name: ${{ inputs.project_name }}
+      codecov_flags: ${{ inputs.package }},${{ inputs.test_type }}
+      sonarqube_enable: ${{ inputs.test_type == 'unit-test' && github.ref_name == 'master' }}
+      sonarqube_name: ${{ inputs.project_name }}
+    secrets:
+      codecov_token: ${{ secrets.codecov_token }}
+      sonar_token: ${{ secrets.sonar_token }}
