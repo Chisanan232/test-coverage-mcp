@@ -57,9 +57,6 @@ on:
       codecov_token:
         description: "Codecov token for uploading coverage"
         required: false
-      sonar_token:
-        description: "SonarQube token for uploading coverage"
-        required: false
 
 jobs:
   run-tests:
@@ -96,4 +93,3 @@ jobs:
       codecov_flags: ${{ inputs.package }},${{ inputs.test_type }}
     secrets:
       codecov_token: ${{ secrets.codecov_token }}
-      sonar_token: ${{ secrets.sonar_token }}
