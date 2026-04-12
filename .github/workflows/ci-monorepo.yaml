@@ -274,8 +274,6 @@ jobs:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
       test_type: all
-      sonarqube_enable: true
-      sonarqube_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
     secrets:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
