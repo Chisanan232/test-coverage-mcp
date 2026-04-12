@@ -146,6 +146,24 @@ jobs:
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
       test_type: all
 
+  upload-codecov:
+    name: Upload to Codecov - ${{ matrix.package }}
+    needs: [detect-changes, organize-all-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_type: all
+      codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},all
+    secrets:
+      codecov_token: ${{ secrets.CODECOV_TOKEN }}
+
   upload-sonarqube:
     name: Upload to SonarQube - ${{ matrix.package }}
     needs: [detect-changes, organize-all-coverage]
@@ -170,6 +188,7 @@ jobs:
       - test-unit
       - test-integration
       - organize-all-coverage
+      - upload-codecov
       - upload-sonarqube
     if: always()
     steps:
@@ -184,12 +203,14 @@ jobs:
           echo "Unit Tests:                    ${{ needs.test-unit.result }}"
           echo "Integration Tests:             ${{ needs.test-integration.result }}"
           echo "Organize All Coverage:         ${{ needs.organize-all-coverage.result }}"
+          echo "Upload to Codecov:             ${{ needs.upload-codecov.result }}"
           echo "Upload to SonarQube:           ${{ needs.upload-sonarqube.result }}"
           echo ""
 
           if ([ "${{ needs.test-unit.result }}" == "success" ] || [ "${{ needs.test-unit.result }}" == "skipped" ]) && \
              ([ "${{ needs.test-integration.result }}" == "success" ] || [ "${{ needs.test-integration.result }}" == "skipped" ]) && \
              ([ "${{ needs.organize-all-coverage.result }}" == "success" ] || [ "${{ needs.organize-all-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-codecov.result }}" == "success" ] || [ "${{ needs.upload-codecov.result }}" == "skipped" ]) && \
              ([ "${{ needs.upload-sonarqube.result }}" == "success" ] || [ "${{ needs.upload-sonarqube.result }}" == "skipped" ]); then
             echo "✅ CI passed successfully!"
           else
