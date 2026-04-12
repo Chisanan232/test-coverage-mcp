@@ -130,6 +130,40 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
+  # ── Organize all coverage and upload to SonarQube ──
+
+  organize-all-coverage:
+    name: Organize All Coverage - ${{ matrix.package }}
+    needs: [detect-changes, test-unit, test-integration]
+    if: needs.detect-changes.outputs.packages != '[]' && (needs.test-unit.result == 'success' || needs.test-unit.result == 'skipped') && (needs.test-integration.result == 'success' || needs.test-integration.result == 'skipped')
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_type: all
+
+  upload-sonarqube:
+    name: Upload to SonarQube - ${{ matrix.package }}
+    needs: [detect-changes, organize-all-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success' && github.ref_name == 'master'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_type: all
+      sonarqube_enable: true
+      sonarqube_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
+
   # Summary job
   ci-summary:
     name: CI Summary
@@ -138,6 +172,8 @@ jobs:
       - detect-changes
       - test-unit
       - test-integration
+      - organize-all-coverage
+      - upload-sonarqube
     if: always()
     steps:
       - name: Check CI Status
@@ -150,10 +186,14 @@ jobs:
           echo ""
           echo "Unit Tests:                    ${{ needs.test-unit.result }}"
           echo "Integration Tests:             ${{ needs.test-integration.result }}"
+          echo "Organize All Coverage:         ${{ needs.organize-all-coverage.result }}"
+          echo "Upload to SonarQube:           ${{ needs.upload-sonarqube.result }}"
           echo ""
 
           if ([ "${{ needs.test-unit.result }}" == "success" ] || [ "${{ needs.test-unit.result }}" == "skipped" ]) && \
-             ([ "${{ needs.test-integration.result }}" == "success" ] || [ "${{ needs.test-integration.result }}" == "skipped" ]); then
+             ([ "${{ needs.test-integration.result }}" == "success" ] || [ "${{ needs.test-integration.result }}" == "skipped" ]) && \
+             ([ "${{ needs.organize-all-coverage.result }}" == "success" ] || [ "${{ needs.organize-all-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.upload-sonarqube.result }}" == "success" ] || [ "${{ needs.upload-sonarqube.result }}" == "skipped" ]); then
             echo "✅ CI passed successfully!"
           else
             echo "❌ CI failed. Check test results above."
