@@ -94,8 +94,6 @@ jobs:
       test_type: ${{ inputs.test_type }}
       codecov_name: ${{ inputs.project_name }}
       codecov_flags: ${{ inputs.package }},${{ inputs.test_type }}
-      sonarqube_enable: ${{ inputs.test_type == 'unit-test' && github.ref_name == 'master' }}
-      sonarqube_name: ${{ inputs.project_name }}
     secrets:
       codecov_token: ${{ secrets.codecov_token }}
       sonar_token: ${{ secrets.sonar_token }}
