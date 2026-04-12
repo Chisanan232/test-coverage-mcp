@@ -62,12 +62,23 @@ jobs:
       - name: Set package matrix
         id: set-matrix
         run: |
-          PACKAGES="[]"
+          PACKAGES=""
           if [ "${{ steps.filter.outputs.core }}" == "true" ]; then
-            PACKAGES=$(echo $PACKAGES | jq '. + ["core"]')
+            if [ -z "$PACKAGES" ]; then
+              PACKAGES='["core"]'
+            else
+              PACKAGES=$(echo "$PACKAGES" | sed 's/\]$/,"core"]/')
+            fi
           fi
           if [ "${{ steps.filter.outputs.codecov }}" == "true" ]; then
-            PACKAGES=$(echo $PACKAGES | jq '. + ["codecov"]')
+            if [ -z "$PACKAGES" ]; then
+              PACKAGES='["codecov"]'
+            else
+              PACKAGES=$(echo "$PACKAGES" | sed 's/\]$/,"codecov"]/')
+            fi
+          fi
+          if [ -z "$PACKAGES" ]; then
+            PACKAGES='[]'
           fi
           echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
           echo "Packages to test: $PACKAGES"
