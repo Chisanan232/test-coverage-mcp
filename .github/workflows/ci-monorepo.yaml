@@ -96,7 +96,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: unit-test
       test_folder: ./test/unit_test
       python-versions: '["3.12", "3.13", "3.14"]'
@@ -113,7 +113,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: integration-test
       test_folder: ./test/integration_test
       python-versions: '["3.12", "3.13", "3.14"]'
@@ -130,7 +130,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: contract-test
       test_folder: ./test/contract_test
       python-versions: '["3.12", "3.13", "3.14"]'
@@ -149,7 +149,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: unit-test
 
   organize-integration-coverage:
@@ -163,7 +163,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: integration-test
 
   organize-contract-coverage:
@@ -177,7 +177,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: contract-test
 
   organize-all-coverage:
@@ -195,7 +195,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: all
 
   # ── Upload coverage reports ──
@@ -211,7 +211,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: unit-test
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},unit-test
@@ -229,7 +229,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: integration-test
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},integration-test
@@ -247,7 +247,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: contract-test
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},contract-test
@@ -265,7 +265,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
-      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
+      test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp/' || './test-coverage-mcp-codecov/' }}
       test_type: all
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},all
