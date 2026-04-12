@@ -72,95 +72,120 @@ jobs:
           echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
           echo "Packages to test: $PACKAGES"
 
-  # Run tests per package
-  test-packages:
-    name: Test ${{ matrix.package }} on ${{ matrix.os }} - Python ${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}
+  # ── Run tests (one job per test type, each calls the reusable workflow at job level) ──
+
+  run-unit-tests:
+    name: Run Unit Tests - ${{ matrix.package }}
     needs: detect-changes
     if: needs.detect-changes.outputs.packages != '[]'
     strategy:
       fail-fast: false
       matrix:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.12", "3.13", "3.14"]
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: unit-test
+      test_folder: ./test/unit_test
+      python-versions: '["3.12", "3.13", "3.14"]'
+      operating-systems: '["ubuntu-latest", "macos-latest"]'
 
-    steps:
-      - uses: actions/checkout@v4
+  run-integration-tests:
+    name: Run Integration Tests - ${{ matrix.package }}
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: integration-test
+      test_folder: ./test/integration_test
+      python-versions: '["3.12", "3.13", "3.14"]'
+      operating-systems: '["ubuntu-latest", "macos-latest"]'
 
-      - name: Set package info
-        id: pkg-info
-        run: |
-          if [ "${{ matrix.package }}" == "core" ]; then
-            echo "project_name=test-coverage-mcp" >> $GITHUB_OUTPUT
-            echo "working_dir=./test-coverage-mcp" >> $GITHUB_OUTPUT
-            echo "codecov_flag=core" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.package }}" == "codecov" ]; then
-            echo "project_name=test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
-            echo "working_dir=./test-coverage-mcp-codecov" >> $GITHUB_OUTPUT
-            echo "codecov_flag=codecov" >> $GITHUB_OUTPUT
-          fi
+  run-contract-tests:
+    name: Run Contract Tests - ${{ matrix.package }}
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: contract-test
+      test_folder: ./test/contract_test
+      python-versions: '["3.12", "3.13", "3.14"]'
+      operating-systems: '["ubuntu-latest", "macos-latest"]'
 
-      # Unit Tests
-      - name: Run Unit Tests
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: unit-test
-          test_folder: ./test/unit_test
-          python-versions: '["${{ matrix.python-version }}"]'
-          operating-systems: '["${{ matrix.os }}"]'
+  # ── Organize coverage reports (one job per test type) ──
 
-      # Integration Tests
-      - name: Run Integration Tests
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: integration-test
-          test_folder: ./test/integration_test
-          python-versions: '["${{ matrix.python-version }}"]'
-          operating-systems: '["${{ matrix.os }}"]'
+  organize-unit-coverage:
+    name: Organize Unit Coverage - ${{ matrix.package }}
+    needs: [detect-changes, run-unit-tests]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-unit-tests.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: unit-test
 
-      # Contract Tests
-      - name: Run Contract Tests
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: contract-test
-          test_folder: ./test/contract_test
-          python-versions: '["${{ matrix.python-version }}"]'
-          operating-systems: '["${{ matrix.os }}"]'
+  organize-integration-coverage:
+    name: Organize Integration Coverage - ${{ matrix.package }}
+    needs: [detect-changes, run-integration-tests]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-integration-tests.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: integration-test
 
-      # Organize coverage reports
-      - name: Organize Unit Test Coverage Reports
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: unit-test
+  organize-contract-coverage:
+    name: Organize Contract Coverage - ${{ matrix.package }}
+    needs: [detect-changes, run-contract-tests]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-contract-tests.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: contract-test
 
-      - name: Organize Integration Test Coverage Reports
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: integration-test
+  organize-all-coverage:
+    name: Organize All Coverage - ${{ matrix.package }}
+    needs: [detect-changes, organize-unit-coverage, organize-integration-coverage, organize-contract-coverage]
+    if: |
+      needs.detect-changes.outputs.packages != '[]' &&
+      (needs.organize-unit-coverage.result == 'success' || needs.organize-unit-coverage.result == 'skipped') &&
+      (needs.organize-integration-coverage.result == 'success' || needs.organize-integration-coverage.result == 'skipped') &&
+      (needs.organize-contract-coverage.result == 'success' || needs.organize-contract-coverage.result == 'skipped')
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
+    with:
+      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
+      test_type: all
 
-      - name: Organize Contract Test Coverage Reports
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: contract-test
+  # ── Upload coverage reports ──
 
-      - name: Organize All Test Coverage Reports
-        uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
-        with:
-          project_name: ${{ steps.pkg-info.outputs.project_name }}
-          test_type: all
-
-  # Upload coverage reports jobs
   upload-unit-coverage:
     name: Upload Unit Coverage - ${{ matrix.package }}
-    needs: [detect-changes, test-packages]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    needs: [detect-changes, organize-unit-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-unit-coverage.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -176,8 +201,8 @@ jobs:
 
   upload-integration-coverage:
     name: Upload Integration Coverage - ${{ matrix.package }}
-    needs: [detect-changes, test-packages]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    needs: [detect-changes, organize-integration-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-integration-coverage.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -193,8 +218,8 @@ jobs:
 
   upload-contract-coverage:
     name: Upload Contract Coverage - ${{ matrix.package }}
-    needs: [detect-changes, test-packages]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    needs: [detect-changes, organize-contract-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-contract-coverage.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -210,8 +235,8 @@ jobs:
 
   upload-all-coverage:
     name: Upload All Coverage - ${{ matrix.package }}
-    needs: [detect-changes, test-packages]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success'
+    needs: [detect-changes, organize-all-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -227,8 +252,8 @@ jobs:
 
   upload-sonarqube:
     name: Upload to SonarQube - ${{ matrix.package }}
-    needs: [detect-changes, test-packages]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.test-packages.result == 'success' && github.ref_name == 'master'
+    needs: [detect-changes, organize-all-coverage]
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success' && github.ref_name == 'master'
     strategy:
       fail-fast: false
       matrix:
@@ -246,25 +271,53 @@ jobs:
   ci-summary:
     name: CI Summary
     runs-on: ubuntu-latest
-    needs: [detect-changes, test-packages, upload-unit-coverage, upload-integration-coverage, upload-contract-coverage, upload-all-coverage, upload-sonarqube]
+    needs:
+      - detect-changes
+      - run-unit-tests
+      - run-integration-tests
+      - run-contract-tests
+      - organize-unit-coverage
+      - organize-integration-coverage
+      - organize-contract-coverage
+      - organize-all-coverage
+      - upload-unit-coverage
+      - upload-integration-coverage
+      - upload-contract-coverage
+      - upload-all-coverage
+      - upload-sonarqube
     if: always()
     steps:
       - name: Check CI Status
         run: |
           echo "=== Monorepo CI Summary ==="
           echo ""
-          echo "Changed Packages: ${{ needs.detect-changes.outputs.packages }}"
-          echo "Core Changed: ${{ needs.detect-changes.outputs.core }}"
-          echo "Codecov Changed: ${{ needs.detect-changes.outputs.codecov }}"
-          echo "Test Status: ${{ needs.test-packages.result }}"
-          echo "Unit Coverage Upload: ${{ needs.upload-unit-coverage.result }}"
-          echo "Integration Coverage Upload: ${{ needs.upload-integration-coverage.result }}"
-          echo "Contract Coverage Upload: ${{ needs.upload-contract-coverage.result }}"
-          echo "All Coverage Upload: ${{ needs.upload-all-coverage.result }}"
-          echo "SonarQube Upload: ${{ needs.upload-sonarqube.result }}"
+          echo "Changed Packages:              ${{ needs.detect-changes.outputs.packages }}"
+          echo "Core Changed:                  ${{ needs.detect-changes.outputs.core }}"
+          echo "Codecov Changed:               ${{ needs.detect-changes.outputs.codecov }}"
+          echo ""
+          echo "Unit Tests:                    ${{ needs.run-unit-tests.result }}"
+          echo "Integration Tests:             ${{ needs.run-integration-tests.result }}"
+          echo "Contract Tests:                ${{ needs.run-contract-tests.result }}"
+          echo ""
+          echo "Organize Unit Coverage:        ${{ needs.organize-unit-coverage.result }}"
+          echo "Organize Integration Coverage: ${{ needs.organize-integration-coverage.result }}"
+          echo "Organize Contract Coverage:    ${{ needs.organize-contract-coverage.result }}"
+          echo "Organize All Coverage:         ${{ needs.organize-all-coverage.result }}"
+          echo ""
+          echo "Unit Coverage Upload:          ${{ needs.upload-unit-coverage.result }}"
+          echo "Integration Coverage Upload:   ${{ needs.upload-integration-coverage.result }}"
+          echo "Contract Coverage Upload:      ${{ needs.upload-contract-coverage.result }}"
+          echo "All Coverage Upload:           ${{ needs.upload-all-coverage.result }}"
+          echo "SonarQube Upload:              ${{ needs.upload-sonarqube.result }}"
           echo ""
 
-          if ([ "${{ needs.test-packages.result }}" == "success" ] || [ "${{ needs.test-packages.result }}" == "skipped" ]) && \
+          if ([ "${{ needs.run-unit-tests.result }}" == "success" ] || [ "${{ needs.run-unit-tests.result }}" == "skipped" ]) && \
+             ([ "${{ needs.run-integration-tests.result }}" == "success" ] || [ "${{ needs.run-integration-tests.result }}" == "skipped" ]) && \
+             ([ "${{ needs.run-contract-tests.result }}" == "success" ] || [ "${{ needs.run-contract-tests.result }}" == "skipped" ]) && \
+             ([ "${{ needs.organize-unit-coverage.result }}" == "success" ] || [ "${{ needs.organize-unit-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.organize-integration-coverage.result }}" == "success" ] || [ "${{ needs.organize-integration-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.organize-contract-coverage.result }}" == "success" ] || [ "${{ needs.organize-contract-coverage.result }}" == "skipped" ]) && \
+             ([ "${{ needs.organize-all-coverage.result }}" == "success" ] || [ "${{ needs.organize-all-coverage.result }}" == "skipped" ]) && \
              ([ "${{ needs.upload-unit-coverage.result }}" == "success" ] || [ "${{ needs.upload-unit-coverage.result }}" == "skipped" ]) && \
              ([ "${{ needs.upload-integration-coverage.result }}" == "success" ] || [ "${{ needs.upload-integration-coverage.result }}" == "skipped" ]) && \
              ([ "${{ needs.upload-contract-coverage.result }}" == "success" ] || [ "${{ needs.upload-contract-coverage.result }}" == "skipped" ]) && \
