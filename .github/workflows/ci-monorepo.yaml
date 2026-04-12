@@ -1,5 +1,10 @@
 name: CI - Monorepo
-
+#
+# This workflow uses intelligent test execution outputs to conditionally process coverage:
+# - Coverage organization only runs if tests were executed and coverage was generated
+# - Skips unnecessary processing when packages have no tests
+# - Provides detailed test execution status in CI summary
+#
 on:
   pull_request:
     branches:
@@ -141,7 +146,7 @@ jobs:
   organize-unit-coverage:
     name: Organize Unit Coverage - ${{ matrix.package }}
     needs: [detect-changes, run-unit-tests]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.run-unit-tests.result == 'success'
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-unit-tests.result == 'success' && needs.run-unit-tests.outputs.has-coverage == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -155,7 +160,7 @@ jobs:
   organize-integration-coverage:
     name: Organize Integration Coverage - ${{ matrix.package }}
     needs: [detect-changes, run-integration-tests]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.run-integration-tests.result == 'success'
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-integration-tests.result == 'success' && needs.run-integration-tests.outputs.has-coverage == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -169,7 +174,7 @@ jobs:
   organize-contract-coverage:
     name: Organize Contract Coverage - ${{ matrix.package }}
     needs: [detect-changes, run-contract-tests]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.run-contract-tests.result == 'success'
+    if: needs.detect-changes.outputs.packages != '[]' && needs.run-contract-tests.result == 'success' && needs.run-contract-tests.outputs.has-coverage == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -316,8 +321,17 @@ jobs:
           echo "Codecov Changed:               ${{ needs.detect-changes.outputs.codecov }}"
           echo ""
           echo "Unit Tests:                    ${{ needs.run-unit-tests.result }}"
+          echo "  - Tests Executed:            ${{ needs.run-unit-tests.outputs.tests-executed }}"
+          echo "  - Has Coverage:              ${{ needs.run-unit-tests.outputs.has-coverage }}"
+          echo "  - Tests Skipped:             ${{ needs.run-unit-tests.outputs.tests-skipped }}"
           echo "Integration Tests:             ${{ needs.run-integration-tests.result }}"
+          echo "  - Tests Executed:            ${{ needs.run-integration-tests.outputs.tests-executed }}"
+          echo "  - Has Coverage:              ${{ needs.run-integration-tests.outputs.has-coverage }}"
+          echo "  - Tests Skipped:             ${{ needs.run-integration-tests.outputs.tests-skipped }}"
           echo "Contract Tests:                ${{ needs.run-contract-tests.result }}"
+          echo "  - Tests Executed:            ${{ needs.run-contract-tests.outputs.tests-executed }}"
+          echo "  - Has Coverage:              ${{ needs.run-contract-tests.outputs.has-coverage }}"
+          echo "  - Tests Skipped:             ${{ needs.run-contract-tests.outputs.tests-skipped }}"
           echo ""
           echo "Organize Unit Coverage:        ${{ needs.organize-unit-coverage.result }}"
           echo "Organize Integration Coverage: ${{ needs.organize-integration-coverage.result }}"
