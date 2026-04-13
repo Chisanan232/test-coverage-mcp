@@ -60,9 +60,9 @@ on:
           - skip
 
 permissions:
-  contents: read      # Validation doesn't write
-  packages: read
-  id-token: write     # For OIDC if needed
+  contents: write     # Reusable workflow needs write access
+  packages: write     # Reusable workflow needs write access
+  id-token: write     # For OIDC
 
 concurrency:
   group: release-validate-${{ github.ref }}
