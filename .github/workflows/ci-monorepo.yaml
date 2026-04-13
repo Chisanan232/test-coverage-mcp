@@ -142,7 +142,7 @@ jobs:
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
-      test_type: all
+      test_type: all-test
 
   upload-codecov:
     name: Upload to Codecov - ${{ matrix.package }}
@@ -156,7 +156,7 @@ jobs:
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
-      test_type: all
+      test_type: all-test
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},all
     secrets:
