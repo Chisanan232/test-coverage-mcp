@@ -12,7 +12,7 @@ dev = [
     "aiohttp>=3.12.15",
 ]
 pre-commit-ci = [
-    "mypy>=1.17.1",
+    "mypy>=1.20.1",
     "pre-commit>=4.3.0",
     "ruff>=0.14.14",
 ]
