@@ -166,7 +166,7 @@ jobs:
     name: Upload to SonarQube
     needs: [detect-changes, organize-all-coverage]
     if: needs.detect-changes.outputs.packages != '[]' && (needs.organize-all-coverage.result == 'success' || needs.organize-all-coverage.result == 'skipped')
-    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_sonarqube_scan.yaml@master
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_sonarqube_scan.yaml@develop
     secrets:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
