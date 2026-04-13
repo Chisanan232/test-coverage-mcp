@@ -3,7 +3,8 @@
 # Workflow Description:
 #     Unified reusable workflow for running tests and handling coverage reports in a monorepo.
 #     Combines: test execution → coverage organization → coverage upload into a single workflow.
-#     This ensures that if a package has no tests, the entire process is skipped cleanly.
+#     This ensures that if a package has no tests or no coverage is generated, the organize and
+#     upload steps are skipped cleanly to prevent false failures.
 #
 # Workflow input parameters:
 #     * package: Package identifier ('core' or 'codecov')
@@ -73,7 +74,7 @@ jobs:
   organize-coverage:
     name: Organize ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
     needs: run-tests
-    if: always() && needs.run-tests.result == 'success'
+    if: always() && needs.run-tests.result == 'success' && needs.run-tests.outputs.has-coverage == 'true'
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@master
     with:
       project_name: ${{ inputs.project_name }}
