@@ -85,11 +85,12 @@ jobs:
     name: Upload ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
     needs: organize-coverage
     if: always() && needs.organize-coverage.result == 'success'
-    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@develop
     with:
       project_name: ${{ inputs.project_name }}
       test_working_directory: ${{ inputs.test_working_directory }}
       test_type: ${{ inputs.test_type }}
+      upload-to-codecov: true
       codecov_name: ${{ inputs.project_name }}
       codecov_flags: ${{ inputs.package }},${{ inputs.test_type }}
     secrets:
