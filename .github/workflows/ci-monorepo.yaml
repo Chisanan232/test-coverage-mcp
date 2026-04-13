@@ -165,7 +165,7 @@ jobs:
   upload-sonarqube:
     name: Upload to SonarQube - ${{ matrix.package }}
     needs: [detect-changes, organize-all-coverage]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success' && github.ref_name == 'master'
+    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success'
     strategy:
       fail-fast: false
       matrix:
