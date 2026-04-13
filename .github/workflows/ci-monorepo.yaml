@@ -163,16 +163,10 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
   upload-sonarqube:
-    name: Upload to SonarQube - ${{ matrix.package }}
+    name: Upload to SonarQube
     needs: [detect-changes, organize-all-coverage]
-    if: needs.detect-changes.outputs.packages != '[]' && needs.organize-all-coverage.result == 'success'
-    strategy:
-      fail-fast: false
-      matrix:
-        package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
+    if: needs.detect-changes.outputs.packages != '[]' && (needs.organize-all-coverage.result == 'success' || needs.organize-all-coverage.result == 'skipped')
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_sonarqube_scan.yaml@master
-    with:
-      project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
     secrets:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
