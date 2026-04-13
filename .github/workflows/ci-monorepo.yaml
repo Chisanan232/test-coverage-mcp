@@ -152,11 +152,12 @@ jobs:
       fail-fast: false
       matrix:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
-    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@master
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@develop
     with:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
       test_type: all-test
+      upload-to-codecov: true
       codecov_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       codecov_flags: ${{ matrix.package == 'core' && 'core' || 'codecov' }},all
     secrets:
