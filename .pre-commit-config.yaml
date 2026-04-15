@@ -32,10 +32,18 @@ repos:
         name: MyPy Type Checking (Backend Packages)
         entry: mypy
         language: system
-        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/src/.*\.py$
-        exclude: ^(test-coverage-mcp|test-coverage-mcp-codecov)/test/.*\.py$
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/(src|test)/.*\.py$
         args:
           - --config-file=mypy.ini
+          - --ignore-missing-imports
+          - --namespace-packages
+          - --explicit-package-bases
+        additional_dependencies: [
+          types-PyYAML>=6.0.12.9,
+          httpx,
+          pydantic,
+          fastapi,
+        ]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
