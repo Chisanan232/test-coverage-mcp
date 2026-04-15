@@ -1,5 +1,7 @@
 # Pre-Commit Configuration for Monorepo
 default_stages: [push]  # Hooks run on push only (not commit)
+ci:
+  skip: []  # Run all hooks in CI
 
 repos:
   # Universal file checks (all files)
@@ -30,20 +32,12 @@ repos:
     hooks:
       - id: mypy
         name: MyPy Type Checking (Backend Packages)
-        entry: mypy
-        language: system
         files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/(src|test)/.*\.py$
         args:
           - --config-file=mypy.ini
           - --ignore-missing-imports
           - --namespace-packages
           - --explicit-package-bases
-        additional_dependencies: [
-          types-PyYAML>=6.0.12.9,
-          httpx,
-          pydantic,
-          fastapi,
-        ]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
