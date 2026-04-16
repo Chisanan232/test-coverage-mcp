@@ -4,15 +4,15 @@
 
 This document outlines a **15-phase** implementation plan for the test-coverage-mcp server, transforming the current single-package structure into a **provider-extensible, capability-driven MCP server** with stable tool contracts, intelligent coverage analysis, and plugin architecture.
 
-**Current State**: Single package with basic structure  
-**Target State**: uv workspace monorepo with independent packages (core + plugins), 11 MCP tools, CLI, Docker support, comprehensive documentation  
+**Current State**: Single package with basic structure
+**Target State**: uv workspace monorepo with independent packages (core + plugins), 11 MCP tools, CLI, Docker support, comprehensive documentation
 **Technology Stack**: FastMCP, FastAPI, Pydantic, Pydantic-Settings, httpx, uv workspaces
 
 ## Updates from v1
 
-✅ **Issue #1 Fixed**: Corrected workspace structure - packages at root level, each with own `src/` and `tests/`  
-✅ **Issue #2 Fixed**: Added gitmoji conventions for clear, human-readable commit messages  
-✅ **Issue #3 Fixed**: Documentation updates integrated into every phase  
+✅ **Issue #1 Fixed**: Corrected workspace structure - packages at root level, each with own `src/` and `tests/`
+✅ **Issue #2 Fixed**: Added gitmoji conventions for clear, human-readable commit messages
+✅ **Issue #3 Fixed**: Documentation updates integrated into every phase
 ✅ **Issue #4 Fixed**: Added CI/CD compatibility analysis and migration plan (Phase 0.5)
 
 ---
@@ -34,7 +34,7 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
 
 #### Gitmoji Commit Patterns
 
-**Format**: 
+**Format**:
 - Simple: `<emoji> <subject>` (emoji conveys the type)
 - With scope: `<emoji> <scope>: <subject>` (scope = codecov, mcp, web, cli, etc.)
 
@@ -118,7 +118,7 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
 ### Commits
 - `docs: Add phase 0 analysis findings`
 
-**Duration**: 1-2 hours  
+**Duration**: 1-2 hours
 **Output**: Analysis document in `.ai/analysis/`
 
 ---
@@ -136,7 +136,7 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
      uv.lock                           # Unified lockfile
      .github/                          # CI/CD workflows (update needed)
      docs/                             # Docusaurus documentation
-     
+
      test-coverage-mcp/                # Core package (at root!)
        .env.example                    # Environment variables template
        pyproject.toml                  # Package config
@@ -155,7 +155,7 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
          contract/
        pytest.ini                      # Test configuration
        .coveragerc                     # Coverage config
-     
+
      test-coverage-mcp-codecov/        # Codecov plugin package
        .env.example                    # Provider-specific env vars
        pyproject.toml                  # Plugin package config
@@ -225,8 +225,8 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
 📝 Add CONTRIBUTING.md with workspace workflow
 ```
 
-**Duration**: 6-8 hours (includes documentation)  
-**Validation**: 
+**Duration**: 6-8 hours (includes documentation)
+**Validation**:
 - `uv sync` (install all workspace members)
 - `cd test-coverage-mcp && uv run pytest`
 - `cd test-coverage-mcp-codecov && uv run pytest`
@@ -248,7 +248,7 @@ Following the global commit policy with **[gitmoji](https://gitmoji.dev/)** conv
 
 After Phase 1 workspace restructure, several configuration issues remain:
 
-1. **Package Structure Issue**: 
+1. **Package Structure Issue**:
    - `test-coverage-mcp-codecov/src/test_coverage_mcp_codecov/` has nested structure
    - Should be flat like core: `test-coverage-mcp-codecov/src/` (no extra nesting)
 
@@ -355,7 +355,7 @@ rmdir test-coverage-mcp-codecov/src/test_coverage_mcp_codecov/
 Option A (Recommended): Simplify to workspace overview
 ```env
 # Test Coverage MCP Workspace Configuration
-# 
+#
 # This workspace contains multiple packages, each with their own configuration.
 # See package-specific .env.example files:
 #
@@ -738,7 +738,7 @@ coverage_codecov_unit-test_macos-latest_3.13
 
 #### Task 0.5.1: Verify Test Structure Compliance ✓
 
-**Status**: Likely already complete from Phase 1  
+**Status**: Likely already complete from Phase 1
 **Action**: Quick verification only
 
 ```bash
@@ -746,7 +746,7 @@ coverage_codecov_unit-test_macos-latest_3.13
 ls -la test-coverage-mcp/test/
 # Expected: unit_test/, integration_test/
 
-# Check codecov package  
+# Check codecov package
 ls -la test-coverage-mcp-codecov/test/
 # Expected: unit_test/, integration_test/
 ```
@@ -778,13 +778,13 @@ paths:
   - 'pyproject.toml'
   - 'uv.lock'
   - '.github/workflows/**'
-  
+
   # Package-level
   - 'test-coverage-mcp/**/*.py'
   - 'test-coverage-mcp/pyproject.toml'
   - 'test-coverage-mcp-codecov/**/*.py'
   - 'test-coverage-mcp-codecov/pyproject.toml'
-  
+
   # Root configs
   - 'mypy.ini'
   - 'ruff.toml'
@@ -1038,7 +1038,7 @@ cd test-coverage-mcp-codecov && uv run pytest test/unit_test/ -v
 **Commits** (following simplified gitmoji style):
 ```bash
 1. 🔧 ci: Replace placeholder variables in workflows
-2. 🔧 ci: Update path triggers for monorepo structure  
+2. 🔧 ci: Update path triggers for monorepo structure
 3. ✨ ci: Create ci-monorepo.yaml with per-package testing
 4. ✨ ci: Add change detection for conditional package testing
 5. 📊 ci: Configure per-package coverage with project_name parameter
@@ -1191,7 +1191,7 @@ repos:
 
 **Reason**: [pre-commit.ci](https://pre-commit.ci) cloud service already provides automated linting validation on every PR. Creating a separate GitHub Actions workflow would duplicate this functionality and add unnecessary CI overhead.
 
-**Decision Made**: 
+**Decision Made**:
 - Pre-commit.ci handles all linting and type checking validation
 - Developers use local pre-commit hooks for validation before pushing
 - No separate CI workflow needed for linting
@@ -1228,7 +1228,7 @@ repos:
 📝 contributing: Document tooling setup
 ```
 
-**Duration**: 2-3 hours  
+**Duration**: 2-3 hours
 **Validation**:
 - ✅ `uv run pre-commit run --all-files` passes
 - ✅ `uv run mypy test-coverage-mcp/src` passes
@@ -1292,7 +1292,7 @@ repos:
 📝 contracts: Add provider specification
 ```
 
-**Duration**: 6-8 hours  
+**Duration**: 6-8 hours
 **Files**: `packages/test-coverage-mcp/src/domain/` package
 
 ---
@@ -1342,7 +1342,7 @@ repos:
 📝 guides: Add configuration with examples
 ```
 
-**Duration**: 6-8 hours  
+**Duration**: 6-8 hours
 **Files**: `test-coverage-mcp/src/test_coverage_mcp/registry/`
 
 **Documentation Updates**:
@@ -1399,7 +1399,7 @@ repos:
 📝 codecov: Add setup guide with token config
 ```
 
-**Duration**: 10-12 hours  
+**Duration**: 10-12 hours
 **Files**: `test-coverage-mcp-codecov/src/test_coverage_mcp_codecov/`
 
 **Documentation Updates**:
@@ -1448,7 +1448,7 @@ repos:
 📝 api: Add service API reference
 ```
 
-**Duration**: 8-10 hours  
+**Duration**: 8-10 hours
 **Files**: `test-coverage-mcp/src/test_coverage_mcp/services/`
 
 **Documentation Updates**:
@@ -1499,7 +1499,7 @@ repos:
 📝 mcp-tools: Add tool catalog with examples
 ```
 
-**Duration**: 6-8 hours  
+**Duration**: 6-8 hours
 **Files**: `test-coverage-mcp/src/test_coverage_mcp/mcp/tools/`
 
 **Documentation Updates**:
@@ -1791,7 +1791,7 @@ repos:
 📝 deployment: Add CLI deployment guide
 ```
 
-**Duration**: 8-10 hours  
+**Duration**: 8-10 hours
 **Files**: `test-coverage-mcp/src/test_coverage_mcp/cli/`
 
 **Documentation Updates**:
@@ -2092,26 +2092,26 @@ main
 
 ### MVP (Phase 0.5-9)
 
-✅ CI/CD compatibility verified  
-✅ Workspace structure working  
-✅ Codecov provider functional  
-✅ 7 core MCP tools implemented  
-✅ CLI `serve` command working  
-✅ 70%+ test coverage  
+✅ CI/CD compatibility verified
+✅ Workspace structure working
+✅ Codecov provider functional
+✅ 7 core MCP tools implemented
+✅ CLI `serve` command working
+✅ 70%+ test coverage
 ✅ Core documentation complete
 
 ### Full v1.0 (Phase 0.5-15)
 
-✅ All 15 phases complete  
-✅ All 11 MCP tools functional  
-✅ Complete CLI (serve, providers, doctor)  
-✅ Docker images published to ghcr.io  
-✅ 80%+ test coverage across all packages  
-✅ Comprehensive documentation (50+ files)  
-✅ Live documentation site deployed  
-✅ Example configurations for all scenarios  
-✅ PyPI package published  
-✅ Plugin architecture validated with Codecov provider  
+✅ All 15 phases complete
+✅ All 11 MCP tools functional
+✅ Complete CLI (serve, providers, doctor)
+✅ Docker images published to ghcr.io
+✅ 80%+ test coverage across all packages
+✅ Comprehensive documentation (50+ files)
+✅ Live documentation site deployed
+✅ Example configurations for all scenarios
+✅ PyPI package published
+✅ Plugin architecture validated with Codecov provider
 ✅ CI/CD fully integrated with workspace structure
 
 ---
@@ -2256,9 +2256,9 @@ Track your progress:
 
 ---
 
-**Document Version**: 3.0  
-**Last Updated**: 2026-04-02  
-**Author**: Cascade AI  
+**Document Version**: 3.0
+**Last Updated**: 2026-04-02
+**Author**: Cascade AI
 **Status**: Ready for Review
 
 **Changes from v2**:
