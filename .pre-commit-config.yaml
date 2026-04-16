@@ -17,7 +17,7 @@ repos:
 
   # Backend Python Hooks (Core + Codecov packages)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.9
+    rev: v0.15.10
     hooks:
       - id: ruff
         name: Ruff Linter (Backend Packages)
@@ -28,7 +28,7 @@ repos:
         files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.pyi?$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.0
+    rev: v1.20.1
     hooks:
       - id: mypy
         name: MyPy Type Checking (Backend Packages)
@@ -116,7 +116,7 @@ repos:
           - --config=docs/.eslintrc.json
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
+    rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
         name: Prettier (Documentation Frontend)
@@ -156,7 +156,7 @@ repos:
 
   # UV Lock Check (Workspace)
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.3
+    rev: 0.11.6
     hooks:
       - id: uv-lock
         name: UV Lock Check (Workspace)
