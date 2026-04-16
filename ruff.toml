@@ -27,6 +27,9 @@ exclude = [
     # Custom excludes
     "docs/",
     ".github/",
+    # Workspace package builds
+    "test-coverage-mcp/build",
+    "test-coverage-mcp-codecov/build",
 ]
 
 # Same as Black
@@ -271,6 +274,13 @@ force-single-line = false
     "F401",  # unused imports
     "F403",  # star imports
     "F405",  # unused star imports
+]
+
+# All test directories can have relaxed rules
+"**/test/**/*.py" = [
+    "S101",  # assert statements
+    "ANN",   # missing type annotations
+    "D",     # missing docstrings
 ]
 
 # Migration scripts can have more relaxed rules
