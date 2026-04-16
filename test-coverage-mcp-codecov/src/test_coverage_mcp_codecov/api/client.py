@@ -92,7 +92,7 @@ class CodecovAPIClient:
         endpoint: str,
         **kwargs: Any,
     ) -> Dict[str, Any]:
-        """Make authenticated request with retry logic.
+        """Make authenticated request with retry logic and rate limit handling.
 
         Args:
             method: HTTP method
@@ -121,10 +121,22 @@ class CodecovAPIClient:
                     **kwargs,
                 )
 
-                if response.status_code == 429:  # Rate limited
+                # Handle rate limiting (429)
+                if response.status_code == 429:
+                    retry_after = response.headers.get("Retry-After")
+                    if retry_after:
+                        wait_time = float(retry_after)
+                    else:
+                        wait_time = self.retry_delay * (2 ** attempt)
+
                     if attempt < self.max_retries - 1:
-                        await asyncio.sleep(self.retry_delay * (2 ** attempt))
+                        logger.warning(
+                            f"Rate limited. Retrying after {wait_time}s "
+                            f"(attempt {attempt + 1}/{self.max_retries})"
+                        )
+                        await asyncio.sleep(wait_time)
                         continue
+
                     raise CodecovAPIError(
                         "Rate limited by Codecov API",
                         status_code=429,
@@ -134,17 +146,32 @@ class CodecovAPIClient:
                 return response.json()
 
             except httpx.HTTPStatusError as e:
+                # Retry on server errors (5xx)
                 if e.response.status_code >= 500 and attempt < self.max_retries - 1:
-                    await asyncio.sleep(self.retry_delay * (2 ** attempt))
+                    wait_time = self.retry_delay * (2 ** attempt)
+                    logger.warning(
+                        f"Server error {e.response.status_code}. "
+                        f"Retrying after {wait_time}s "
+                        f"(attempt {attempt + 1}/{self.max_retries})"
+                    )
+                    await asyncio.sleep(wait_time)
                     continue
+
                 raise CodecovAPIError(
                     f"API error: {e.response.text}",
                     status_code=e.response.status_code,
                 ) from e
             except httpx.RequestError as e:
                 if attempt < self.max_retries - 1:
-                    await asyncio.sleep(self.retry_delay * (2 ** attempt))
+                    wait_time = self.retry_delay * (2 ** attempt)
+                    logger.warning(
+                        f"Request failed: {e}. "
+                        f"Retrying after {wait_time}s "
+                        f"(attempt {attempt + 1}/{self.max_retries})"
+                    )
+                    await asyncio.sleep(wait_time)
                     continue
+
                 raise CodecovAPIError(f"Request failed: {e}") from e
 
         raise CodecovAPIError("Max retries exceeded")
