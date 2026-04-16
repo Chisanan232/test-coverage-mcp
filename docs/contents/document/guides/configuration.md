@@ -124,7 +124,7 @@ from src.registry.config import ProviderConfig
 
 class MyProviderConfig(ProviderConfig):
     """Configuration for my custom provider."""
-    
+
     api_endpoint: str = Field(..., description="API endpoint")
     api_key: str = Field(..., description="API key")
     custom_setting: str = Field(default="value")
