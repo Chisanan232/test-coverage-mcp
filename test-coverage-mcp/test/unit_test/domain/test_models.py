@@ -1,9 +1,10 @@
 """Tests for domain models."""
 
-import pytest
 from datetime import datetime
 
-from test_coverage_mcp.domain import (
+import pytest
+
+from src.domain import (
     AnalysisDepth,
     ConfigDiagnosis,
     CoverageDelta,

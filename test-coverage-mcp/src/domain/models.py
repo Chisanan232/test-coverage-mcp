@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
-from test_coverage_mcp.domain.enums import (
+from src.domain.enums import (
     AnalysisDepth,
     ProviderCapability,
     RiskLevel,

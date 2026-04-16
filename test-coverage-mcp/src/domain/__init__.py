@@ -1,17 +1,17 @@
 """Domain models and contracts for test coverage MCP server."""
 
-from test_coverage_mcp.domain.contracts import (
+from src.domain.contracts import (
     CoverageProvider,
     ProviderHealth,
     ProviderMetadata,
 )
-from test_coverage_mcp.domain.enums import (
+from src.domain.enums import (
     AnalysisDepth,
     ProviderCapability,
     RiskLevel,
     SupportLevel,
 )
-from test_coverage_mcp.domain.models import (
+from src.domain.models import (
     ConfigDiagnosis,
     CoverageDelta,
     ExecutionMetadata,
