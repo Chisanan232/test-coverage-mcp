@@ -1,13 +1,19 @@
-"""Data Transfer Objects for Codecov API responses."""
+"""Data Transfer Objects for Codecov API responses.
+
+This module defines Pydantic models for all Codecov API response structures,
+enabling type-safe parsing and validation of API responses.
+"""
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CoverageMetrics(BaseModel):
     """Coverage metrics from Codecov."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     coverage: Optional[float] = Field(None, description="Coverage percentage")
     lines: Optional[int] = Field(None, description="Total lines")
@@ -21,6 +27,8 @@ class CoverageMetrics(BaseModel):
 class FileDTO(BaseModel):
     """File coverage information from Codecov."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     name: str = Field(..., description="File path")
     coverage: Optional[float] = Field(None, description="File coverage percentage")
     lines: Optional[int] = Field(None, description="Total lines in file")
@@ -33,6 +41,8 @@ class FileDTO(BaseModel):
 class CommitDTO(BaseModel):
     """Commit information from Codecov."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     commitid: str = Field(..., description="Commit SHA")
     message: Optional[str] = Field(None, description="Commit message")
     timestamp: Optional[datetime] = Field(None, description="Commit timestamp")
@@ -44,6 +54,8 @@ class CommitDTO(BaseModel):
 
 class RepositoryDTO(BaseModel):
     """Repository information from Codecov."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     name: str = Field(..., description="Repository name")
     owner: Optional[str] = Field(None, description="Repository owner")
@@ -58,6 +70,8 @@ class RepositoryDTO(BaseModel):
 
 class ComparisonDTO(BaseModel):
     """Coverage comparison between commits."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     base_commit: Optional[str] = Field(None, description="Base commit SHA")
     head_commit: Optional[str] = Field(None, description="Head commit SHA")
@@ -74,6 +88,8 @@ class ComparisonDTO(BaseModel):
 class FlagDTO(BaseModel):
     """Coverage flag information."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     name: str = Field(..., description="Flag name")
     coverage: Optional[float] = Field(None, description="Flag coverage percentage")
     carryforward: Optional[bool] = Field(None, description="Whether flag carries forward")
@@ -83,6 +99,8 @@ class FlagDTO(BaseModel):
 class ComponentDTO(BaseModel):
     """Component coverage information."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     name: str = Field(..., description="Component name")
     coverage: Optional[float] = Field(None, description="Component coverage percentage")
     totals: Optional[CoverageMetrics] = Field(None, description="Coverage metrics")
@@ -90,6 +108,8 @@ class ComponentDTO(BaseModel):
 
 class UploadDTO(BaseModel):
     """Coverage upload information."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     id: str = Field(..., description="Upload ID")
     created_at: Optional[datetime] = Field(None, description="Upload timestamp")
@@ -102,6 +122,8 @@ class UploadDTO(BaseModel):
 class TestResultDTO(BaseModel):
     """Test result information."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     name: str = Field(..., description="Test name")
     status: str = Field(..., description="Test status (passed, failed, skipped)")
     duration: Optional[float] = Field(None, description="Test duration in seconds")
@@ -110,6 +132,8 @@ class TestResultDTO(BaseModel):
 
 class BranchDTO(BaseModel):
     """Branch information from Codecov."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     name: str = Field(..., description="Branch name")
     coverage: Optional[float] = Field(None, description="Branch coverage percentage")
@@ -120,6 +144,8 @@ class BranchDTO(BaseModel):
 
 class PullRequestDTO(BaseModel):
     """Pull request information from Codecov."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     number: int = Field(..., description="PR number")
     title: Optional[str] = Field(None, description="PR title")
@@ -137,6 +163,8 @@ class PullRequestDTO(BaseModel):
 class CodecovErrorDTO(BaseModel):
     """Error response from Codecov API."""
 
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+
     error: str = Field(..., description="Error message")
     detail: Optional[str] = Field(None, description="Error details")
     status_code: Optional[int] = Field(None, description="HTTP status code")
@@ -144,6 +172,8 @@ class CodecovErrorDTO(BaseModel):
 
 class CodecovResponseDTO(BaseModel):
     """Generic Codecov API response wrapper."""
+
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
 
     data: Optional[Dict[str, Any]] = Field(None, description="Response data")
     error: Optional[CodecovErrorDTO] = Field(None, description="Error information")
