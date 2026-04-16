@@ -1,5 +1,6 @@
 """Codecov API client and DTOs."""
 
+from test_coverage_mcp_codecov.api.client import CodecovAPIClient, CodecovAPIError
 from test_coverage_mcp_codecov.api.dtos import (
     BranchDTO,
     CodecovErrorDTO,
@@ -17,6 +18,8 @@ from test_coverage_mcp_codecov.api.dtos import (
 )
 
 __all__ = [
+    "CodecovAPIClient",
+    "CodecovAPIError",
     "CoverageMetrics",
     "FileDTO",
     "CommitDTO",
