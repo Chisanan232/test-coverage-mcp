@@ -140,6 +140,8 @@ uv run pytest test-coverage-mcp-codecov/test/
 
 The workspace uses three main development tools configured at the workspace level:
 
+**Note**: Linting and type checking are automatically validated by [pre-commit.ci](https://pre-commit.ci) on every PR, so a separate CI workflow is not needed. Developers should run these tools locally before pushing.
+
 #### MyPy (Type Checking)
 
 **Configuration**: `mypy.ini`
