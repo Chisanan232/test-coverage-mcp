@@ -1,0 +1,242 @@
+# Pre-commit configuration for monorepo
+# Hooks run on push only (not on commit) for faster local development
+
+default_stages: [push]  # All hooks run on push only (not commit)
+
+repos:
+  # Universal file checks (all files)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        name: Check YAML Files
+        files: |
+          (?x)^(
+            \.github/workflows/.*\.ya?ml$|
+            \.github/tag_and_release/.*\.ya?ml$|
+            codecov\.yml$|
+            \.pre-commit-config\.yaml$
+          )$
+        args: ['--unsafe']  # Allow custom YAML tags (GitHub Actions)
+
+      - id: check-json
+        name: Check JSON Files
+        files: |
+          (?x)^(
+            docs/.*\.json$|
+            \.github/.*\.json$|
+            \.vscode/.*\.json$
+          )$
+        exclude: ^docs/pnpm-lock\.yaml$
+
+      - id: debug-statements
+        name: Check Debug Statements (Backend)
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/src/.*\.py$
+
+      - id: end-of-file-fixer
+        name: End of File Fixer
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
+
+      - id: trailing-whitespace
+        name: Trailing Whitespace Fixer
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
+
+      - id: detect-private-key
+        name: Detect Private Key
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
+
+      - id: check-merge-conflict
+        name: Check Merge Conflict
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
+
+      - id: check-added-large-files
+        name: Check Added Large Files
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
+
+  # Backend Python hooks (packages only)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.14
+    hooks:
+      - id: ruff
+        name: Ruff Linter (Backend Packages)
+        types_or: [ python, pyi ]
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.pyi?$
+        args: [--fix]
+
+      - id: ruff-format
+        name: Ruff Formatter (Backend Packages)
+        types_or: [ python, pyi ]
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.pyi?$
+
+  # Type checking (backend only)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+        name: MyPy Type Checking (Backend Packages)
+        entry: mypy
+        language: system
+        files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/src/.*\.py$
+        exclude: ^(test-coverage-mcp|test-coverage-mcp-codecov)/test/.*\.py$
+        args:
+          - --config-file=mypy.ini
+
+  # Shell script validation
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        name: ShellCheck (Scripts)
+        files: |
+          (?x)^(
+            scripts/.*\.sh$|
+            .*\.bash$
+          )$
+        args:
+          - --severity=warning
+          - --shell=bash
+
+  # TOML validation and formatting
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.16.0
+    hooks:
+      - id: pretty-format-toml
+        name: Format TOML Files
+        files: |
+          (?x)^(
+            pyproject\.toml$|
+            ruff\.toml$|
+            test-coverage-mcp/pyproject\.toml$|
+            test-coverage-mcp-codecov/pyproject\.toml$
+          )$
+        args: [--autofix]
+
+  # UV dependency lock check
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.9.28
+    hooks:
+      - id: uv-lock
+        name: UV Lock Check (Workspace)
+        files: |
+          (?x)^(
+            pyproject\.toml$|
+            test-coverage-mcp/pyproject\.toml$|
+            test-coverage-mcp-codecov/pyproject\.toml$
+          )$
+
+  # Frontend documentation hooks (Docusaurus)
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.22.0
+    hooks:
+      - id: eslint
+        name: ESLint (Documentation Frontend)
+        files: ^docs/.*\.(ts|tsx|js|jsx)$
+        additional_dependencies:
+          - eslint@^9.22.0
+          - '@typescript-eslint/parser@^7.0.0'
+          - '@typescript-eslint/eslint-plugin@^7.0.0'
+          - eslint-plugin-react@^7.35.0
+        args:
+          - --fix
+          - --config=docs/.eslintrc.json
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.5.3
+    hooks:
+      - id: prettier
+        name: Prettier (Documentation Frontend)
+        files: ^docs/.*\.(ts|tsx|js|jsx|json|css|scss|md)$
+        exclude: ^docs/pnpm-lock\.yaml$
+        args:
+          - --config=docs/.prettierrc.json
+
+  - repo: local
+    hooks:
+      - id: tsc-check
+        name: TypeScript Compilation Check (Documentation)
+        entry: bash -c 'cd docs && npx tsc --noEmit'
+        language: system
+        files: ^docs/.*\.(ts|tsx)$
+        pass_filenames: false
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.43.1
+    hooks:
+      - id: markdownlint
+        name: Markdownlint (Documentation)
+        files: ^docs/contents/.*\.md$
+        args:
+          - --config=docs/.markdownlint.json
+          - --fix
+
+  # Advanced infrastructure hooks
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.13.2-beta
+    hooks:
+      - id: hadolint-docker
+        name: Hadolint (Dockerfile)
+        files: ^Dockerfile$
+        args:
+          - --ignore=DL3008  # Pin versions in apt-get (optional)
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Detect Secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            \.mypy_cache/.*|
+            \.ruff_cache/.*|
+            dist/.*|
+            .*\.lock$|
+            pnpm-lock\.yaml
+          )$
