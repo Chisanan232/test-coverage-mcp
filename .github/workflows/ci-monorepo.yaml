@@ -143,6 +143,7 @@ jobs:
       project_name: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
       test_working_directory: ${{ matrix.package == 'core' && './test-coverage-mcp' || './test-coverage-mcp-codecov' }}
       test_type: all-test
+      source_folder: ${{ matrix.package == 'core' && 'test-coverage-mcp' || 'test-coverage-mcp-codecov' }}
 
   upload-codecov:
     name: Upload to Codecov - ${{ matrix.package }}
