@@ -56,11 +56,11 @@ Repository = "https://github.com/Chisanan232/test-coverage-mcp"
 test-coverage-mcp = "test_coverage_mcp.entry:main"
 
 [tool.hatch.build.targets.sdist]
-include = ["test_coverage_mcp/"]
-packages = ["test_coverage_mcp"]
-artifacts = ["test_coverage_mcp/py.typed"]
+include = ["src/"]
+packages = ["src/test_coverage_mcp"]
+artifacts = ["src/test_coverage_mcp/py.typed"]
 
 [tool.hatch.build.targets.wheel]
-include = ["test_coverage_mcp/"]
-packages = ["test_coverage_mcp"]
-artifacts = ["test_coverage_mcp/py.typed"]
+include = ["src/"]
+packages = ["src/test_coverage_mcp"]
+artifacts = ["src/test_coverage_mcp/py.typed"]
