@@ -20,8 +20,8 @@ class TestWebServerFactory:
         """Test that WebServerFactory inherits from BaseServerFactory."""
         assert issubclass(WebServerFactory, BaseServerFactory)
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_create_singleton(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test that create() enforces singleton pattern."""
         # Mock settings
@@ -44,8 +44,8 @@ class TestWebServerFactory:
         with pytest.raises(AssertionError, match="not allowed to create more than one instance"):
             WebServerFactory.create()
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_get_success(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test successful get() after create()."""
         # Mock settings
@@ -72,8 +72,8 @@ class TestWebServerFactory:
         with pytest.raises(AssertionError, match="It must be created web server first"):
             WebServerFactory.get()
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_reset(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test reset() functionality."""
         # Mock settings
@@ -109,8 +109,8 @@ class TestWebFactoryInstance:
         """Test that web_factory is the WebServerFactory class."""
         assert web_factory is WebServerFactory
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_web_factory_create(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating server through web_factory."""
         # Mock settings
@@ -128,8 +128,8 @@ class TestWebFactoryInstance:
         assert server is not None
         assert server.title == "Template MCP Server"
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_web_factory_get(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test getting server through web_factory."""
         # Mock settings
@@ -151,8 +151,8 @@ class TestWebFactoryInstance:
 
         assert server1 is server2
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_web_factory_reset(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test resetting through web_factory."""
         # Mock settings
@@ -185,8 +185,8 @@ class TestWebService:
         WebServerFactory.reset()
         MCPServerFactory.reset()
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.web_factory")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.web_factory")
     def test_mount_service_sse(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test mounting SSE service."""
         # Mock factories
@@ -203,8 +203,8 @@ class TestWebService:
         # Verify mounting
         mock_app.mount.assert_called_once_with("/sse", mock_sse_app)
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.web_factory")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.web_factory")
     def test_mount_service_http_streaming(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test mounting HTTP streaming service."""
         # Mock factories
@@ -228,8 +228,8 @@ class TestWebService:
 
             mount_service("invalid_transport")  # This will raise ValueError for invalid transport
 
-    @patch("src.web_server.app.mount_service")
-    @patch("src.web_server.app.web_factory")
+    @patch("test_coverage_mcp.web_server.app.mount_service")
+    @patch("test_coverage_mcp.web_server.app.web_factory")
     def test_create_app(self, mock_web_factory: MagicMock, mock_mount_service: MagicMock) -> None:
         """Test create_app function."""
         # Mock web factory
@@ -261,8 +261,8 @@ class TestWebServerIntegration:
         WebServerFactory.reset()
         MCPServerFactory.reset()
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_health_check_endpoint(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test health check endpoint."""
         # Mock settings
@@ -284,8 +284,8 @@ class TestWebServerIntegration:
         routes = [route.path for route in server.routes]
         assert "/health" in routes
 
-    @patch("src.web_server.app.mcp_factory")
-    @patch("src.web_server.app.get_settings")
+    @patch("test_coverage_mcp.web_server.app.mcp_factory")
+    @patch("test_coverage_mcp.web_server.app.get_settings")
     def test_cors_configuration(self, mock_get_settings: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test CORS configuration."""
         # Mock settings

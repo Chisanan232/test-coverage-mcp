@@ -172,8 +172,8 @@ class TestConfigureLogging:
 class TestInitializeServerEnvironment:
     """Test cases for the initialize_server_environment function."""
 
-    @patch("src.entry.get_settings")
-    @patch("src.entry.configure_logging")
+    @patch("test_coverage_mcp.entry.get_settings")
+    @patch("test_coverage_mcp.entry.configure_logging")
     def test_initialize_success(self, mock_configure_logging: MagicMock, mock_get_settings: MagicMock) -> None:
         """Test successful environment initialization."""
         # Mock settings
@@ -192,8 +192,8 @@ class TestInitializeServerEnvironment:
         # Verify settings were returned
         assert result is mock_settings
 
-    @patch("src.entry.get_settings")
-    @patch("src.entry.configure_logging")
+    @patch("test_coverage_mcp.entry.get_settings")
+    @patch("test_coverage_mcp.entry.configure_logging")
     def test_initialize_with_token(self, mock_configure_logging: MagicMock, mock_get_settings: MagicMock) -> None:
         """Test environment initialization with token override."""
         # Mock settings
@@ -210,8 +210,8 @@ class TestInitializeServerEnvironment:
         # Verify settings were returned
         assert result is mock_settings
 
-    @patch("src.entry.get_settings")
-    @patch("src.entry.configure_logging")
+    @patch("test_coverage_mcp.entry.get_settings")
+    @patch("test_coverage_mcp.entry.configure_logging")
     def test_initialize_config_error(self, mock_configure_logging: MagicMock, mock_get_settings: MagicMock) -> None:
         """Test environment initialization with configuration error."""
         # Mock settings to raise an exception
@@ -230,8 +230,8 @@ class TestInitializeServerEnvironment:
 class TestRunStandaloneServer:
     """Test cases for the run_standalone_server function."""
 
-    @patch("src.entry.initialize_server_environment")
-    @patch("src.entry.mcp_factory")
+    @patch("test_coverage_mcp.entry.initialize_server_environment")
+    @patch("test_coverage_mcp.entry.mcp_factory")
     def test_run_sse_transport(self, mock_mcp_factory: MagicMock, mock_init_env: MagicMock) -> None:
         """Test running standalone server with SSE transport."""
         # Mock environment initialization
@@ -246,7 +246,7 @@ class TestRunStandaloneServer:
         # Create config
         config = ServerConfig(transport=MCPTransportType.SSE)
 
-        with patch("src.web_server.app.create_app") as mock_create_app, patch("src.entry.uvicorn.run") as mock_uvicorn:
+        with patch("test_coverage_mcp.web_server.app.create_app") as mock_create_app, patch("test_coverage_mcp.entry.uvicorn.run") as mock_uvicorn:
             mock_app = MagicMock()
             mock_create_app.return_value = mock_app
 
@@ -258,7 +258,7 @@ class TestRunStandaloneServer:
             # Verify uvicorn was called
             mock_uvicorn.assert_called_once()
 
-    @patch("src.entry.initialize_server_environment")
+    @patch("test_coverage_mcp.entry.initialize_server_environment")
     def test_run_server_init_error(self, mock_init_env: MagicMock) -> None:
         """Test running server with initialization error."""
         # Mock environment initialization to return None
@@ -276,8 +276,8 @@ class TestRunStandaloneServer:
 class TestRunIntegratedServer:
     """Test cases for the run_integrated_server function."""
 
-    @patch("src.entry.initialize_server_environment")
-    @patch("src.entry.integrated_factory")
+    @patch("test_coverage_mcp.entry.initialize_server_environment")
+    @patch("test_coverage_mcp.entry.integrated_factory")
     def test_run_integrated_success(self, mock_integrated_factory: MagicMock, mock_init_env: MagicMock) -> None:
         """Test running integrated server successfully."""
         # Mock environment initialization
@@ -292,7 +292,7 @@ class TestRunIntegratedServer:
         # Create config
         config = ServerConfig(transport=MCPTransportType.SSE)
 
-        with patch("src.entry.uvicorn.run") as mock_uvicorn:
+        with patch("test_coverage_mcp.entry.uvicorn.run") as mock_uvicorn:
             run_integrated_server(config)
 
             # Verify environment was initialized
@@ -306,7 +306,7 @@ class TestRunIntegratedServer:
             # Verify uvicorn was called
             mock_uvicorn.assert_called_once()
 
-    @patch("src.entry.initialize_server_environment")
+    @patch("test_coverage_mcp.entry.initialize_server_environment")
     def test_run_integrated_init_error(self, mock_init_env: MagicMock) -> None:
         """Test running integrated server with initialization error."""
         # Mock environment initialization to return None
@@ -320,8 +320,8 @@ class TestRunIntegratedServer:
         # Verify environment initialization was attempted
         mock_init_env.assert_called_once_with(config)
 
-    @patch("src.entry.initialize_server_environment")
-    @patch("src.entry.integrated_factory")
+    @patch("test_coverage_mcp.entry.initialize_server_environment")
+    @patch("test_coverage_mcp.entry.integrated_factory")
     def test_run_integrated_invalid_transport(
         self, mock_integrated_factory: MagicMock, mock_init_env: MagicMock
     ) -> None:
@@ -343,9 +343,9 @@ class TestRunIntegratedServer:
 class TestMain:
     """Test cases for the main function."""
 
-    @patch("src.entry.run_integrated_server")
-    @patch("src.entry.create_server_config")
-    @patch("src.entry.parse_args")
+    @patch("test_coverage_mcp.entry.run_integrated_server")
+    @patch("test_coverage_mcp.entry.create_server_config")
+    @patch("test_coverage_mcp.entry.parse_args")
     def test_main_integrated_mode(
         self, mock_parse_args: MagicMock, mock_create_server_config: MagicMock, mock_run_integrated_server: MagicMock
     ) -> None:
@@ -366,9 +366,9 @@ class TestMain:
         mock_create_server_config.assert_called_once_with(mock_args)
         mock_run_integrated_server.assert_called_once_with(mock_config)
 
-    @patch("src.entry.run_standalone_server")
-    @patch("src.entry.create_server_config")
-    @patch("src.entry.parse_args")
+    @patch("test_coverage_mcp.entry.run_standalone_server")
+    @patch("test_coverage_mcp.entry.create_server_config")
+    @patch("test_coverage_mcp.entry.parse_args")
     def test_main_standalone_mode(
         self, mock_parse_args: MagicMock, mock_create_server_config: MagicMock, mock_run_standalone_server: MagicMock
     ) -> None:
@@ -389,9 +389,9 @@ class TestMain:
         mock_create_server_config.assert_called_once_with(mock_args)
         mock_run_standalone_server.assert_called_once_with(mock_config)
 
-    @patch("src.entry.run_standalone_server")
-    @patch("src.entry.create_server_config")
-    @patch("src.entry.parse_args")
+    @patch("test_coverage_mcp.entry.run_standalone_server")
+    @patch("test_coverage_mcp.entry.create_server_config")
+    @patch("test_coverage_mcp.entry.parse_args")
     def test_main_with_argv(
         self, mock_parse_args: MagicMock, mock_create_server_config: MagicMock, mock_run_standalone_server: MagicMock
     ) -> None:
@@ -411,8 +411,8 @@ class TestMain:
         # Verify parse_args was called with custom argv
         mock_parse_args.assert_called_once_with(argv)
 
-    @patch("src.entry.create_server_config")
-    @patch("src.entry.parse_args")
+    @patch("test_coverage_mcp.entry.create_server_config")
+    @patch("test_coverage_mcp.entry.parse_args")
     def test_main_config_validation_error(
         self, mock_parse_args: MagicMock, mock_create_server_config: MagicMock
     ) -> None:

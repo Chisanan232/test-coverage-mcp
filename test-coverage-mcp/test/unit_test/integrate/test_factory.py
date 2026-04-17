@@ -25,8 +25,8 @@ class TestIntegratedServerFactory:
         """Test that IntegratedServerFactory inherits from BaseServerFactory."""
         assert issubclass(IntegratedServerFactory, BaseServerFactory)
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_create_sse_transport(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating integrated server with SSE transport."""
         # Mock factories
@@ -55,8 +55,8 @@ class TestIntegratedServerFactory:
         # Verify SSE app was mounted
         mock_web_app.mount.assert_called_once_with("/mcp", mock_sse_app)
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_create_http_streaming_transport(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating integrated server with HTTP streaming transport."""
         # Mock factories
@@ -84,8 +84,8 @@ class TestIntegratedServerFactory:
         with pytest.raises(ValueError, match="Invalid transport type"):
             IntegratedServerFactory.create(mcp_transport="invalid_transport")
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_get_success(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test successful get() after create()."""
         # Mock factories
@@ -112,8 +112,8 @@ class TestIntegratedServerFactory:
         with pytest.raises(AssertionError, match="Integrated server must be created first"):
             IntegratedServerFactory.get()
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_reset(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test reset() functionality."""
         # Mock factories
@@ -149,8 +149,8 @@ class TestIntegratedFactoryInstance:
         """Test that integrated_factory is the IntegratedServerFactory class."""
         assert integrated_factory is IntegratedServerFactory
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_integrated_factory_create(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating server through integrated_factory."""
         # Mock factories
@@ -181,8 +181,8 @@ class TestIntegratedFactoryInstance:
         """Test resetting through integrated_factory."""
         # Mock factories for reset
         with (
-            patch("src.integrate.app.mcp_factory") as mock_mcp_factory,
-            patch("src.integrate.app.web_factory") as mock_web_factory,
+            patch("test_coverage_mcp.integrate.app.mcp_factory") as mock_mcp_factory,
+            patch("test_coverage_mcp.integrate.app.web_factory") as mock_web_factory,
         ):
             # Create server
             server1 = integrated_factory.create(mcp_transport="sse")
@@ -204,8 +204,8 @@ class TestIntegratedServerIntegration:
         MCPServerFactory.reset()
         WebServerFactory.reset()
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_server_lifespan_integration(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test that server lifespan is properly integrated."""
         # Mock factories
@@ -229,8 +229,8 @@ class TestIntegratedServerIntegration:
         # Check that the created app has the lifespan from MCP factory
         # This would be verified in the actual FastAPI app creation
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_transport_mounting(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test that different transports are mounted correctly."""
         # Mock factories
@@ -264,8 +264,8 @@ class TestIntegratedServerIntegration:
     def test_default_parameters(self) -> None:
         """Test default parameters for create method."""
         with (
-            patch("src.integrate.app.mcp_factory") as mock_mcp_factory,
-            patch("src.integrate.app.web_factory") as mock_web_factory,
+            patch("test_coverage_mcp.integrate.app.mcp_factory") as mock_mcp_factory,
+            patch("test_coverage_mcp.integrate.app.web_factory") as mock_web_factory,
         ):
             # Mock factories
             mock_web_app = MagicMock()
@@ -284,8 +284,8 @@ class TestIntegratedServerIntegration:
             # Verify defaults - SSE transport with default mount path /sse
             mock_web_app.mount.assert_called_with("/sse", mock_sse_app)
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_custom_mount_path_sse(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating integrated server with custom mount path for SSE."""
         # Mock factories
@@ -305,8 +305,8 @@ class TestIntegratedServerIntegration:
         # Verify custom mount path is used
         mock_web_app.mount.assert_called_once_with("/api/mcp", mock_sse_app)
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_custom_mount_path_http_streaming(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating integrated server with custom mount path for HTTP streaming."""
         # Mock factories
@@ -326,8 +326,8 @@ class TestIntegratedServerIntegration:
         # Verify custom mount path is used
         mock_web_app.mount.assert_called_once_with("/api/protocol", mock_http_app)
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_transport_enum_input(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test creating integrated server with MCPTransportType enum."""
         # Mock factories
@@ -367,8 +367,8 @@ class TestIntegratedServerLifecycle:
         except ValueError:
             pass  # Expected
 
-    @patch("src.integrate.app.mcp_factory")
-    @patch("src.integrate.app.web_factory")
+    @patch("test_coverage_mcp.integrate.app.mcp_factory")
+    @patch("test_coverage_mcp.integrate.app.web_factory")
     def test_lifecycle_with_server_creation(self, mock_web_factory: MagicMock, mock_mcp_factory: MagicMock) -> None:
         """Test lifecycle context manager with server creation."""
         # Mock factories

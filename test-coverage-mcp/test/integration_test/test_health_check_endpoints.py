@@ -35,8 +35,8 @@ class TestHealthCheckEndpointsIntegration:
 
         """
         with (
-            patch("src.web_server.app.mcp_factory") as mock_mcp_factory,
-            patch("src.web_server.app.get_settings") as mock_get_settings,
+            patch("test_coverage_mcp.web_server.app.mcp_factory") as mock_mcp_factory,
+            patch("test_coverage_mcp.web_server.app.get_settings") as mock_get_settings,
         ):
             mock_settings = MagicMock()
             mock_settings.cors_allow_origins = ["*"]

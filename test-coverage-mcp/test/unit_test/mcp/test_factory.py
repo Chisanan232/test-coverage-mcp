@@ -147,7 +147,7 @@ class TestMcpServerIntegration:
         http_app = server.streamable_http_app()
         assert http_app is not None
 
-    @patch("src.mcp_server.app.FastMCP.run")
+    @patch("test_coverage_mcp.mcp_server.app.FastMCP.run")
     def test_server_stdio_run(self, mock_run: MagicMock) -> None:
         """Test running server with stdio transport."""
         # Create server
