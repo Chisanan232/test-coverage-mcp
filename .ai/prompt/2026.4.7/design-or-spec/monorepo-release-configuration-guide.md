@@ -1,9 +1,9 @@
 # Monorepo Release Configuration Guide
 ## test-coverage-mcp Project
 
-**Date**: April 7, 2026  
-**Project**: test-coverage-mcp  
-**Current Status**: UV Workspace Monorepo (2 packages)  
+**Date**: April 7, 2026
+**Project**: test-coverage-mcp
+**Current Status**: UV Workspace Monorepo (2 packages)
 **Target**: Configure GitHub Actions release workflows for monorepo
 
 ---
@@ -58,11 +58,11 @@ packages:
     package_name: test-coverage-mcp               # PyPI package name
     working_directory: test-coverage-mcp          # Package source directory
     tag_prefix: core/                             # Git tag prefix (e.g., core/v1.0.0)
-    
+
     # Release control
     release: true
     level: auto                                   # auto | patch | minor | major
-    
+
     # Artifacts
     artifacts:
       python: auto                                # auto | force | skip
@@ -71,36 +71,36 @@ packages:
         mode: auto
         sections: ["docs"]
         strategy: changed
-    
+
     # Python configuration
     python:
       auth_method: token                          # or 'oidc' for trusted publisher
-    
+
     # Validation
     validation:
       version: "1.0.0-validation"
       test_version: "validation-test"
-  
+
   # Codecov Provider Plugin Package
   - name: codecov                                 # Identifier for workflow
     package_name: test-coverage-mcp-codecov       # PyPI package name
     working_directory: test-coverage-mcp-codecov  # Package source directory
     tag_prefix: codecov/                          # Git tag prefix (e.g., codecov/v0.1.0)
-    
+
     # Release control
     release: true
     level: auto
-    
+
     # Artifacts
     artifacts:
       python: auto
       docker: skip                                # Plugin doesn't have Dockerfile
       docs: skip                                  # Plugin uses core's docs
-    
+
     # Python configuration
     python:
       auth_method: token
-    
+
     # Validation
     validation:
       version: "0.1.0-validation"
@@ -641,10 +641,10 @@ python -c "import test_coverage_mcp; print(test_coverage_mcp.__version__)"
 
 Your project is perfectly suited for monorepo workflows because it's already a UV workspace with 2 packages. The reusable workflows now support this pattern seamlessly with:
 
-✅ Package-specific configuration via `intent.yaml`  
-✅ Independent version management per package  
-✅ Tag prefixes for clear package identification  
-✅ Backward compatible (no breaking changes)  
+✅ Package-specific configuration via `intent.yaml`
+✅ Independent version management per package
+✅ Tag prefixes for clear package identification
+✅ Backward compatible (no breaking changes)
 ✅ Flexible release strategies (manual or orchestrated)
 
 Follow the migration steps, and you'll have a robust monorepo release system! 🚀

@@ -51,7 +51,7 @@ Its job is to answer: what capabilities does a provider support, and how are pro
 * config read
 * coverage trend
 
-Codecov’s public API clearly exposes compare, file comparison, impacted files, segmented comparison, components, flags, repo config, coverage trend, file report, report/tree, test-results, test-analytics, and totals, which makes it a strong advanced provider.   
+Codecov’s public API clearly exposes compare, file comparison, impacted files, segmented comparison, components, flags, repo config, coverage trend, file report, report/tree, test-results, test-analytics, and totals, which makes it a strong advanced provider.
 
 ---
 
@@ -351,7 +351,7 @@ Answers: “What does coverage look like for this version?”
 * suspicious low-confidence files
 * optional components / flags / uploads metadata
 
-Codecov’s totals, report, file report, and commit upload endpoints support this well.  
+Codecov’s totals, report, file report, and commit upload endpoints support this well.
 
 ---
 
@@ -401,7 +401,7 @@ Answers: “Did this change improve or degrade coverage, and where?”
 * component/flag delta if available
 * regressions / improvements
 
-Codecov’s compare, compare/components, and compare/flags endpoints directly support this use case.  
+Codecov’s compare, compare/components, and compare/flags endpoints directly support this use case.
 
 ---
 
@@ -428,7 +428,7 @@ Answers: “What changed, but is still not covered by tests?”
 * suggested scenario labels
 
 **Advanced provider advantage**
-Codecov can leverage impacted files and segment comparison for segment-level / line-range analysis. Its impacted-files endpoint explicitly returns `pending` and `processed` states, so this tool must model pending analysis rather than treating it as an error.  
+Codecov can leverage impacted files and segment comparison for segment-level / line-range analysis. Its impacted-files endpoint explicitly returns `pending` and `processed` states, so this tool must model pending analysis rather than treating it as an error.
 
 ---
 
@@ -493,7 +493,7 @@ Answers:
 * component/flag review
 * suggested actions
 
-Codecov’s repo config endpoint plus filterable totals/report structures make this especially useful.  
+Codecov’s repo config endpoint plus filterable totals/report structures make this especially useful.
 
 ---
 
@@ -570,7 +570,7 @@ All tools should clearly distinguish:
 * `degraded`
 * `pending`
 
-This is especially important for `find_untested_changed_code` and `analyze_pr_coverage_risk` when using impacted-files style analysis. Codecov explicitly documents `pending` vs `processed` states. 
+This is especially important for `find_untested_changed_code` and `analyze_pr_coverage_risk` when using impacted-files style analysis. Codecov explicitly documents `pending` vs `processed` states.
 
 ---
 

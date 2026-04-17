@@ -1,7 +1,7 @@
 # Pre-Commit Monorepo Redesign Plan
 
-**Version**: 1.0  
-**Date**: 2026-04-07  
+**Version**: 1.0
+**Date**: 2026-04-07
 **Status**: Planning - Awaiting Review
 
 ---
@@ -103,10 +103,10 @@ test-coverage-mcp/                    # Root workspace
 # Example structure
 - id: ruff
   files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.py$
-  
+
 - id: eslint
   files: ^docs/.*\.(ts|tsx|js|jsx)$
-  
+
 - id: shellcheck
   files: ^scripts/.*\.sh$
 ```
@@ -126,7 +126,7 @@ test-coverage-mcp/                    # Root workspace
 4. **check-merge-conflict** - Detect merge conflict markers
 5. **check-added-large-files** - Prevent large files (>500KB)
 
-**File Targeting**: 
+**File Targeting**:
 ```yaml
 files: ''  # All files (default)
 exclude: |
@@ -656,10 +656,10 @@ default_stages: [push]  # All hooks run on push only
 ```yaml
 - id: trailing-whitespace
   stages: [commit, push]  # Fast hook, can run on commit too
-  
+
 - id: mypy
   stages: [push]  # Inherits default (explicit for clarity)
-  
+
 - id: tsc-check
   stages: [manual]  # Only run manually with --hook-stage manual
 ```
@@ -810,7 +810,7 @@ pre-commit run --hook-stage manual --all-files
    ```bash
    # Run all hooks to see what fails
    pre-commit run --all-files
-   
+
    # Fix any issues that arise
    # Commit fixes separately
    ```
@@ -834,7 +834,7 @@ pre-commit run --hook-stage manual --all-files
    ```bash
    # Run all hooks
    pre-commit run --all-files
-   
+
    # Fix any issues
    # Commit fixes separately
    ```
@@ -852,10 +852,10 @@ pre-commit run --hook-stage manual --all-files
    # Commit code (no hooks run)
    git add .
    git commit -m "✨ feat: Add new feature"
-   
+
    # Push (hooks run automatically before push)
    git push origin branch-name
-   
+
    # Or run manually anytime
    pre-commit run --all-files
    ```
@@ -1106,7 +1106,7 @@ If hooks fail:
 
 **End of Plan** 🚀
 
-**Version**: 1.0 (Updated for push-only execution with phased commits)  
+**Version**: 1.0 (Updated for push-only execution with phased commits)
 **Status**: Ready for review and approval
 
 This redesign provides a comprehensive, scalable pre-commit configuration optimized for monorepo architecture with:

@@ -1,10 +1,10 @@
 # ClickUp Task Organization Plan - Test Coverage MCP Server v0.1.0
 
-**Project**: Test Coverage MCP Server  
-**Version**: 0.1.0  
-**ClickUp Folder**: https://app.clickup.com/9018752317/v/f/901813267313/90184991515  
-**Created**: 2026-04-14  
-**Updated**: 2026-04-15  
+**Project**: Test Coverage MCP Server
+**Version**: 0.1.0
+**ClickUp Folder**: https://app.clickup.com/9018752317/v/f/901813267313/90184991515
+**Created**: 2026-04-14
+**Updated**: 2026-04-15
 **Status**: Planning - For Review
 
 ---
@@ -79,9 +79,9 @@ This section is the source of truth for linking the planning document, Jira exec
 
 ### Naming Conventions
 
-**FEATURE**: `[Feature] Feature Name`  
-**PHASE**: `[Phase] Phase N: Phase Name`  
-**Sub-task**: `[Impl] Specific implementation task`  
+**FEATURE**: `[Feature] Feature Name`
+**PHASE**: `[Phase] Phase N: Phase Name`
+**Sub-task**: `[Impl] Specific implementation task`
 
 ### Task Properties
 
@@ -103,19 +103,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to support uv workspace monorepo with proper CI/CD workflows, SonarQube multi-module analysis, and development tooling configuration. This foundation enables independent package development with shared infrastructure.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 15-22 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 15-22 hours
 **Tags**: `infrastructure`, `monorepo`, `ci-cd`
 
 ### PHASE 0: Pre-Implementation Analysis
 
-**Parent Feature**: [Feature] Foundation & Infrastructure  
-**Jira Epic**: `MCP-17`  
-**Jira Phase Ticket**: `MCP-31`  
-**Planned PR ID**: `PR-00`  
-**Priority**: High  
-**Estimate**: 1-2 hours  
+**Parent Feature**: [Feature] Foundation & Infrastructure
+**Jira Epic**: `MCP-17`
+**Jira Phase Ticket**: `MCP-31`
+**Planned PR ID**: `PR-00`
+**Priority**: High
+**Estimate**: 1-2 hours
 **Tags**: `phase-0`, `analysis`
 
 **Description**: Audit existing codebase, identify migration risks, validate design constraints
@@ -140,12 +140,12 @@ All tasks should include:
 
 ### PHASE 0.5: CI/CD Compatibility & SonarQube Migration
 
-**Parent Feature**: [Feature] Foundation & Infrastructure  
-**Jira Epic**: `MCP-17`  
-**Jira Phase Ticket**: `MCP-33`  
-**Planned PR ID**: `PR-00.5`  
-**Priority**: High  
-**Estimate**: 4-6 hours  
+**Parent Feature**: [Feature] Foundation & Infrastructure
+**Jira Epic**: `MCP-17`
+**Jira Phase Ticket**: `MCP-33`
+**Planned PR ID**: `PR-00.5`
+**Priority**: High
+**Estimate**: 4-6 hours
 **Tags**: `phase-0.5`, `ci-cd`, `sonarqube`
 
 **Description**: Adapt CI/CD workflows for monorepo using enhanced reusable workflows with project_name support
@@ -175,12 +175,12 @@ All tasks should include:
 
 ### PHASE 1: Workspace Restructuring
 
-**Parent Feature**: [Feature] Foundation & Infrastructure  
-**Jira Epic**: `MCP-17`  
-**Jira Phase Ticket**: `MCP-35`  
-**Planned PR ID**: `PR-01`  
-**Priority**: High  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Foundation & Infrastructure
+**Jira Epic**: `MCP-17`
+**Jira Phase Ticket**: `MCP-35`
+**Planned PR ID**: `PR-01`
+**Priority**: High
+**Estimate**: 6-8 hours
 **Tags**: `phase-1`, `workspace`, `monorepo`
 
 **Description**: Transform single package into uv workspace monorepo with proper package structure
@@ -216,12 +216,12 @@ All tasks should include:
 
 ### PHASE 1.5-A: Configuration Cleanup & Monorepo Optimization
 
-**Parent Feature**: [Feature] Foundation & Infrastructure  
-**Jira Epic**: `MCP-17`  
-**Jira Phase Ticket**: `MCP-37`  
-**Planned PR ID**: `PR-01.5-A`  
-**Priority**: High  
-**Estimate**: 2-3 hours  
+**Parent Feature**: [Feature] Foundation & Infrastructure
+**Jira Epic**: `MCP-17`
+**Jira Phase Ticket**: `MCP-37`
+**Planned PR ID**: `PR-01.5-A`
+**Priority**: High
+**Estimate**: 2-3 hours
 **Tags**: `phase-1.5`, `configuration`, `tooling`
 
 **Description**: Clean up root-level configurations, flatten package structures, establish proper monorepo configuration hierarchy
@@ -255,12 +255,12 @@ All tasks should include:
 
 ### PHASE 1.5-B: Monorepo Tooling Configuration
 
-**Parent Feature**: [Feature] Foundation & Infrastructure  
-**Jira Epic**: `MCP-17`  
-**Jira Phase Ticket**: `MCP-42`  
-**Planned PR ID**: `PR-01.5-B`  
-**Priority**: High  
-**Estimate**: 2-3 hours  
+**Parent Feature**: [Feature] Foundation & Infrastructure
+**Jira Epic**: `MCP-17`
+**Jira Phase Ticket**: `MCP-42`
+**Planned PR ID**: `PR-01.5-B`
+**Priority**: High
+**Estimate**: 2-3 hours
 **Tags**: `phase-1.5`, `tooling`, `mypy`, `ruff`
 
 **Description**: Configure MyPy, Ruff, Pre-Commit for workspace packages
@@ -295,19 +295,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to dynamically discover, load, and manage coverage provider plugins through entry points, supporting multiple providers with capability declaration and health monitoring.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 12-16 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 12-16 hours
 **Tags**: `plugin-system`, `extensibility`, `providers`
 
 ### PHASE 2: Domain Models & Provider Contracts
 
-**Parent Feature**: [Feature] Domain & Provider System  
-**Jira Epic**: `MCP-18`  
-**Jira Phase Ticket**: `MCP-43`  
-**Planned PR ID**: `PR-02`  
-**Priority**: High  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Domain & Provider System
+**Jira Epic**: `MCP-18`
+**Jira Phase Ticket**: `MCP-43`
+**Planned PR ID**: `PR-02`
+**Priority**: High
+**Estimate**: 6-8 hours
 **Tags**: `phase-2`, `domain-models`, `contracts`
 
 **Description**: Define core abstractions and type system for provider extensibility
@@ -342,12 +342,12 @@ All tasks should include:
 
 ### PHASE 3: Provider Registry & Discovery
 
-**Parent Feature**: [Feature] Domain & Provider System  
-**Jira Epic**: `MCP-18`  
-**Jira Phase Ticket**: `MCP-44`  
-**Planned PR ID**: `PR-03`  
-**Priority**: High  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Domain & Provider System
+**Jira Epic**: `MCP-18`
+**Jira Phase Ticket**: `MCP-44`
+**Planned PR ID**: `PR-03`
+**Priority**: High
+**Estimate**: 6-8 hours
 **Tags**: `phase-3`, `registry`, `plugin-system`
 
 **Description**: Implement plugin discovery and provider management system
@@ -391,19 +391,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to integrate with Codecov API, retrieve coverage data, and support all advanced capabilities including commit analysis, PR comparisons, and configuration diagnosis.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 10-12 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 10-12 hours
 **Tags**: `codecov`, `provider`, `integration`
 
 ### PHASE 4: Codecov Provider - Foundation
 
-**Parent Feature**: [Feature] Codecov Provider Integration  
-**Jira Epic**: `MCP-19`  
-**Jira Phase Ticket**: `MCP-46`  
-**Planned PR ID**: `PR-04`  
-**Priority**: High  
-**Estimate**: 10-12 hours  
+**Parent Feature**: [Feature] Codecov Provider Integration
+**Jira Epic**: `MCP-19`
+**Jira Phase Ticket**: `MCP-46`
+**Planned PR ID**: `PR-04`
+**Priority**: High
+**Estimate**: 10-12 hours
 **Tags**: `phase-4`, `codecov`, `provider`
 
 **Description**: Implement Codecov API client, DTOs, and provider adapter
@@ -447,19 +447,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to list providers, assess health, compare coverage, analyze PR risk, diagnose config, recommend tests, and detect excludable code through 11 MCP tools.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 42-54 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 42-54 hours
 **Tags**: `services`, `mcp-tools`, `analysis`
 
 ### PHASE 5: Coverage Intelligence Services - Tier 1
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-54`  
-**Planned PR ID**: `PR-05`  
-**Priority**: High  
-**Estimate**: 8-10 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-54`
+**Planned PR ID**: `PR-05`
+**Priority**: High
+**Estimate**: 8-10 hours
 **Tags**: `phase-5`, `services`, `tier-1`
 
 **Description**: Implement foundational intelligence services for provider discovery, health, and comparison
@@ -493,12 +493,12 @@ All tasks should include:
 
 ### PHASE 6: MCP Facade - Bootstrap Tools
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-56`  
-**Planned PR ID**: `PR-06`  
-**Priority**: High  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-56`
+**Planned PR ID**: `PR-06`
+**Priority**: High
+**Estimate**: 6-8 hours
 **Tags**: `phase-6`, `mcp-tools`, `bootstrap`
 
 **Description**: Implement first 3 MCP tools: list_coverage_providers, describe_coverage_provider, get_repository_test_health
@@ -533,12 +533,12 @@ All tasks should include:
 
 ### PHASE 7: MCP Facade - Commit & Comparison Tools
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-58`  
-**Planned PR ID**: `PR-07`  
-**Priority**: High  
-**Estimate**: 4-6 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-58`
+**Planned PR ID**: `PR-07`
+**Priority**: High
+**Estimate**: 4-6 hours
 **Tags**: `phase-7`, `mcp-tools`, `comparison`
 
 **Description**: Add commit summary and comparison MCP tools
@@ -565,12 +565,12 @@ All tasks should include:
 
 ### PHASE 8: Coverage Intelligence Services - Tier 2
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-59`  
-**Planned PR ID**: `PR-08`  
-**Priority**: High  
-**Estimate**: 8-10 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-59`
+**Planned PR ID**: `PR-08`
+**Priority**: High
+**Estimate**: 8-10 hours
 **Tags**: `phase-8`, `services`, `tier-2`
 
 **Description**: Implement advanced analysis services for risk scoring and gap discovery
@@ -603,12 +603,12 @@ All tasks should include:
 
 ### PHASE 9: MCP Facade - PR Analysis Tools
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-62`  
-**Planned PR ID**: `PR-09`  
-**Priority**: High  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-62`
+**Planned PR ID**: `PR-09`
+**Priority**: High
+**Estimate**: 6-8 hours
 **Tags**: `phase-9`, `mcp-tools`, `pr-analysis`
 
 **Description**: Add PR-focused analysis tools for untested code and risk assessment
@@ -641,12 +641,12 @@ All tasks should include:
 
 ### PHASE 10: Coverage Intelligence Services - Tier 3
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-64`  
-**Planned PR ID**: `PR-10`  
-**Priority**: High  
-**Estimate**: 10-12 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-64`
+**Planned PR ID**: `PR-10`
+**Priority**: High
+**Estimate**: 10-12 hours
 **Tags**: `phase-10`, `services`, `tier-3`
 
 **Description**: Implement recommendation and diagnostic services for config diagnosis, test recommendations, and excludable code detection
@@ -687,12 +687,12 @@ All tasks should include:
 
 ### PHASE 11: MCP Facade - Advanced Analysis Tools
 
-**Parent Feature**: [Feature] Intelligence Services & MCP Tools  
-**Jira Epic**: `MCP-21`  
-**Jira Phase Ticket**: `MCP-66`  
-**Planned PR ID**: `PR-11`  
-**Priority**: High  
-**Estimate**: 8-10 hours  
+**Parent Feature**: [Feature] Intelligence Services & MCP Tools
+**Jira Epic**: `MCP-21`
+**Jira Phase Ticket**: `MCP-66`
+**Planned PR ID**: `PR-11`
+**Priority**: High
+**Estimate**: 8-10 hours
 **Tags**: `phase-11`, `mcp-tools`, `advanced`
 
 **Description**: Complete remaining 4 MCP tools: low coverage files, config diagnosis, test plan recommendation, excludable code candidates
@@ -735,19 +735,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to run MCP server via CLI with stdio/http transports, list providers, and perform health checks.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 8-10 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 8-10 hours
 **Tags**: `cli`, `command-line`, `interface`
 
 ### PHASE 12: CLI Implementation
 
-**Parent Feature**: [Feature] CLI Interface  
-**Jira Epic**: `MCP-23`  
-**Jira Phase Ticket**: `MCP-67`  
-**Planned PR ID**: `PR-12`  
-**Priority**: High  
-**Estimate**: 8-10 hours  
+**Parent Feature**: [Feature] CLI Interface
+**Jira Epic**: `MCP-23`
+**Jira Phase Ticket**: `MCP-67`
+**Planned PR ID**: `PR-12`
+**Priority**: High
+**Estimate**: 8-10 hours
 **Tags**: `phase-12`, `cli`, `commands`
 
 **Description**: Build production-ready CLI with serve, providers, and doctor commands
@@ -791,19 +791,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to build and deploy MCP server using Docker with multi-stage builds, health checks, and production-ready configuration.
 
-**Release Tracking**: v0.1.0  
-**Priority**: Medium  
-**Estimate**: 6-8 hours  
+**Release Tracking**: v0.1.0
+**Priority**: Medium
+**Estimate**: 6-8 hours
 **Tags**: `docker`, `deployment`, `containerization`
 
 ### PHASE 13: Docker Support
 
-**Parent Feature**: [Feature] Docker Deployment  
-**Jira Epic**: `MCP-25`  
-**Jira Phase Ticket**: `MCP-74`  
-**Planned PR ID**: `PR-13`  
-**Priority**: Medium  
-**Estimate**: 6-8 hours  
+**Parent Feature**: [Feature] Docker Deployment
+**Jira Epic**: `MCP-25`
+**Jira Phase Ticket**: `MCP-74`
+**Planned PR ID**: `PR-13`
+**Priority**: Medium
+**Estimate**: 6-8 hours
 **Tags**: `phase-13`, `docker`, `deployment`
 
 **Description**: Create production Docker images with multi-stage builds and CI integration
@@ -848,19 +848,19 @@ All tasks should include:
 
 **Description**: Complete functional ability to access comprehensive documentation including architecture, tool references, guides, and deployment instructions via live documentation site.
 
-**Release Tracking**: v0.1.0  
-**Priority**: High  
-**Estimate**: 16-22 hours  
+**Release Tracking**: v0.1.0
+**Priority**: High
+**Estimate**: 16-22 hours
 **Tags**: `documentation`, `guides`, `reference`
 
 ### PHASE 14: Testing, Documentation, Release Prep
 
-**Parent Feature**: [Feature] Testing & Documentation  
-**Jira Epic**: `MCP-27`  
-**Jira Phase Ticket**: `MCP-76`  
-**Planned PR ID**: `PR-14`  
-**Priority**: High  
-**Estimate**: 12-16 hours  
+**Parent Feature**: [Feature] Testing & Documentation
+**Jira Epic**: `MCP-27`
+**Jira Phase Ticket**: `MCP-76`
+**Planned PR ID**: `PR-14`
+**Priority**: High
+**Estimate**: 12-16 hours
 **Tags**: `phase-14`, `testing`, `documentation`
 
 **Description**: Complete testing coverage and comprehensive documentation for v0.1.0 release
@@ -912,12 +912,12 @@ All tasks should include:
 
 ### PHASE 15: Documentation Site Deployment
 
-**Parent Feature**: [Feature] Testing & Documentation  
-**Jira Epic**: `MCP-27`  
-**Jira Phase Ticket**: `MCP-78`  
-**Planned PR ID**: `PR-15`  
-**Priority**: Medium  
-**Estimate**: 4-6 hours  
+**Parent Feature**: [Feature] Testing & Documentation
+**Jira Epic**: `MCP-27`
+**Jira Phase Ticket**: `MCP-78`
+**Planned PR ID**: `PR-15`
+**Priority**: Medium
+**Estimate**: 4-6 hours
 **Tags**: `phase-15`, `docusaurus`, `documentation-site`
 
 **Description**: Deploy comprehensive Docusaurus documentation site to GitHub Pages
@@ -1085,8 +1085,8 @@ Phase 15 (Documentation Site Deployment)
 
 ## Summary
 
-**Total FEATURES**: 7  
-**Total PHASES**: 17 (one phase = one PR)  
+**Total FEATURES**: 7
+**Total PHASES**: 17 (one phase = one PR)
 **Estimated Total Duration**: 117-159 hours (~3-4 weeks full-time)
 
 **Feature Breakdown**:
@@ -1122,8 +1122,8 @@ Phase 15 (Documentation Site Deployment)
 
 ---
 
-**Document Version**: 3.0  
-**Created**: 2026-04-14  
-**Updated**: 2026-04-14  
-**Author**: Cascade AI  
+**Document Version**: 3.0
+**Created**: 2026-04-14
+**Updated**: 2026-04-14
+**Author**: Cascade AI
 **Status**: Ready for Review

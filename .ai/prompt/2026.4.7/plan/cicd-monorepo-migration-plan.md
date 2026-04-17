@@ -1,9 +1,9 @@
 # CI/CD Monorepo Migration Plan
 ## test-coverage-mcp Project
 
-**Date**: April 7, 2026  
-**Version**: 1.2 (3 Orchestrator Design - Based on User Requirements)  
-**Status**: Planning - Awaiting Final Review  
+**Date**: April 7, 2026
+**Version**: 1.2 (3 Orchestrator Design - Based on User Requirements)
+**Status**: Planning - Awaiting Final Review
 **Dependencies**: Phase 0.5 & Phase 1.5 from implementation-plan.md
 
 ---
@@ -12,12 +12,12 @@
 
 ### Key Changes Made (Version 1.2) 🆕
 
-**User Requirements**: 
+**User Requirements**:
 1. Must have 3 release types with specific triggers
 2. Keep important settings (permissions, concurrency)
 3. Remove redundant workflows instead of just deprecating
 
-**Major Changes**: 
+**Major Changes**:
 
 1. **3 Release Orchestrators** ✅
    - **Validation**: `release-validate-monorepo.yml` (auto + manual)
@@ -101,7 +101,7 @@ OLD Release Workflows:
 ❌ release-validate.yml                 # Replaced by release-validate-monorepo.yml
 ```
 
-**Net Result**: 
+**Net Result**:
 - **Before**: 15+ workflow files (single-project + placeholders)
 - **After**: ~10 workflow files (4 new + 6 updated + supporting)
 - **Removed**: 6 redundant workflow files
@@ -199,10 +199,10 @@ packages:
     package_name: test-coverage-mcp
     working_directory: test-coverage-mcp
     tag_prefix: core/
-    
+
     release: true
     level: auto
-    
+
     artifacts:
       python: auto
       docker: skip                # Core has no Dockerfile yet
@@ -210,31 +210,31 @@ packages:
         mode: auto
         sections: ["docs"]
         strategy: changed
-    
+
     python:
       auth_method: token
-    
+
     validation:
       version: "1.0.0-validation"
       test_version: "validation-test"
-  
+
   # Codecov Provider Plugin Package
   - name: codecov
     package_name: test-coverage-mcp-codecov
     working_directory: test-coverage-mcp-codecov
     tag_prefix: codecov/
-    
+
     release: true
     level: auto
-    
+
     artifacts:
       python: auto
       docker: skip
       docs: skip                  # Uses core's docs
-    
+
     python:
       auth_method: token
-    
+
     validation:
       version: "0.1.0-validation"
       test_version: "validation-test"
@@ -531,7 +531,7 @@ jobs:
 1. `.github/workflows/rw_build_and_test.yaml`
 2. `.github/workflows/rw_run_all_test_and_record.yaml`
 
-**Rationale**: 
+**Rationale**:
 - These are **local orchestration** workflows (not upstream reusable workflows)
 - They exist to coordinate calls between `ci.yaml` and upstream workflows
 - With `ci-monorepo.yaml` directly calling upstream workflows, this layer is redundant
@@ -539,7 +539,7 @@ jobs:
 
 **Current Architecture** (being replaced):
 ```
-ci.yaml 
+ci.yaml
   → rw_run_all_test_and_record.yaml (local)
     → rw_build_and_test.yaml (local)
       → rw_uv_run_test.yaml (upstream - Chisanan232 repo)
@@ -556,7 +556,7 @@ ci-monorepo.yaml
 ```
 
 **Migration Strategy**:
-1. **Phase 2**: Create new `ci-monorepo.yaml` 
+1. **Phase 2**: Create new `ci-monorepo.yaml`
 2. **Phase 2**: Test new workflow (old workflows still available as fallback)
 3. **Phase 5**: Remove both local workflows after validation
 
@@ -712,7 +712,7 @@ on:
       - '.github/workflows/release-*.yml'
       - 'pyproject.toml'
       - 'uv.lock'
-  
+
   # Manual trigger: With package selection and level
   workflow_dispatch:
     inputs:
@@ -795,7 +795,7 @@ jobs:
           echo "Validation Status: ${{ needs.validate-releases.result }}"
           echo "Packages Validated: ${{ needs.validate-releases.outputs.packages_validated }}"
           echo ""
-          
+
           if [[ "${{ needs.validate-releases.result }}" == "success" ]]; then
             echo "✅ Release validation passed!"
             echo ""
@@ -913,7 +913,7 @@ jobs:
           echo "Staging Status: ${{ needs.staging-releases.result }}"
           echo "Packages Released: ${{ needs.staging-releases.outputs.packages_released }}"
           echo ""
-          
+
           if [[ "${{ needs.staging-releases.result }}" == "success" ]]; then
             echo "🎭 Staging release completed successfully!"
             echo ""
@@ -959,7 +959,7 @@ on:
       - master
     paths:
       - .github/tag_and_release/release-**
-  
+
   # Manual trigger: With package selection and options
   workflow_dispatch:
     inputs:
@@ -1046,7 +1046,7 @@ jobs:
           echo "Release Status: ${{ needs.production-releases.result }}"
           echo "Packages Released: ${{ needs.production-releases.outputs.packages_released }}"
           echo ""
-          
+
           if [[ "${{ needs.production-releases.result }}" == "success" && "${{ needs.production-releases.outputs.release_performed }}" == "true" ]]; then
             echo "🎉 Production release completed successfully!"
             echo ""
@@ -1265,16 +1265,16 @@ git commit -m "🗑️ release: Remove deprecated release workflows
 1. **Monorepo Section**:
    ```markdown
    ## Monorepo Workflows
-   
+
    This project uses a UV workspace monorepo with 2 packages:
    - `test-coverage-mcp` (core) - Main MCP server
    - `test-coverage-mcp-codecov` (codecov) - Codecov provider plugin
-   
+
    ### CI Testing
    - **Workflow**: `ci-monorepo.yaml`
    - **Features**: Per-package testing, change detection, parallel execution
    - **Artifact naming**: `coverage_{project_name}_{test_type}_{os}_{python}`
-   
+
    ### Releases
    - **Core package**: Use `release-core.yml`
    - **Codecov package**: Use `release-codecov.yml`
@@ -1284,7 +1284,7 @@ git commit -m "🗑️ release: Remove deprecated release workflows
 2. **Examples Section**:
    ```markdown
    ### Triggering Per-Package Release
-   
+
    1. Go to Actions → Release - Core Package
    2. Click "Run workflow"
    3. Select release level (auto/patch/minor/major)
@@ -1425,7 +1425,7 @@ To release both packages:
 
 #### Migration Testing
 - [ ] **Phase 1**: YAML validation passes
-- [ ] **Phase 2**: 
+- [ ] **Phase 2**:
   - Create test PR modifying only core → only core tests run
   - Create test PR modifying only codecov → only codecov tests run
   - Verify coverage artifacts have correct naming
@@ -1791,4 +1791,3 @@ Old Release:
 - ✅ **Simplified Architecture**: Direct upstream workflow calls (removed local orchestration layers)
 
 This plan addresses the maintainability concern with orchestrator pattern while meeting all 3 release type requirements, preserving important workflow settings, and cleaning up redundant workflows for a simplified architecture.
-
