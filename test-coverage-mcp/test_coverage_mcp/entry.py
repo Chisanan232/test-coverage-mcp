@@ -334,8 +334,8 @@ def initialize_server_environment(config: ServerConfig) -> Settings | None:
     --------
     .. code-block:: python
 
-        from src.models.cli import ServerConfig
-        from src.entry import initialize_server_environment
+        from test_coverage_mcp.models.cli import ServerConfig
+        from test_coverage_mcp.entry import initialize_server_environment
 
         config = ServerConfig(transport="sse")
         settings = initialize_server_environment(config)
@@ -378,8 +378,8 @@ def run_standalone_server(config: ServerConfig) -> None:
     --------
     .. code-block:: python
 
-        from src.models.cli import ServerConfig
-        from src.entry import run_standalone_server
+        from test_coverage_mcp.models.cli import ServerConfig
+        from test_coverage_mcp.entry import run_standalone_server
 
         config = ServerConfig(transport="sse")
         run_standalone_server(config)
@@ -399,7 +399,7 @@ def run_standalone_server(config: ServerConfig) -> None:
     # Run server based on transport
     if config.transport == MCPTransportType.SSE or config.transport == MCPTransportType.HTTP_STREAMING:
         # HTTP-based transport - run with uvicorn
-        from src.web_server.app import create_app
+        from test_coverage_mcp.web_server.app import create_app
 
         app = create_app(config)
         _LOG.info(f"Starting MCP server with {config.transport} transport on {config.host}:{config.port}")
@@ -432,8 +432,8 @@ def run_integrated_server(config: ServerConfig) -> None:
     --------
     .. code-block:: python
 
-        from src.models.cli import ServerConfig
-        from src.entry import run_integrated_server
+        from test_coverage_mcp.models.cli import ServerConfig
+        from test_coverage_mcp.entry import run_integrated_server
 
         config = ServerConfig(transport="sse")
         run_integrated_server(config)

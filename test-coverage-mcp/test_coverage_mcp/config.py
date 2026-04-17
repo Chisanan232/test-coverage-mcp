@@ -33,7 +33,7 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.config import get_settings
+    from test_coverage_mcp.config import get_settings
 
     settings = get_settings()
     print(f"Token: {settings.api_token}")
@@ -311,7 +311,7 @@ def reset_settings() -> None:
     --------
     .. code-block:: python
 
-        from src.config import reset_settings, get_settings
+        from test_coverage_mcp.config import reset_settings, get_settings
 
         reset_settings()
         settings = get_settings()  # Creates fresh instance

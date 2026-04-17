@@ -3,7 +3,7 @@
 import logging
 from typing import Any, Dict, Optional
 
-from src.domain import CoverageProvider, ProviderHealth
+from test_coverage_mcp.domain import CoverageProvider, ProviderHealth
 
 logger = logging.getLogger(__name__)
 

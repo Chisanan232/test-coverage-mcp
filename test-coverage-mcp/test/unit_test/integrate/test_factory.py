@@ -3,15 +3,15 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src._base import BaseServerFactory
-from src.integrate.app import (
+from test_coverage_mcp._base import BaseServerFactory
+from test_coverage_mcp.integrate.app import (
     IntegratedServerFactory,
     integrated_factory,
     integrated_server_lifecycle,
 )
-from src.mcp_server.app import MCPServerFactory
-from src.models.cli import MCPTransportType
-from src.web_server.app import WebServerFactory
+from test_coverage_mcp.mcp_server.app import MCPServerFactory
+from test_coverage_mcp.models.cli import MCPTransportType
+from test_coverage_mcp.web_server.app import WebServerFactory
 
 
 class TestIntegratedServerFactory:

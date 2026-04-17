@@ -81,9 +81,9 @@ To extend this template with project-specific models:
 
    .. code-block:: python
 
-       from src.models import ServerConfig
-       from src.models.user import User
-       from src.models.task import Task
+       from test_coverage_mcp.models import ServerConfig
+       from test_coverage_mcp.models.user import User
+       from test_coverage_mcp.models.task import Task
 
        config = ServerConfig()
        user = User(name="John", email="john@example.com")
@@ -94,7 +94,7 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.models import ServerConfig, LogLevel, MCPTransportType
+    from test_coverage_mcp.models import ServerConfig, LogLevel, MCPTransportType
 
     # Create configuration with type safety
     config = ServerConfig(

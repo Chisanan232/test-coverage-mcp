@@ -137,9 +137,9 @@ To add custom MCP tool models:
 
    .. code-block:: python
 
-       from src.mcp_server import mcp_factory
-       from src.mcp_server.models.input.calculator_input import CalculatorInput
-       from src.mcp_server.models.output.calculator_output import CalculatorOutput
+       from test_coverage_mcp.mcp_server import mcp_factory
+       from test_coverage_mcp.mcp_server.models.input.calculator_input import CalculatorInput
+       from test_coverage_mcp.mcp_server.models.output.calculator_output import CalculatorOutput
 
        @mcp_factory.get().tool()
        def calculate(input: CalculatorInput) -> CalculatorOutput:
@@ -162,8 +162,8 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.mcp_server.models.input.calculator_input import CalculatorInput
-    from src.mcp_server.models.output.calculator_output import CalculatorOutput
+    from test_coverage_mcp.mcp_server.models.input.calculator_input import CalculatorInput
+    from test_coverage_mcp.mcp_server.models.output.calculator_output import CalculatorOutput
 
     # Create input model with validation
     input_data = CalculatorInput(
@@ -230,7 +230,7 @@ Test models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.mcp_server.models.input.calculator_input import CalculatorInput
+    from test_coverage_mcp.mcp_server.models.input.calculator_input import CalculatorInput
 
     def test_calculator_input_validation():
         # Valid input

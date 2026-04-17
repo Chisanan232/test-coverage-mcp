@@ -3,8 +3,8 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src._base import BaseServerFactory
-from src.mcp_server.app import MCPServerFactory, mcp_factory
+from test_coverage_mcp._base import BaseServerFactory
+from test_coverage_mcp.mcp_server.app import MCPServerFactory, mcp_factory
 
 
 class TestMCPServerFactory:

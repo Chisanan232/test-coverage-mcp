@@ -114,8 +114,8 @@ To add custom API endpoint request models:
    .. code-block:: python
 
        from fastapi import APIRouter
-       from src.web_server.models.request.create_task_request import CreateTaskRequest
-       from src.web_server.models.response.task_response import TaskResponse
+       from test_coverage_mcp.web_server.models.request.create_task_request import CreateTaskRequest
+       from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
        router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -235,7 +235,7 @@ Test request models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.web_server.models.request.create_task_request import CreateTaskRequest
+    from test_coverage_mcp.web_server.models.request.create_task_request import CreateTaskRequest
 
     def test_create_task_request_valid():
         request = CreateTaskRequest(title="Test task")
@@ -258,7 +258,7 @@ Request models provide clear validation errors:
 .. code-block:: python
 
     from pydantic import ValidationError
-    from src.web_server.models.request.create_task_request import CreateTaskRequest
+    from test_coverage_mcp.web_server.models.request.create_task_request import CreateTaskRequest
 
     try:
         request = CreateTaskRequest(title="")
@@ -274,7 +274,7 @@ Request models are automatically documented in OpenAPI/Swagger:
 .. code-block:: python
 
     from fastapi import FastAPI
-    from src.web_server.models.request.create_task_request import CreateTaskRequest
+    from test_coverage_mcp.web_server.models.request.create_task_request import CreateTaskRequest
 
     app = FastAPI()
 

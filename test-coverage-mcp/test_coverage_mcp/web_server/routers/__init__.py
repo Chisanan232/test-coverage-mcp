@@ -74,9 +74,9 @@ Here's a complete example of a users router:
     from typing import List, Optional
     from fastapi import APIRouter, Depends, HTTPException, Query, Path
     from fastapi.responses import JSONResponse
-    from src.web_server.services.user_service import UserService, UserAlreadyExistsError
-    from src.web_server.models.request.user import UserCreateRequest, UserUpdateRequest
-    from src.web_server.models.response.user import UserResponse, UserListResponse, ErrorResponse
+    from test_coverage_mcp.web_server.services.user_service import UserService, UserAlreadyExistsError
+    from test_coverage_mcp.web_server.models.request.user import UserCreateRequest, UserUpdateRequest
+    from test_coverage_mcp.web_server.models.response.user import UserResponse, UserListResponse, ErrorResponse
 
     router = APIRouter(
         prefix="/users",
@@ -265,7 +265,7 @@ Routers are integrated into the main FastAPI application:
 .. code-block:: python
 
     from fastapi import FastAPI
-    from src.web_server.routers import users, health, data
+    from test_coverage_mcp.web_server.routers import users, health, data
 
     app = FastAPI(
         title="MCP Server API",
@@ -293,8 +293,8 @@ Advanced Router Features
 .. code-block:: python
 
     from fastapi import FastAPI
-    from src.web_server.middleware.auth import auth_middleware
-    from src.web_server.routers.admin import router as admin_router
+    from test_coverage_mcp.web_server.middleware.auth import auth_middleware
+    from test_coverage_mcp.web_server.routers.admin import router as admin_router
 
     app = FastAPI()
 
@@ -307,7 +307,7 @@ Advanced Router Features
 .. code-block:: python
 
     from fastapi import APIRouter, Depends
-    from src.web_server.dependencies.auth import get_current_user
+    from test_coverage_mcp.web_server.dependencies.auth import get_current_user
 
     router = APIRouter(
         prefix="/protected",
@@ -320,7 +320,7 @@ Advanced Router Features
 .. code-block:: python
 
     from fastapi import APIRouter
-    from src.web_server.exceptions import UserNotFoundError
+    from test_coverage_mcp.web_server.exceptions import UserNotFoundError
 
     router = APIRouter()
 
@@ -341,9 +341,9 @@ Test routers with TestClient and mocked dependencies:
     import pytest
     from fastapi.testclient import TestClient
     from unittest.mock import Mock, AsyncMock
-    from src.web_server.app import app
-    from src.web_server.routers.users import router
-    from src.web_server.services.user_service import UserService
+    from test_coverage_mcp.web_server.app import app
+    from test_coverage_mcp.web_server.routers.users import router
+    from test_coverage_mcp.web_server.services.user_service import UserService
 
     @pytest.fixture
     def client():
@@ -362,7 +362,7 @@ Test routers with TestClient and mocked dependencies:
         app.dependency_overrides[UserService] = lambda: mock_user_service
 
         # Mock response
-        from src.web_server.models.response.user import UserResponse
+        from test_coverage_mcp.web_server.models.response.user import UserResponse
         mock_user_service.create_user.return_value = UserResponse(
             id=1,
             email="test@example.com",
@@ -470,7 +470,7 @@ Import this package in your web server application:
 .. code-block:: python
 
     # Import routers to make them available
-    from src.web_server.routers import users_router, health_router, data_router
+    from test_coverage_mcp.web_server.routers import users_router, health_router, data_router
 
     # Include in your FastAPI app
     from fastapi import FastAPI

@@ -4,7 +4,7 @@ import importlib.metadata
 import logging
 from typing import Dict, List
 
-from src.domain import CoverageProvider
+from test_coverage_mcp.domain import CoverageProvider
 
 logger = logging.getLogger(__name__)
 

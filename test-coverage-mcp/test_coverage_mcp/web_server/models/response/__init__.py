@@ -122,7 +122,7 @@ To add custom API endpoint response models:
    .. code-block:: python
 
        from fastapi import APIRouter
-       from src.web_server.models.response.task_response import TaskResponse
+       from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
        router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -233,7 +233,7 @@ Test response models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.web_server.models.response.task_response import TaskResponse
+    from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
     from datetime import datetime
 
     def test_task_response_valid():
@@ -265,7 +265,7 @@ Response models support JSON serialization for HTTP responses:
 
 .. code-block:: python
 
-    from src.web_server.models.response.task_response import TaskResponse
+    from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
     # Create response
     response = TaskResponse(...)
@@ -287,7 +287,7 @@ Response models are automatically documented in OpenAPI/Swagger:
 .. code-block:: python
 
     from fastapi import FastAPI
-    from src.web_server.models.response.task_response import TaskResponse
+    from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
     app = FastAPI()
 
@@ -384,7 +384,7 @@ Use response models with appropriate HTTP status codes:
 .. code-block:: python
 
     from fastapi import APIRouter
-    from src.web_server.models.response.task_response import TaskResponse
+    from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
     router = APIRouter()
 

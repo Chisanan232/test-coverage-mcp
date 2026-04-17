@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.domain import (
+from test_coverage_mcp.domain import (
     AnalysisDepth,
     CoverageProvider,
     ProviderCapability,
@@ -10,7 +10,7 @@ from src.domain import (
     ProviderMetadata,
     SupportLevel,
 )
-from src.registry import ProviderRegistry
+from test_coverage_mcp.registry import ProviderRegistry
 
 
 class MockProvider(CoverageProvider):

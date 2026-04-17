@@ -79,7 +79,7 @@ class WebServerFactory(BaseServerFactory[FastAPI]):
 
     Usage Examples:
         # Python - Create and use the web server
-        from src.web_server.app import WebServerFactory
+        from test_coverage_mcp.web_server.app import WebServerFactory
 
         server = WebServerFactory.create()
         # Server is now running with MCP endpoints
@@ -276,7 +276,7 @@ def create_app(
         app = create_app()
 
         # Python - Create app with custom configuration
-        from src.models.cli import ServerConfig
+        from test_coverage_mcp.models.cli import ServerConfig
         config = ServerConfig(
             host="0.0.0.0",
             port=8080,

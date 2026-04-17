@@ -171,8 +171,8 @@ To extend this template with custom API endpoints:
    .. code-block:: python
 
        from fastapi import APIRouter, HTTPException
-       from src.web_server.models.request.task_request import CreateTaskRequest
-       from src.web_server.models.response.task_response import TaskResponse
+       from test_coverage_mcp.web_server.models.request.task_request import CreateTaskRequest
+       from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
        router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -183,7 +183,7 @@ To extend this template with custom API endpoints:
            return TaskResponse(...)
 
        # Register router with app
-       from src.web_server import web_factory
+       from test_coverage_mcp.web_server import web_factory
        app = web_factory.get()
        app.include_router(router)
 
@@ -192,7 +192,7 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.web_server import WebServerFactory, web_factory, create_app
+    from test_coverage_mcp.web_server import WebServerFactory, web_factory, create_app
 
     # Create web server instance (singleton)
     app = web_factory.create()
@@ -201,7 +201,7 @@ Usage Examples
     app = web_factory.get()
 
     # Create app with custom configuration
-    from src.models import ServerConfig
+    from test_coverage_mcp.models import ServerConfig
     config = ServerConfig(port=8000)
     app = create_app(config)
 
@@ -243,7 +243,7 @@ CORS is configured from settings:
 
 .. code-block:: python
 
-    from src.config import get_settings
+    from test_coverage_mcp.config import get_settings
 
     settings = get_settings()
     # CORS settings:
@@ -277,7 +277,7 @@ For testing, use the reset functionality:
 
 .. code-block:: python
 
-    from src.web_server import web_factory
+    from test_coverage_mcp.web_server import web_factory
     from fastapi.testclient import TestClient
     import pytest
 

@@ -4,7 +4,7 @@ from argparse import Namespace
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src.entry import (
+from test_coverage_mcp.entry import (
     configure_logging,
     create_server_config,
     initialize_server_environment,
@@ -13,7 +13,7 @@ from src.entry import (
     run_integrated_server,
     run_standalone_server,
 )
-from src.models.cli import LogLevel, MCPTransportType, ServerConfig
+from test_coverage_mcp.models.cli import LogLevel, MCPTransportType, ServerConfig
 
 
 class TestParseArgs:

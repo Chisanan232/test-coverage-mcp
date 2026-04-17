@@ -61,8 +61,8 @@ Here's a complete example of how to implement a custom MCP tool:
 
     from typing import Union
     from fastmcp import Tool
-    from src.mcp_server.models.input.calculator_input import CalculatorInput
-    from src.mcp_server.models.output.calculator_output import CalculatorOutput, CalculatorError
+    from test_coverage_mcp.mcp_server.models.input.calculator_input import CalculatorInput
+    from test_coverage_mcp.mcp_server.models.output.calculator_output import CalculatorOutput, CalculatorError
 
     @mcp_factory.get().tool()
     def calculate(input: CalculatorInput) -> Union[CalculatorOutput, CalculatorError]:
@@ -102,7 +102,7 @@ Tools are automatically registered with the MCP server through decorators:
 
 .. code-block:: python
 
-    from src.mcp_server.app import mcp_factory
+    from test_coverage_mcp.mcp_server.app import mcp_factory
 
     # Tools are registered when the module is imported
     # Import your tools in src/mcp/tools/__init__.py
@@ -119,8 +119,8 @@ Test your tools with proper fixtures:
 .. code-block:: python
 
     import pytest
-    from src.mcp_server.tools.calculator import calculate
-    from src.mcp_server.models.input.calculator_input import CalculatorInput
+    from test_coverage_mcp.mcp_server.tools.calculator import calculate
+    from test_coverage_mcp.mcp_server.models.input.calculator_input import CalculatorInput
 
     def test_calculate_addition():
         \"\"\"Test basic addition.\"\"\"
@@ -210,11 +210,11 @@ Import this package in your main MCP application:
 .. code-block:: python
 
     # Import all tools to register them with the MCP server
-    from src.mcp_server.tools import *
+    from test_coverage_mcp.mcp_server.tools import *
 
     # Or import specific tools
-    from src.mcp_server.tools.calculator import calculate
-    from src.mcp_server.tools.database import query_database
+    from test_coverage_mcp.mcp_server.tools.calculator import calculate
+    from test_coverage_mcp.mcp_server.tools.database import query_database
 
 """
 

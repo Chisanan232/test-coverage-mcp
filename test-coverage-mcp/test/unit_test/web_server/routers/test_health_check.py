@@ -5,16 +5,16 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
-from src.web_server.dependencies.health_check import get_health_check_service
-from src.web_server.models.response.health_check import (
+from test_coverage_mcp.web_server.dependencies.health_check import get_health_check_service
+from test_coverage_mcp.web_server.models.response.health_check import (
     ComponentHealthStatus,
     DetailedHealthCheckResponseDto,
     HealthyCheckResponseDto,
     LivenessCheckResponseDto,
     ReadinessCheckResponseDto,
 )
-from src.web_server.routers.health_check import router
-from src.web_server.services.health_check_service import HealthCheckService
+from test_coverage_mcp.web_server.routers.health_check import router
+from test_coverage_mcp.web_server.services.health_check_service import HealthCheckService
 
 
 @pytest.fixture

@@ -16,7 +16,7 @@ Quick Start
 
 .. code-block:: python
 
-    from src.integrate.app import IntegratedServerFactory
+    from test_coverage_mcp.integrate.app import IntegratedServerFactory
 
     # Create app (SSE transport, mounted at /mcp)
     app = IntegratedServerFactory.create(mcp_transport="sse", mcp_mount_path="/mcp", retry=3)
@@ -83,7 +83,7 @@ def integrated_server_lifecycle() -> Generator[None, None, None]:
     --------
     .. code-block:: python
 
-        from src.integrate.app import integrated_server_lifecycle
+        from test_coverage_mcp.integrate.app import integrated_server_lifecycle
 
         with integrated_server_lifecycle():
             app = IntegratedServerFactory.create()
@@ -112,7 +112,7 @@ class IntegratedServerFactory(BaseServerFactory[FastAPI]):
     --------
     .. code-block:: python
 
-        from src.integrate.app import IntegratedServerFactory
+        from test_coverage_mcp.integrate.app import IntegratedServerFactory
 
         # Create default integrated app (SSE transport)
         app = IntegratedServerFactory.create(mcp_transport="sse", mcp_mount_path="/mcp")
@@ -233,7 +233,7 @@ class IntegratedServerFactory(BaseServerFactory[FastAPI]):
         --------
         .. code-block:: python
 
-            from src.integrate.app import IntegratedServerFactory
+            from test_coverage_mcp.integrate.app import IntegratedServerFactory
 
             app = IntegratedServerFactory.get()
 
@@ -256,7 +256,7 @@ class IntegratedServerFactory(BaseServerFactory[FastAPI]):
         --------
         .. code-block:: python
 
-            from src.integrate.app import IntegratedServerFactory
+            from test_coverage_mcp.integrate.app import IntegratedServerFactory
 
             IntegratedServerFactory.reset()
 

@@ -110,7 +110,7 @@ To extend this template with integrated server customization:
 
    .. code-block:: python
 
-       from src.integrate import IntegratedServerFactory
+       from test_coverage_mcp.integrate import IntegratedServerFactory
        from fastapi import FastAPI
 
        class CustomIntegratedFactory(IntegratedServerFactory):
@@ -123,7 +123,7 @@ To extend this template with integrated server customization:
                app.state.custom_data = {}
 
                # Add custom routers
-               from src.web_server.routers import custom_router
+               from test_coverage_mcp.web_server.routers import custom_router
                app.include_router(custom_router)
 
                return app
@@ -132,7 +132,7 @@ To extend this template with integrated server customization:
 
    .. code-block:: python
 
-       from src.integrate import integrated_server_lifecycle
+       from test_coverage_mcp.integrate import integrated_server_lifecycle
 
        # Use custom factory
        custom_factory = CustomIntegratedFactory
@@ -150,7 +150,7 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.integrate import IntegratedServerFactory, integrated_factory, integrated_server_lifecycle
+    from test_coverage_mcp.integrate import IntegratedServerFactory, integrated_factory, integrated_server_lifecycle
 
     # Create integrated server instance (singleton)
     app = integrated_factory.create(
@@ -196,8 +196,8 @@ Transport selection and configuration:
 
 .. code-block:: python
 
-    from src.integrate import integrated_factory
-    from src.models import MCPTransportType
+    from test_coverage_mcp.integrate import integrated_factory
+    from test_coverage_mcp.models import MCPTransportType
 
     # Create with SSE transport
     app = integrated_factory.create(
@@ -238,7 +238,7 @@ Use context manager for proper resource management:
 
 .. code-block:: python
 
-    from src.integrate import integrated_server_lifecycle, integrated_factory
+    from test_coverage_mcp.integrate import integrated_server_lifecycle, integrated_factory
 
     with integrated_server_lifecycle():
         try:
@@ -265,7 +265,7 @@ For testing, use the reset functionality:
 
 .. code-block:: python
 
-    from src.integrate import integrated_factory
+    from test_coverage_mcp.integrate import integrated_factory
     from fastapi.testclient import TestClient
     import pytest
 
@@ -291,9 +291,9 @@ The integrated server manages dependencies:
 
 .. code-block:: python
 
-    from src.integrate import integrated_factory
-    from src.mcp_server import mcp_factory
-    from src.web_server import web_factory
+    from test_coverage_mcp.integrate import integrated_factory
+    from test_coverage_mcp.mcp_server import mcp_factory
+    from test_coverage_mcp.web_server import web_factory
 
     # Create integrated server
     app = integrated_factory.create()

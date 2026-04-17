@@ -4,14 +4,14 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src.web_server.models.response.health_check import (
+from test_coverage_mcp.web_server.models.response.health_check import (
     ComponentHealthStatus,
     DetailedHealthCheckResponseDto,
     HealthyCheckResponseDto,
     LivenessCheckResponseDto,
     ReadinessCheckResponseDto,
 )
-from src.web_server.services.health_check_service import HealthCheckService
+from test_coverage_mcp.web_server.services.health_check_service import HealthCheckService
 
 
 class TestHealthCheckService:

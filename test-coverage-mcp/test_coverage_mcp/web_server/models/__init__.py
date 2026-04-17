@@ -147,8 +147,8 @@ To add custom API endpoint models:
    .. code-block:: python
 
        from fastapi import APIRouter, HTTPException
-       from src.web_server.models.request.task_request import CreateTaskRequest
-       from src.web_server.models.response.task_response import TaskResponse
+       from test_coverage_mcp.web_server.models.request.task_request import CreateTaskRequest
+       from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
        router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -169,8 +169,8 @@ Usage Examples
 
 .. code-block:: python
 
-    from src.web_server.models.request.task_request import CreateTaskRequest
-    from src.web_server.models.response.task_response import TaskResponse
+    from test_coverage_mcp.web_server.models.request.task_request import CreateTaskRequest
+    from test_coverage_mcp.web_server.models.response.task_response import TaskResponse
 
     # Create request model with validation
     request_data = CreateTaskRequest(
@@ -257,7 +257,7 @@ Test models with Pydantic validation:
 
     import pytest
     from pydantic import ValidationError
-    from src.web_server.models.request.task_request import CreateTaskRequest
+    from test_coverage_mcp.web_server.models.request.task_request import CreateTaskRequest
 
     def test_create_task_request_validation():
         # Valid request

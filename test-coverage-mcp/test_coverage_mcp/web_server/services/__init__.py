@@ -70,10 +70,10 @@ Here's a complete example of a user service:
     from typing import Optional, List
     from datetime import datetime, timedelta
     from sqlalchemy.orm import Session
-    from src.web_server.dependencies.database import db_dependency
-    from src.web_server.models.request.user import UserCreateRequest, UserUpdateRequest
-    from src.web_server.models.response.user import UserResponse, UserListResponse
-    from src.models.dto.user import UserDTO, UserStatus
+    from test_coverage_mcp.web_server.dependencies.database import db_dependency
+    from test_coverage_mcp.web_server.models.request.user import UserCreateRequest, UserUpdateRequest
+    from test_coverage_mcp.web_server.models.response.user import UserResponse, UserListResponse
+    from test_coverage_mcp.models.dto.user import UserDTO, UserStatus
 
     logger = logging.getLogger(__name__)
 
@@ -247,8 +247,8 @@ Services can be used in FastAPI endpoints through dependency injection:
 .. code-block:: python
 
     from fastapi import Depends, FastAPI, HTTPException
-    from src.web_server.services.user_service import UserService
-    from src.web_server.models.request.user import UserCreateRequest
+    from test_coverage_mcp.web_server.services.user_service import UserService
+    from test_coverage_mcp.web_server.models.request.user import UserCreateRequest
 
     app = FastAPI()
 
@@ -283,7 +283,7 @@ Test services with mock dependencies:
 
     import pytest
     from unittest.mock import Mock, AsyncMock
-    from src.web_server.services.user_service import UserService
+    from test_coverage_mcp.web_server.services.user_service import UserService
 
     @pytest.fixture
     def mock_session():
@@ -304,7 +304,7 @@ Test services with mock dependencies:
     @pytest.mark.asyncio
     async def test_create_user_success(user_service, mock_session):
         \"\"\"Test successful user creation.\"\"\"
-        from src.web_server.models.request.user import UserCreateRequest
+        from test_coverage_mcp.web_server.models.request.user import UserCreateRequest
 
         user_data = UserCreateRequest(
             email="test@example.com",
@@ -409,11 +409,11 @@ Import this package in your web server application:
 .. code-block:: python
 
     # Import services to make them available
-    from src.web_server.services import UserService, DataService, NotificationService
+    from test_coverage_mcp.web_server.services import UserService, DataService, NotificationService
 
     # Use in your FastAPI app
     from fastapi import FastAPI, Depends
-    from src.web_server.services.user_service import UserService
+    from test_coverage_mcp.web_server.services.user_service import UserService
 
     app = FastAPI()
 

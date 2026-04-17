@@ -71,7 +71,7 @@ Here's a complete example of a database dependency:
     from sqlalchemy import create_engine, MetaData
     from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
     from sqlalchemy.orm import sessionmaker, declarative_base
-    from src.config import get_settings
+    from test_coverage_mcp.config import get_settings
 
     logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ Dependencies can be injected into FastAPI endpoints using dependency injection:
 .. code-block:: python
 
     from fastapi import Depends, FastAPI
-    from src.web_server.dependencies.database import db_dependency
+    from test_coverage_mcp.web_server.dependencies.database import db_dependency
     from sqlalchemy.orm import Session
 
     app = FastAPI()
@@ -203,7 +203,7 @@ Test dependencies with mock implementations:
 
     import pytest
     from unittest.mock import Mock, AsyncMock
-    from src.web_server.dependencies.database import db_dependency
+    from test_coverage_mcp.web_server.dependencies.database import db_dependency
 
     @pytest.fixture
     def mock_db_session():
@@ -328,11 +328,11 @@ Import this package in your web server application:
 .. code-block:: python
 
     # Import dependencies to make them available
-    from src.web_server.dependencies import db_dependency, cache_dependency
+    from test_coverage_mcp.web_server.dependencies import db_dependency, cache_dependency
 
     # Use in your FastAPI app
     from fastapi import FastAPI, Depends
-    from src.web_server.dependencies.database import db_dependency
+    from test_coverage_mcp.web_server.dependencies.database import db_dependency
 
     app = FastAPI()
 

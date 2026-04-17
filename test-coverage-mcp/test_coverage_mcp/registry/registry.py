@@ -2,7 +2,7 @@
 
 from typing import Dict, Optional
 
-from src.domain import CoverageProvider, ProviderHealth, ProviderMetadata
+from test_coverage_mcp.domain import CoverageProvider, ProviderHealth, ProviderMetadata
 
 
 class ProviderRegistry:
