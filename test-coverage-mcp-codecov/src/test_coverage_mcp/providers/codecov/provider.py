@@ -97,6 +97,10 @@ class CodecovProvider(CoverageProvider):
         import asyncio
         from datetime import datetime
 
+        async def _check_health() -> bool:
+            async with self._client as client:
+                return await client.health_check()
+
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
@@ -104,14 +108,14 @@ class CodecovProvider(CoverageProvider):
             asyncio.set_event_loop(loop)
 
         try:
-            is_healthy = loop.run_until_complete(self._client.health_check())
+            is_healthy = loop.run_until_complete(_check_health())
             return ProviderHealth(
                 is_healthy=is_healthy,
                 last_check=datetime.utcnow().isoformat(),
                 error_message=None,
                 response_time_ms=10.0,
             )
-        except CodecovAPIError as e:
+        except (CodecovAPIError, Exception) as e:
             return ProviderHealth(
                 is_healthy=False,
                 last_check=datetime.utcnow().isoformat(),

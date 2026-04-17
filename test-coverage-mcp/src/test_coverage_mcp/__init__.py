@@ -92,16 +92,16 @@ Quick Start
 .. code-block:: bash
 
     # Run with default stdio transport
-    python -m src.entry
+    python -m test_coverage_mcp.entry
 
     # Run with SSE transport
-    python -m src.entry --transport sse --port 8000
+    python -m test_coverage_mcp.entry --transport sse --port 8000
 
     # Run in integrated mode
-    python -m src.entry --integrated --transport sse
+    python -m test_coverage_mcp.entry --integrated --transport sse
 
     # Run with custom configuration
-    python -m src.entry --transport http-streaming --port 9000 --log-level debug
+    python -m test_coverage_mcp.entry --transport http-streaming --port 9000 --log-level debug
 
 Extending This Template
 =======================
@@ -123,6 +123,9 @@ All modules use type hints for better IDE support and static analysis.
 """
 
 from __future__ import annotations
+
+# Support namespace packages for provider ecosystem
+__path__ = __import__('pkgutil').extend_path(__path__, __name__)
 
 # Re-export commonly used components for convenience
 from .config import Settings, get_settings
