@@ -29,4 +29,7 @@ dist/
 ## Script
 scripts/ci/get-all-tests.sh
 
+## AI Development Notes and Prompts (keep locally, ignore from git)
+.ai/
+
 ## Some usage of this project
