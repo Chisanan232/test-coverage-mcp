@@ -53,5 +53,6 @@ USER appuser
 
 EXPOSE ${SERVER_PORT}
 
-# Entry point runs core package
-CMD ["test-coverage-mcp", "serve"]
+# Entry point runs core package in integrated mode (MCP + webhook server)
+# Uses SSE transport for HTTP-based MCP clients
+CMD ["test-coverage-mcp", "--integrated", "--transport", "sse", "--host", "0.0.0.0", "--port", "8000"]
