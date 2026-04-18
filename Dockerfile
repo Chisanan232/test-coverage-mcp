@@ -44,6 +44,10 @@ COPY --from=builder /app/test-coverage-mcp ./test-coverage-mcp
 COPY --from=builder /app/test-coverage-mcp-codecov ./test-coverage-mcp-codecov
 COPY pyproject.toml uv.lock ./
 
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Create non-root user
 RUN groupadd -r appuser && \
     useradd -r -g appuser -d /app appuser && \
@@ -53,6 +57,13 @@ USER appuser
 
 EXPOSE ${SERVER_PORT}
 
-# Entry point runs core package in integrated mode (MCP + webhook server)
-# Uses SSE transport for HTTP-based MCP clients
-CMD ["test-coverage-mcp", "--integrated", "--transport", "sse", "--host", "0.0.0.0", "--port", "8000"]
+# Environment variables for server configuration
+ENV TRANSPORT=sse \
+    HOST=0.0.0.0 \
+    PORT=8000 \
+    INTEGRATED=true \
+    LOG_LEVEL=info \
+    RELOAD=false
+
+# Entry point script handles dynamic configuration via environment variables
+ENTRYPOINT ["/app/entrypoint.sh"]
