@@ -1,7 +1,13 @@
 # Pre-Commit Configuration for Monorepo
 default_stages: [push]  # Hooks run on push only (not commit)
 ci:
-  skip: []  # Run all hooks in CI
+  skip:
+    # Skip Node.js-based hooks in CI due to version incompatibilities
+    # These are still run locally for development
+    - eslint
+    - prettier
+    - tsc-check
+    - markdownlint
 
 repos:
   # Universal file checks (all files)

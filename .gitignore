@@ -13,6 +13,8 @@ __pycache__
 .pypirc
 ## MyPy
 .mypy_cache/
+## IDE
+.idea/
 
 #### Running result of tools
 ## Docummentation
@@ -28,5 +30,13 @@ dist/
 
 ## Script
 scripts/ci/get-all-tests.sh
+
+## AI Development Notes and Prompts (keep locally, ignore from git)
+.ai/
+
+## Backup files
+*.backup
+*.bak
+*~
 
 ## Some usage of this project

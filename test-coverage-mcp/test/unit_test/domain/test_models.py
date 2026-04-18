@@ -4,7 +4,7 @@ from datetime import datetime
 
 import pytest
 
-from src.domain import (
+from test_coverage_mcp.domain import (
     AnalysisDepth,
     ConfigDiagnosis,
     CoverageDelta,

@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.domain import ProviderCapability, SupportLevel
-from test_coverage_mcp_codecov.provider import CodecovProvider
+from test_coverage_mcp.domain import ProviderCapability, SupportLevel
+from test_coverage_mcp.providers.codecov import CodecovProvider
 
 
 class TestCodecovProvider:
@@ -46,7 +46,6 @@ class TestCodecovProvider:
         """Test support levels for capabilities."""
         provider = CodecovProvider(api_token="test-token")
 
-        # Test some key support levels
         assert (
             provider.get_support_level(ProviderCapability.REPOSITORY_SUMMARY)
             == SupportLevel.ADVANCED
