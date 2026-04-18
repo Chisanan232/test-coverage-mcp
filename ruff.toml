@@ -204,7 +204,8 @@ line-ending = "auto"
 [lint.isort]
 known-first-party = [
     "test_coverage_mcp",
-    "test_coverage_mcp_codecov"
+    "test_coverage_mcp.providers",
+    "test_coverage_mcp.providers.codecov"
 ]
 known-third-party = ["pytest", "testcontainers", "httpx", "pydantic", "sqlalchemy"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]

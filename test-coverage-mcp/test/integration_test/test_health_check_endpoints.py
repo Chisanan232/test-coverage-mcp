@@ -8,8 +8,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
-from src.mcp_server.app import MCPServerFactory
-from src.web_server.app import WebServerFactory
+from test_coverage_mcp.mcp_server.app import MCPServerFactory
+from test_coverage_mcp.web_server.app import WebServerFactory
 
 
 class TestHealthCheckEndpointsIntegration:
@@ -35,8 +35,8 @@ class TestHealthCheckEndpointsIntegration:
 
         """
         with (
-            patch("src.web_server.app.mcp_factory") as mock_mcp_factory,
-            patch("src.web_server.app.get_settings") as mock_get_settings,
+            patch("test_coverage_mcp.web_server.app.mcp_factory") as mock_mcp_factory,
+            patch("test_coverage_mcp.web_server.app.get_settings") as mock_get_settings,
         ):
             mock_settings = MagicMock()
             mock_settings.cors_allow_origins = ["*"]
@@ -47,7 +47,7 @@ class TestHealthCheckEndpointsIntegration:
 
             mock_mcp_factory.lifespan.return_value = MagicMock()
 
-            from src.web_server.app import create_app
+            from test_coverage_mcp.web_server.app import create_app
 
             app = create_app()
             return TestClient(app)
