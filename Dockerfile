@@ -45,7 +45,7 @@ COPY --from=builder /app/test-coverage-mcp-codecov ./test-coverage-mcp-codecov
 COPY pyproject.toml uv.lock ./
 
 # Copy entrypoint script
-COPY entrypoint.sh /app/entrypoint.sh
+COPY scripts/docker/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 # Create non-root user
