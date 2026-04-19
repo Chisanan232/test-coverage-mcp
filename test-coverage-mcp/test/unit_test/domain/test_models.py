@@ -233,25 +233,24 @@ class TestTestRecommendation:
 
     def test_test_recommendation_creation(self) -> None:
         """Test creating TestRecommendation."""
-        region = UncoveredRegion(
+        recommendation = TestRecommendation(
             file_path="src/utils.py",
             start_line=50,
             end_line=75,
             region_type="function",
-            risk_level=RiskLevel.HIGH,
-        )
-
-        recommendation = TestRecommendation(
-            file_path="src/utils.py",
-            uncovered_region=region,
-            recommendation="Add unit tests for validate_email function",
-            estimated_impact=15.5,
-            priority=5,
+            test_types=["unit", "integration"],
+            scenarios=["happy path", "edge cases", "error handling"],
+            priority="high",
+            rationale="This function is critical for email validation",
         )
 
         assert recommendation.file_path == "src/utils.py"
-        assert recommendation.estimated_impact == 15.5
-        assert recommendation.priority == 5
+        assert recommendation.start_line == 50
+        assert recommendation.end_line == 75
+        assert recommendation.region_type == "function"
+        assert recommendation.priority == "high"
+        assert len(recommendation.test_types) == 2
+        assert len(recommendation.scenarios) == 3
 
 
 class TestConfigDiagnosis:
@@ -259,27 +258,39 @@ class TestConfigDiagnosis:
 
     def test_config_diagnosis_creation(self) -> None:
         """Test creating ConfigDiagnosis."""
-        metadata = ExecutionMetadata(
-            provider_name="codecov",
-            provider_version="1.0.0",
-            support_level=SupportLevel.BASIC,
-            used_capabilities=[ProviderCapability.COVERAGE_CONFIG_DIAGNOSIS],
-            analysis_depth=AnalysisDepth.CONFIG_AWARE,
-            execution_time_ms=75.0,
-        )
-
         diagnosis = ConfigDiagnosis(
-            summary="Configuration has issues",
-            key_findings=["Missing coverage thresholds", "Outdated exclude patterns"],
-            recommended_next_actions=["Update .coveragerc", "Review exclude patterns"],
-            confidence_score=0.85,
-            execution_metadata=metadata,
-            config_file=".coveragerc",
-            issues=["No fail_under threshold", "Outdated exclude patterns"],
-            suggestions=["Set fail_under=80", "Update exclude patterns for new directories"],
-            is_valid=False,
+            repo_owner="myorg",
+            repo_name="myapp",
+            config_valid=False,
+            parse_errors=["Invalid YAML syntax"],
+            over_included_paths=[
+                {
+                    "path": "unused/",
+                    "reason": "No coverage data found",
+                    "suggestion": "Remove from include_paths",
+                }
+            ],
+            missing_exclusions=[
+                {
+                    "pattern": "**/test/**",
+                    "reason": "Test files",
+                    "affected_files": 45,
+                }
+            ],
+            threshold_issues=["Minimum threshold is very high (>95%)"],
+            scoping_issues=[
+                {
+                    "component": "api",
+                    "issue": "Overlapping paths with component 'utils'",
+                    "suggestion": "Clarify path boundaries",
+                }
+            ],
+            summary="Found 4 configuration issues",
         )
 
-        assert diagnosis.config_file == ".coveragerc"
-        assert diagnosis.is_valid is False
-        assert len(diagnosis.issues) == 2
+        assert diagnosis.repo_owner == "myorg"
+        assert diagnosis.repo_name == "myapp"
+        assert diagnosis.config_valid is False
+        assert len(diagnosis.parse_errors) == 1
+        assert len(diagnosis.over_included_paths) == 1
+        assert len(diagnosis.missing_exclusions) == 1
