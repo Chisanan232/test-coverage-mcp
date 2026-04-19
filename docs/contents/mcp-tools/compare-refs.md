@@ -235,19 +235,19 @@ print(f"Provider results: {result['provider_results']}")
 # Analyze coverage change in a pull request
 def analyze_pr_coverage(repo_slug, base_branch, pr_branch):
     result = compare_coverage_between_refs(repo_slug, base_branch, pr_branch)
-    
+
     if 'error' in result:
         print(f"Error: {result['error']}")
         return
-    
+
     delta = result['coverage_delta']
     regression = result['regression_analysis']
-    
+
     print(f"PR Coverage Analysis")
     print(f"Base: {delta['base_coverage']}%")
     print(f"PR: {delta['head_coverage']}%")
     print(f"Delta: {delta['delta_percentage']:+.1f}%")
-    
+
     if regression['has_regression']:
         print(f"⚠️ Regression: {regression['severity']}")
     else:
@@ -267,7 +267,7 @@ def verify_release_coverage(repo_slug, previous_version, new_version):
         f"v{new_version}",
         regression_threshold=0.5
     )
-    
+
     regression = result['regression_analysis']
     if regression['has_regression']:
         print(f"❌ Release {new_version} has coverage regression!")
@@ -287,7 +287,7 @@ verify_release_coverage("owner/repo", "1.0.0", "1.1.0")
 def compare_branches(repo_slug, branches):
     base = branches[0]
     results = {}
-    
+
     for branch in branches[1:]:
         result = compare_coverage_between_refs(repo_slug, base, branch)
         if 'error' not in result:
@@ -296,7 +296,7 @@ def compare_branches(repo_slug, branches):
                 'coverage': delta['head_coverage'],
                 'delta': delta['delta_percentage']
             }
-    
+
     print(f"Coverage comparison (base: {base}):")
     for branch, data in results.items():
         print(f"  {branch}: {data['coverage']}% ({data['delta']:+.1f}%)")
@@ -315,16 +315,16 @@ def detect_regressions(repo_slug, base_ref, head_ref, threshold=1.0):
         head_ref,
         regression_threshold=threshold
     )
-    
+
     regression = result['regression_analysis']
-    
+
     severity_emoji = {
         'none': '✓',
         'minor': '⚠️',
         'major': '⚠️⚠️',
         'critical': '❌'
     }
-    
+
     emoji = severity_emoji.get(regression['severity'], '?')
     print(f"{emoji} Regression Analysis")
     print(f"  Has regression: {regression['has_regression']}")
@@ -341,14 +341,14 @@ detect_regressions("owner/repo", "main", "feature-branch", threshold=1.0)
 # Analyze coverage trend across commits
 def analyze_trend(repo_slug, commits):
     results = []
-    
+
     for i in range(len(commits) - 1):
         result = compare_coverage_between_refs(
             repo_slug,
             commits[i],
             commits[i + 1]
         )
-        
+
         if 'error' not in result:
             delta = result['coverage_delta']
             results.append({
@@ -356,7 +356,7 @@ def analyze_trend(repo_slug, commits):
                 'to': commits[i + 1],
                 'delta': delta['delta_percentage']
             })
-    
+
     print("Coverage Trend:")
     for r in results:
         direction = "↑" if r['delta'] > 0 else "↓" if r['delta'] < 0 else "→"

@@ -180,11 +180,11 @@ print(f"Sources: {', '.join(metadata['upload_sources'])}")
 # Check coverage for a specific commit
 def check_commit_coverage(repo_slug, commit_sha, min_coverage=80.0):
     result = get_commit_coverage_summary(repo_slug, commit_sha)
-    
+
     if 'error' in result:
         print(f"Error: {result['error']}")
         return False
-    
+
     coverage = result['coverage_summary']['total_coverage']
     if coverage >= min_coverage:
         print(f"✓ Coverage {coverage}% meets minimum {min_coverage}%")
@@ -203,11 +203,11 @@ check_commit_coverage("owner/repo", "abc123def456", min_coverage=85.0)
 def compare_commits(repo_slug, commit1, commit2):
     result1 = get_commit_coverage_summary(repo_slug, commit1)
     result2 = get_commit_coverage_summary(repo_slug, commit2)
-    
+
     cov1 = result1['coverage_summary']['total_coverage']
     cov2 = result2['coverage_summary']['total_coverage']
     delta = cov2 - cov1
-    
+
     print(f"Commit {commit1}: {cov1}%")
     print(f"Commit {commit2}: {cov2}%")
     print(f"Delta: {delta:+.1f}%")
@@ -221,12 +221,12 @@ compare_commits("owner/repo", "abc123d", "def456g")
 # Find files with low coverage in a commit
 def find_low_coverage_files(repo_slug, commit_sha, threshold=50.0):
     result = get_commit_coverage_summary(repo_slug, commit_sha)
-    
+
     low_coverage = [
         f for f in result['file_breakdown']
         if f['coverage'] < threshold
     ]
-    
+
     if low_coverage:
         print(f"Files with coverage < {threshold}%:")
         for file_info in low_coverage:
@@ -247,10 +247,10 @@ def track_coverage_trend(repo_slug, commits):
         result = get_commit_coverage_summary(repo_slug, commit)
         if 'error' not in result:
             results[commit] = result['coverage_summary']['total_coverage']
-    
+
     for commit, coverage in results.items():
         print(f"{commit}: {coverage}%")
-    
+
     if results:
         trend = "↑" if list(results.values())[-1] > list(results.values())[0] else "↓"
         print(f"Trend: {trend}")
@@ -264,14 +264,14 @@ track_coverage_trend("owner/repo", ["abc123d", "def456g", "ghi789h"])
 # Generate a coverage report for a commit
 def generate_coverage_report(repo_slug, commit_sha):
     result = get_commit_coverage_summary(repo_slug, commit_sha)
-    
+
     if 'error' in result:
         print(f"Error: {result['error']}")
         return
-    
+
     summary = result['coverage_summary']
     uploads = result['uploads_metadata']
-    
+
     print(f"Coverage Report for {repo_slug}")
     print(f"Commit: {commit_sha}")
     print(f"\nCoverage Metrics:")
