@@ -324,7 +324,7 @@ if result["has_pending"]:
   run: |
     python -c "
     from test_coverage_mcp.services import CoverageRiskAnalysisService
-    
+
     service = CoverageRiskAnalysisService()
     result = service.score_pr_risk(
         base_coverage=85.0,
@@ -333,7 +333,7 @@ if result["has_pending"]:
         uncovered_changed_lines=30,
         total_changed_lines=100
     )
-    
+
     if result['risk_level'] == 'critical':
         exit(1)  # Fail the build
     "
