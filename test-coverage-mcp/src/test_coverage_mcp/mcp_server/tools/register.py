@@ -1,6 +1,12 @@
 """Tool registration for MCP server."""
 
 from test_coverage_mcp.mcp_server.app import mcp_factory
+from test_coverage_mcp.mcp_server.tools.commit_summary import (
+    get_commit_coverage_summary,
+)
+from test_coverage_mcp.mcp_server.tools.comparison import (
+    compare_coverage_between_refs,
+)
 from test_coverage_mcp.mcp_server.tools.coverage_providers import (
     describe_coverage_provider,
     list_coverage_providers,
@@ -21,5 +27,7 @@ def register_tools() -> None:
         mcp.tool()(list_coverage_providers)
         mcp.tool()(describe_coverage_provider)
         mcp.tool()(get_repository_test_health)
+        mcp.tool()(get_commit_coverage_summary)
+        mcp.tool()(compare_coverage_between_refs)
     except AssertionError:
         pass
