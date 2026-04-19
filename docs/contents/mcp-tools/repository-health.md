@@ -204,7 +204,7 @@ for action in result['next_actions']:
 # Regular health checks
 def monitor_repository(repo_slug, threshold=80.0):
     result = get_repository_test_health(repo_slug, threshold=threshold)
-    
+
     if not result['health_summary']['is_healthy']:
         print(f"⚠️ {repo_slug}: Coverage below threshold")
         print(f"   Current: {result['coverage_metrics']['average_coverage']}%")
@@ -224,7 +224,7 @@ def compare_branches(repo_slug, branches):
     for branch in branches:
         result = get_repository_test_health(repo_slug, ref=branch)
         results[branch] = result['coverage_metrics']['average_coverage']
-    
+
     for branch, coverage in sorted(results.items(), key=lambda x: x[1], reverse=True):
         print(f"{branch}: {coverage}%")
 
@@ -237,10 +237,10 @@ compare_branches("owner/repo", ["main", "develop", "staging"])
 # Assess coverage risk
 def assess_risk(repo_slug):
     result = get_repository_test_health(repo_slug)
-    
+
     risk_level = result['risk_analysis']['risk_level']
     coverage = result['coverage_metrics']['average_coverage']
-    
+
     if risk_level == "critical":
         print(f"🔴 CRITICAL: Coverage is {coverage}%")
     elif risk_level == "high":
@@ -249,7 +249,7 @@ def assess_risk(repo_slug):
         print(f"🟡 MEDIUM: Coverage is {coverage}%")
     else:
         print(f"🟢 LOW: Coverage is {coverage}%")
-    
+
     return risk_level
 
 assess_risk("owner/repo")
@@ -261,7 +261,7 @@ assess_risk("owner/repo")
 # Generate improvement plan
 def create_improvement_plan(repo_slug):
     result = get_repository_test_health(repo_slug, threshold=90.0)
-    
+
     print(f"Improvement Plan for {repo_slug}")
     print(f"Current Coverage: {result['coverage_metrics']['average_coverage']}%")
     print(f"Target Coverage: {result['risk_analysis']['risk_level']}")
@@ -285,7 +285,7 @@ def get_health_with_fallback(repo_slug, preferred_provider=None):
         result = get_repository_test_health(repo_slug, provider=preferred_provider)
         if 'error' not in result:
             return result
-    
+
     # Fallback to best available
     return get_repository_test_health(repo_slug)
 

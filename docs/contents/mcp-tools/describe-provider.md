@@ -149,7 +149,7 @@ def compare_providers(provider_names):
         result = describe_coverage_provider(name)
         if 'error' not in result:
             results[name] = result['capabilities']['supported']
-    
+
     # Find common capabilities
     if results:
         common = set(results[list(results.keys())[0]])
