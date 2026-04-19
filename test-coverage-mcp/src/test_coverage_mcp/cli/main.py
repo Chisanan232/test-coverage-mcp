@@ -2,6 +2,8 @@
 
 import click
 
+from test_coverage_mcp.cli.serve import serve
+
 
 @click.group()
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
@@ -12,6 +14,9 @@ def cli(ctx: click.Context, verbose: bool, config: str) -> None:
     ctx.ensure_object(dict)
     ctx.obj["verbose"] = verbose
     ctx.obj["config"] = config
+
+
+cli.add_command(serve)
 
 
 if __name__ == "__main__":
