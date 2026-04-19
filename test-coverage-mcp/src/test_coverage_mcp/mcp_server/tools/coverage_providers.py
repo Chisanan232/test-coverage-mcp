@@ -2,12 +2,34 @@
 
 from typing import Any, Dict, List, Optional
 
-from test_coverage_mcp.domain import ExecutionMetadata, ProviderCapability
-from test_coverage_mcp.mcp_server.app import mcp_factory
+from test_coverage_mcp.domain import (
+    AnalysisDepth,
+    ExecutionMetadata,
+    ProviderCapability,
+    SupportLevel,
+)
 from test_coverage_mcp.services import ProviderDiscoveryService
 
 
-@mcp_factory.get().tool()
+def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
+    """Create execution metadata for tool response.
+
+    Args:
+        tool_name: Name of the tool
+
+    Returns:
+        Dictionary with execution metadata
+    """
+    return {
+        "provider_name": "test-coverage-mcp",
+        "provider_version": "0.1.0",
+        "support_level": SupportLevel.ADVANCED.value,
+        "used_capabilities": [],
+        "analysis_depth": AnalysisDepth.REPOSITORY.value,
+        "execution_time_ms": 0.0,
+    }
+
+
 def list_coverage_providers(
     include_capabilities: bool = True,
     include_health: bool = True,
@@ -75,11 +97,7 @@ def list_coverage_providers(
             "providers": providers_list,
             "total_providers": len(providers_list),
             "healthy_providers": healthy_count if include_health else None,
-            "execution_metadata": ExecutionMetadata(
-                tool_name="list_coverage_providers",
-                execution_timestamp="",
-                execution_duration_ms=0.0,
-            ).model_dump(),
+            "execution_metadata": _create_execution_metadata("list_coverage_providers"),
         }
     except Exception as e:
         return {
@@ -87,15 +105,10 @@ def list_coverage_providers(
             "error_type": "ProviderDiscoveryError",
             "providers": [],
             "total_providers": 0,
-            "execution_metadata": ExecutionMetadata(
-                tool_name="list_coverage_providers",
-                execution_timestamp="",
-                execution_duration_ms=0.0,
-            ).model_dump(),
+            "execution_metadata": _create_execution_metadata("list_coverage_providers"),
         }
 
 
-@mcp_factory.get().tool()
 def describe_coverage_provider(provider_name: str) -> Dict[str, Any]:
     """Get detailed information about a specific coverage provider.
 
@@ -127,11 +140,7 @@ def describe_coverage_provider(provider_name: str) -> Dict[str, Any]:
             return {
                 "error": f"Provider '{provider_name}' not found",
                 "error_type": "ProviderNotFoundError",
-                "execution_metadata": ExecutionMetadata(
-                    tool_name="describe_coverage_provider",
-                    execution_timestamp="",
-                    execution_duration_ms=0.0,
-                ).model_dump(),
+                "execution_metadata": _create_execution_metadata("describe_coverage_provider"),
             }
 
         metadata = provider.get_metadata()
@@ -159,19 +168,11 @@ def describe_coverage_provider(provider_name: str) -> Dict[str, Any]:
                 "response_time_ms": health.response_time_ms if health else None,
                 "error_message": health.error_message if health else None,
             } if health else None,
-            "execution_metadata": ExecutionMetadata(
-                tool_name="describe_coverage_provider",
-                execution_timestamp="",
-                execution_duration_ms=0.0,
-            ).model_dump(),
+            "execution_metadata": _create_execution_metadata("describe_coverage_provider"),
         }
     except Exception as e:
         return {
             "error": str(e),
             "error_type": "ProviderDescriptionError",
-            "execution_metadata": ExecutionMetadata(
-                tool_name="describe_coverage_provider",
-                execution_timestamp="",
-                execution_duration_ms=0.0,
-            ).model_dump(),
+            "execution_metadata": _create_execution_metadata("describe_coverage_provider"),
         }
