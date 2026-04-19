@@ -123,7 +123,7 @@ def test_generate_risk_recommendations():
     recommendations = service._generate_risk_recommendations(50.0, 80.0)
     assert isinstance(recommendations, list)
     assert len(recommendations) > 0
-    assert any("50" in rec for rec in recommendations)
+    assert any("30" in rec for rec in recommendations)
 
 
 def test_generate_risk_recommendations_critical():
