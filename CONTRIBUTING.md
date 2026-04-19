@@ -278,6 +278,46 @@ git push origin feature/your-feature-name
 
 Then create a Pull Request on GitHub.
 
+## Adding a New Service
+
+To add a new intelligence service:
+
+1. Create a new file in `test-coverage-mcp/src/test_coverage_mcp/services/`:
+   ```python
+   # services/my_service.py
+   from test_coverage_mcp.services.discovery import ProviderDiscoveryService
+   
+   class MyIntelligenceService:
+       """Service for specific coverage intelligence."""
+       
+       def __init__(self, discovery_service: Optional[ProviderDiscoveryService] = None) -> None:
+           self._discovery = discovery_service or ProviderDiscoveryService()
+       
+       def analyze(self, repo_owner: str, repo_name: str) -> Dict[str, Any]:
+           """Analyze coverage using multiple providers."""
+           pass
+   ```
+
+2. Add to `test-coverage-mcp/src/test_coverage_mcp/services/__init__.py`:
+   ```python
+   from test_coverage_mcp.services.my_service import MyIntelligenceService
+   
+   __all__ = [..., "MyIntelligenceService"]
+   ```
+
+3. Write unit tests in `test-coverage-mcp/test/unit_test/services/test_my_service.py`
+
+4. Write integration tests in `test-coverage-mcp/test/integration_test/test_services_integration.py`
+
+5. Document in `docs/contents/api/services.md`
+
+**Key Patterns**:
+- Inject `ProviderDiscoveryService` for provider access
+- Aggregate data from multiple providers
+- Implement graceful degradation (continue if some providers fail)
+- Use type hints and docstrings
+- Write comprehensive tests
+
 ## Adding a New Provider
 
 To add a new coverage provider:
