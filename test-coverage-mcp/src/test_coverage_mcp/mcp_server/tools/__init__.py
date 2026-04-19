@@ -221,21 +221,13 @@ Import this package in your main MCP application:
 from __future__ import annotations
 
 # Import all tool modules to register them with the MCP server
-# Child projects should add their tool imports here:
-
-# Example imports (uncomment and modify for your tools):
-# from .calculator import calculate
-# from .database import query_database
-# from .file_operations import read_file, write_file
-# from .api_client import call_external_api
+from .coverage_providers import describe_coverage_provider, list_coverage_providers
+from .repository_health import get_repository_test_health
 
 __all__ = [
-    # Add your tool functions here
-    # "calculate",
-    # "query_database",
-    # "read_file",
-    # "write_file",
-    # "call_external_api",
+    "list_coverage_providers",
+    "describe_coverage_provider",
+    "get_repository_test_health",
 ]
 
 # Package metadata for tool discovery
