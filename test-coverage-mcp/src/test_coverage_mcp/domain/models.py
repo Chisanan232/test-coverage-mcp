@@ -104,18 +104,32 @@ class TestRecommendation(BaseModel):
     """Recommendation for test coverage improvement."""
 
     file_path: str = Field(..., description="Path to the file")
-    uncovered_region: UncoveredRegion = Field(..., description="Uncovered region to test")
-    recommendation: str = Field(..., description="Specific test recommendation")
-    estimated_impact: float = Field(
-        ..., ge=0.0, le=100.0, description="Estimated coverage improvement percentage"
-    )
-    priority: int = Field(..., ge=1, le=5, description="Priority (1=low, 5=critical)")
+    start_line: int = Field(..., ge=1, description="Start line number")
+    end_line: int = Field(..., ge=1, description="End line number")
+    region_type: str = Field(..., description="Type of region (function, class, method, etc.)")
+    test_types: list[str] = Field(..., description="Suggested test types (unit, integration, etc.)")
+    scenarios: list[str] = Field(..., description="Test scenarios to implement")
+    priority: str = Field(..., description="Priority level (critical, high, medium, low)")
+    rationale: str = Field(..., description="Explanation of why this test is important")
 
 
-class ConfigDiagnosis(ToolResponseBase):
+class ConfigDiagnosis(BaseModel):
     """Diagnosis of coverage configuration issues."""
 
-    config_file: str = Field(..., description="Path to configuration file")
-    issues: list[str] = Field(..., description="List of identified issues")
-    suggestions: list[str] = Field(..., description="Suggestions for improvement")
-    is_valid: bool = Field(..., description="Whether configuration is valid")
+    repo_owner: str = Field(..., description="Repository owner")
+    repo_name: str = Field(..., description="Repository name")
+    config_valid: bool = Field(..., description="Whether configuration is valid")
+    parse_errors: list[str] = Field(default_factory=list, description="Configuration parsing errors")
+    over_included_paths: list[dict[str, Any]] = Field(
+        default_factory=list, description="Paths that are over-included"
+    )
+    missing_exclusions: list[dict[str, Any]] = Field(
+        default_factory=list, description="Suggested missing exclusions"
+    )
+    threshold_issues: list[str] = Field(
+        default_factory=list, description="Issues with coverage thresholds"
+    )
+    scoping_issues: list[dict[str, Any]] = Field(
+        default_factory=list, description="Issues with component/flag scoping"
+    )
+    summary: str = Field(..., description="Summary of diagnosis findings")
