@@ -2,6 +2,7 @@
 
 import click
 
+from test_coverage_mcp.cli.providers import providers
 from test_coverage_mcp.cli.serve import serve
 
 
@@ -17,6 +18,7 @@ def cli(ctx: click.Context, verbose: bool, config: str) -> None:
 
 
 cli.add_command(serve)
+cli.add_command(providers)
 
 
 if __name__ == "__main__":
