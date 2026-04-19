@@ -67,6 +67,12 @@ def find_untested_changed_code(
     for file_path in file_coverage_data.keys():
         file_data = file_coverage_data[file_path]
 
+        # Handle pending analysis first
+        pending_result = gap_service.handle_pending_analysis(file_path, file_data)
+        if pending_result["has_pending"]:
+            has_pending = True
+            pending_regions_list.extend(pending_result["pending_regions"])
+
         # Detect uncovered regions
         uncovered_regions = gap_service.detect_uncovered_regions(file_path, file_data)
         for region in uncovered_regions:
@@ -80,12 +86,6 @@ def find_untested_changed_code(
                     lines_count=region["lines_count"],
                 )
             )
-
-        # Handle pending analysis
-        pending_result = gap_service.handle_pending_analysis(file_path, file_data)
-        if pending_result["has_pending"]:
-            has_pending = True
-            pending_regions_list.extend(pending_result["pending_regions"])
 
     return {
         "base_ref": base_ref,
