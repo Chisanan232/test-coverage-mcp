@@ -1,0 +1,213 @@
+"""Unit tests for ProviderDiscoveryService."""
+
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from test_coverage_mcp.domain import (
+    ProviderCapability,
+    ProviderHealth,
+    ProviderMetadata,
+    SupportLevel,
+)
+from test_coverage_mcp.registry import ProviderRegistry
+from test_coverage_mcp.services.discovery import ProviderDiscoveryService
+
+
+@pytest.fixture
+def mock_registry() -> ProviderRegistry:
+    """Create a mock registry."""
+    registry = ProviderRegistry()
+    registry.clear()
+    return registry
+
+
+@pytest.fixture
+def mock_provider():
+    """Create a mock provider."""
+    provider = MagicMock()
+    provider.get_metadata.return_value = ProviderMetadata(
+        name="test_provider",
+        version="1.0.0",
+        description="Test provider",
+        supported_capabilities=[
+            ProviderCapability.REPOSITORY_SUMMARY,
+            ProviderCapability.FILE_COVERAGE,
+        ],
+        support_levels={
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
+            ProviderCapability.FILE_COVERAGE: SupportLevel.BASIC,
+        },
+        analysis_depths=[],
+    )
+    provider.health_check.return_value = ProviderHealth(
+        is_healthy=True,
+        last_check="2024-01-01T00:00:00Z",
+        error_message=None,
+        response_time_ms=100.0,
+    )
+    return provider
+
+
+def test_discovery_service_initialization(mock_registry):
+    """Test service initialization."""
+    service = ProviderDiscoveryService(mock_registry)
+    assert service._registry is mock_registry
+
+
+def test_list_providers(mock_registry, mock_provider):
+    """Test listing providers."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    providers = service.list_providers()
+    assert "test_provider" in providers
+    assert providers["test_provider"].name == "test_provider"
+
+
+def test_get_provider(mock_registry, mock_provider):
+    """Test getting a specific provider."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    provider = service.get_provider("test_provider")
+    assert provider is not None
+    assert provider.get_metadata().name == "test_provider"
+
+
+def test_get_nonexistent_provider(mock_registry):
+    """Test getting a nonexistent provider."""
+    service = ProviderDiscoveryService(mock_registry)
+    provider = service.get_provider("nonexistent")
+    assert provider is None
+
+
+def test_set_default_provider(mock_registry, mock_provider):
+    """Test setting default provider."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    service.set_default_provider("test_provider")
+    default = service.get_default_provider()
+    assert default is not None
+    assert default.get_metadata().name == "test_provider"
+
+
+def test_capability_matrix(mock_registry, mock_provider):
+    """Test capability matrix generation."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    matrix = service.get_capability_matrix()
+    assert "test_provider" in matrix
+    assert "repository_summary" in matrix["test_provider"]
+    assert matrix["test_provider"]["repository_summary"] == "advanced"
+
+
+def test_get_providers_for_capability(mock_registry, mock_provider):
+    """Test getting providers for a capability."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    providers = service.get_providers_for_capability(
+        ProviderCapability.REPOSITORY_SUMMARY
+    )
+    assert "test_provider" in providers
+    assert providers["test_provider"] == "advanced"
+
+
+def test_get_provider_health(mock_registry, mock_provider):
+    """Test getting provider health."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    health = service.get_provider_health("test_provider")
+    assert health is not None
+    assert health.is_healthy is True
+    assert health.response_time_ms == 100.0
+
+
+def test_get_all_health_status(mock_registry, mock_provider):
+    """Test getting all health status."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    health_status = service.get_all_health_status()
+    assert "test_provider" in health_status
+    assert health_status["test_provider"].is_healthy is True
+
+
+def test_aggregate_health_empty(mock_registry):
+    """Test aggregating health with no providers."""
+    service = ProviderDiscoveryService(mock_registry)
+    health = service.aggregate_health()
+
+    assert health["total_providers"] == 0
+    assert health["healthy_providers"] == 0
+    assert health["health_percentage"] == 0.0
+
+
+def test_aggregate_health_with_providers(mock_registry, mock_provider):
+    """Test aggregating health with providers."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    health = service.aggregate_health()
+    assert health["total_providers"] == 1
+    assert health["healthy_providers"] == 1
+    assert health["health_percentage"] == 100.0
+    assert health["avg_response_time_ms"] == 100.0
+
+
+def test_get_provider_versions(mock_registry, mock_provider):
+    """Test getting provider versions."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    versions = service.get_provider_versions()
+    assert "test_provider" in versions
+    assert versions["test_provider"] == "1.0.0"
+
+
+def test_select_best_provider_with_default(mock_registry, mock_provider):
+    """Test selecting best provider with default set."""
+    mock_registry.register(mock_provider)
+    mock_registry.set_default("test_provider")
+    service = ProviderDiscoveryService(mock_registry)
+
+    best = service.select_best_provider()
+    assert best is not None
+    assert best.get_metadata().name == "test_provider"
+
+
+def test_select_best_provider_no_default(mock_registry, mock_provider):
+    """Test selecting best provider without default."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    best = service.select_best_provider()
+    assert best is not None
+    assert best.get_metadata().name == "test_provider"
+
+
+def test_select_best_provider_with_required_capabilities(mock_registry, mock_provider):
+    """Test selecting best provider with required capabilities."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    best = service.select_best_provider(
+        required_capabilities=[ProviderCapability.REPOSITORY_SUMMARY]
+    )
+    assert best is not None
+    assert best.get_metadata().name == "test_provider"
+
+
+def test_select_best_provider_missing_capability(mock_registry, mock_provider):
+    """Test selecting best provider with missing capability."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    best = service.select_best_provider(
+        required_capabilities=[ProviderCapability.COVERAGE_TRENDS]
+    )
+    assert best is None
