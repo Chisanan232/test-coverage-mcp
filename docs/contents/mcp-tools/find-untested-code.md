@@ -182,14 +182,14 @@ def check_pr_coverage(pr_number, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["coverage_percentage"] < 80.0:
         return {
             "status": "FAIL",
             "message": f"PR coverage too low: {result['coverage_percentage']:.1f}%",
             "uncovered_regions": result["uncovered_regions"],
         }
-    
+
     return {"status": "PASS", "message": "Coverage meets threshold"}
 ```
 
@@ -205,7 +205,7 @@ def analyze_test_gaps(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     # Group by region type
     gaps_by_type = {}
     for region in result["uncovered_regions"]:
@@ -213,7 +213,7 @@ def analyze_test_gaps(repo_slug, base_ref, head_ref):
         if region_type not in gaps_by_type:
             gaps_by_type[region_type] = []
         gaps_by_type[region_type].append(region)
-    
+
     return gaps_by_type
 ```
 
@@ -229,14 +229,14 @@ def ci_coverage_check(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     # Check for critical gaps
     critical_gaps = [r for r in result["uncovered_regions"] if r["risk_level"] == "critical"]
-    
+
     if critical_gaps:
         print(f"❌ Build failed: {len(critical_gaps)} critical coverage gaps")
         return False
-    
+
     print(f"✓ Build passed: Coverage acceptable")
     return True
 ```
@@ -253,14 +253,14 @@ def check_with_pending_handling(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["has_pending"]:
         print(f"⏳ Analysis in progress ({len(result['pending_regions'])} regions)")
         print("Recommendations:")
         for rec in result.get("recommendations", []):
             print(f"  - {rec}")
         return None  # Defer decision
-    
+
     # Analysis complete
     return result["coverage_percentage"]
 ```

@@ -223,7 +223,7 @@ def auto_assess_pr_risk(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     return {
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],
@@ -244,11 +244,11 @@ def ci_coverage_gate(repo_slug, base_ref, head_ref, max_risk_score=50):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["risk_score"] > max_risk_score:
         print(f"❌ Build failed: Risk score {result['risk_score']:.1f} exceeds limit {max_risk_score}")
         return False
-    
+
     print(f"✓ Build passed: Risk score {result['risk_score']:.1f}")
     return True
 ```
@@ -265,11 +265,11 @@ def detect_regression(repo_slug, base_ref, head_ref, max_regression=-1.0):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["coverage_delta"] < max_regression:
         print(f"⚠️ Coverage regression: {result['coverage_delta']:.1f}%")
         return False
-    
+
     return True
 ```
 
@@ -285,7 +285,7 @@ def get_pr_metrics(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     return {
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],

@@ -70,14 +70,14 @@ def initial_risk_assessment(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     assessment = {
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],
         "coverage_delta": result["coverage_delta"],
         "changed_code_coverage": result["changed_code_coverage"],
     }
-    
+
     # Determine review action
     if result["risk_level"] == "critical":
         assessment["action"] = "BLOCK"
@@ -91,7 +91,7 @@ def initial_risk_assessment(repo_slug, base_ref, head_ref):
     else:
         assessment["action"] = "APPROVE"
         assessment["reason"] = "Low coverage risk"
-    
+
     return assessment
 ```
 
@@ -108,7 +108,7 @@ def identify_coverage_gaps(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     # Group by file
     gaps_by_file = {}
     for region in result["uncovered_regions"]:
@@ -116,7 +116,7 @@ def identify_coverage_gaps(repo_slug, base_ref, head_ref):
         if file_path not in gaps_by_file:
             gaps_by_file[file_path] = []
         gaps_by_file[file_path].append(region)
-    
+
     # Group by risk level
     gaps_by_risk = {}
     for region in result["uncovered_regions"]:
@@ -124,7 +124,7 @@ def identify_coverage_gaps(repo_slug, base_ref, head_ref):
         if risk_level not in gaps_by_risk:
             gaps_by_risk[risk_level] = []
         gaps_by_risk[risk_level].append(region)
-    
+
     return {
         "by_file": gaps_by_file,
         "by_risk": gaps_by_risk,
@@ -146,15 +146,15 @@ def analyze_high_risk_files(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if not result["high_risk_files"]:
         return {"message": "No high-risk files found"}
-    
+
     analysis = {
         "total_high_risk_files": len(result["high_risk_files"]),
         "files": [],
     }
-    
+
     for file_info in result["high_risk_files"]:
         analysis["files"].append({
             "path": file_info["file_path"],
@@ -163,7 +163,7 @@ def analyze_high_risk_files(repo_slug, base_ref, head_ref):
             "uncovered_lines": file_info["uncovered_lines"],
             "recommendations": file_info["recommendations"],
         })
-    
+
     return analysis
 ```
 
@@ -180,7 +180,7 @@ def check_for_regressions(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["coverage_delta"] < 0:
         return {
             "has_regression": True,
@@ -188,7 +188,7 @@ def check_for_regressions(repo_slug, base_ref, head_ref):
             "severity": "critical" if result["coverage_delta"] < -5 else "warning",
             "message": f"Coverage regression of {abs(result['coverage_delta']):.1f}%",
         }
-    
+
     return {
         "has_regression": False,
         "delta": result["coverage_delta"],
@@ -209,14 +209,14 @@ def generate_review_summary(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     gap_result = find_untested_changed_code(
         repo_slug=repo_slug,
         provider="codecov",
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     summary = {
         "risk_assessment": {
             "level": risk_result["risk_level"],
@@ -237,7 +237,7 @@ def generate_review_summary(repo_slug, base_ref, head_ref):
         "high_risk_files": len(risk_result["high_risk_files"]),
         "recommendations": risk_result["recommendations"],
     }
-    
+
     return summary
 ```
 
@@ -342,7 +342,7 @@ def handle_pending_analysis(repo_slug, base_ref, head_ref):
         base_ref=base_ref,
         head_ref=head_ref,
     )
-    
+
     if result["has_pending"]:
         return {
             "status": "PENDING",
@@ -354,7 +354,7 @@ def handle_pending_analysis(repo_slug, base_ref, head_ref):
                 "Estimated completion: 5-10 minutes",
             ],
         }
-    
+
     # Analysis complete - proceed with review
     return {"status": "COMPLETE"}
 ```
@@ -373,19 +373,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Analyze PR Risk
         run: |
           python -c "
           from test_coverage_mcp.mcp_server.tools import analyze_pr_coverage_risk
-          
+
           result = analyze_pr_coverage_risk(
               repo_slug='${{ github.repository }}',
               provider='codecov',
               base_ref='${{ github.base_ref }}',
               head_ref='${{ github.head_ref }}',
           )
-          
+
           if result['risk_level'] == 'critical':
               print('::error::Critical coverage risk detected')
               exit(1)
