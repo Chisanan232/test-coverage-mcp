@@ -2,6 +2,7 @@
 
 import click
 
+from test_coverage_mcp.cli.completion import completion
 from test_coverage_mcp.cli.doctor import doctor
 from test_coverage_mcp.cli.providers import providers
 from test_coverage_mcp.cli.serve import serve
@@ -21,6 +22,7 @@ def cli(ctx: click.Context, verbose: bool, config: str) -> None:
 cli.add_command(serve)
 cli.add_command(providers)
 cli.add_command(doctor)
+cli.add_command(completion)
 
 
 if __name__ == "__main__":
