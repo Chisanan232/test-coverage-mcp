@@ -22,9 +22,9 @@ _test_coverage_mcp_completion() {
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    
+
     opts="serve providers doctor --help --verbose --config"
-    
+
     if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
@@ -43,7 +43,7 @@ _test_coverage_mcp() {
         'providers:Manage coverage providers'
         'doctor:Check environment and system health'
     )
-    
+
     _describe 'command' commands
 }
 
