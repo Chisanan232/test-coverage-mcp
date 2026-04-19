@@ -261,26 +261,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Diagnose Configuration
         run: |
           python -c "
           from test_coverage_mcp.services.config_diagnosis import CoverageConfigDiagnosisService
-          
+
           service = CoverageConfigDiagnosisService()
           diagnosis = service.diagnose_config(
               'owner', 'repo',
               file_coverage={},
               current_coverage=85.0
           )
-          
+
           if not diagnosis.config_valid:
               print('❌ Configuration is invalid')
               exit(1)
-          
+
           if diagnosis.over_included_paths:
               print('⚠️ Over-included paths found')
-          
+
           if diagnosis.missing_exclusions:
               print('⚠️ Missing exclusions suggested')
           "

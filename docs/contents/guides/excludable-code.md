@@ -108,7 +108,7 @@ Code is NOT excluded if it:
 1. **Defines Public API**
    - Has `__all__` definition
    - Contains public classes/functions
-   
+
 2. **Has Side Effects**
    - Modifies `sys.path`
    - Accesses `os.environ`

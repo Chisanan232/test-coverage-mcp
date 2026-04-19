@@ -120,8 +120,8 @@ scenarios = [
 Provides clear explanation of why each test is important:
 
 ```
-"This is a critical gap that could cause production issues. 
-The uncovered function is used by other components. 
+"This is a critical gap that could cause production issues.
+The uncovered function is used by other components.
 The gap spans 15 lines of code."
 ```
 
@@ -333,18 +333,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Generate Test Recommendations
         run: |
           python -c "
           from test_coverage_mcp.services.test_recommendation import TestRecommendationService
-          
+
           service = TestRecommendationService()
           recommendations = service.recommend_tests(
               uncovered_regions,
               max_recommendations=5
           )
-          
+
           for rec in recommendations:
               print(f'Priority: {rec.priority}')
               print(f'File: {rec.file_path}:{rec.start_line}-{rec.end_line}')
@@ -381,7 +381,7 @@ def process_data(data):
 class StateMachine:
     def __init__(self):
         self.state = "initial"
-    
+
     def transition(self, event):
         if self.state == "initial" and event == "start":
             self.state = "running"
