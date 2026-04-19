@@ -323,11 +323,17 @@ class CoverageConfigDiagnosisService:
             True if file matches pattern
         """
         # Simple pattern matching for common cases
-        if pattern.startswith("**/"):
+        if pattern.startswith("**/") and pattern.endswith("/**"):
+            # Pattern like **/test/**
+            middle = pattern[3:-3]
+            return f"/{middle}/" in f"/{file_path}/"
+        elif pattern.startswith("**/"):
+            # Pattern like **/test.py
             suffix = pattern[3:]
-            return file_path.endswith(suffix) or f"/{suffix}/" in file_path
+            return file_path.endswith(suffix) or f"/{suffix}" in file_path
         elif pattern.endswith("/**"):
+            # Pattern like src/**
             prefix = pattern[:-3]
-            return file_path.startswith(prefix)
+            return file_path.startswith(prefix) or file_path.startswith(f"{prefix}/")
         else:
             return file_path == pattern
