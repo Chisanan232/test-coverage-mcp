@@ -70,6 +70,188 @@ Analyze test coverage health for a repository.
 - Get recommendations for improvement
 - Track coverage trends
 
+### 4. get_commit_coverage_summary
+
+Get coverage summary for a specific commit.
+
+**Purpose**: Analyze coverage at a specific point in time
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `commit_sha` (str, required) - Commit SHA
+
+**Returns**:
+- Coverage metrics for the commit
+- File coverage details
+- Execution metadata
+
+**Use Cases**:
+- Check coverage at a specific commit
+- Analyze historical coverage
+- Track coverage changes over time
+
+### 5. compare_coverage_between_refs
+
+Compare coverage between two git references.
+
+**Purpose**: Analyze coverage changes between branches, tags, or commits
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `base_ref` (str, required) - Base reference
+- `head_ref` (str, required) - Head reference to compare
+
+**Returns**:
+- Base and head coverage percentages
+- Coverage delta
+- Provider-specific results
+- Improvement/regression status
+
+**Use Cases**:
+- Compare coverage between branches
+- Detect coverage regressions
+- Track coverage improvements
+
+### 6. find_untested_changed_code
+
+Find untested code in changed files.
+
+**Purpose**: Identify coverage gaps in changed code between two references
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `base_ref` (str, required) - Base reference
+- `head_ref` (str, required) - Head reference
+
+**Returns**:
+- Changed code statistics
+- Uncovered regions with risk levels
+- Pending analysis regions
+- Gap summary
+
+**Use Cases**:
+- Review coverage in pull requests
+- Identify untested changes
+- Assess PR coverage risk
+
+### 7. analyze_pr_coverage_risk
+
+Analyze coverage risk in a pull request.
+
+**Purpose**: Evaluate coverage risk and provide mitigation recommendations
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `base_ref` (str, required) - Base reference
+- `head_ref` (str, required) - Head reference
+
+**Returns**:
+- Risk level and score
+- Coverage delta
+- High-risk files
+- Recommendations
+
+**Use Cases**:
+- Assess PR coverage risk
+- Get risk mitigation recommendations
+- Make merge decisions
+
+### 8. find_low_coverage_files
+
+Find files with coverage below a threshold.
+
+**Purpose**: Identify files that need coverage improvement
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `ref` (str, required) - Git reference
+- `threshold` (float, default: 80.0) - Coverage threshold
+- `limit` (int, default: 10) - Maximum files to return
+
+**Returns**:
+- Files below threshold
+- Coverage percentages
+- Improvement potential
+- Summary
+
+**Use Cases**:
+- Find low coverage files
+- Prioritize coverage improvement
+- Track coverage progress
+
+### 9. diagnose_coverage_configuration
+
+Diagnose coverage configuration issues.
+
+**Purpose**: Analyze configuration and identify problems
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+
+**Returns**:
+- Configuration validity
+- Over-included paths
+- Missing exclusions
+- Threshold issues
+- Scoping issues
+- Summary
+
+**Use Cases**:
+- Audit coverage configuration
+- Identify configuration problems
+- Get improvement recommendations
+
+### 10. recommend_test_plan
+
+Generate test recommendations for coverage improvement.
+
+**Purpose**: Get intelligent test suggestions based on coverage gaps
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `target` (str, default: "repo") - Analysis target: repo, pr, or file path
+
+**Returns**:
+- Test recommendations with priority
+- Suggested test types and scenarios
+- Rationale for each recommendation
+- Summary
+
+**Use Cases**:
+- Get test recommendations
+- Plan test implementation
+- Improve coverage efficiently
+
+### 11. identify_excludable_code_candidates
+
+Identify code that should be excluded from coverage.
+
+**Purpose**: Find code candidates for exclusion using conservative detection
+
+**Parameters**:
+- `repo_slug` (str, required) - Repository in format "owner/repo"
+- `provider` (str, required) - Coverage provider name
+- `ref` (str, required) - Git reference
+
+**Returns**:
+- Excludable code candidates
+- Excludability scores
+- Detection signal breakdown
+- Summary
+
+**Use Cases**:
+- Find generated code
+- Identify vendor code
+- Detect deprecated code
+- Improve coverage metrics
+
 ## Tool Architecture
 
 ### Design Principles
