@@ -7,7 +7,7 @@
 ```python
 class ProviderDiscoveryService:
     """Service for discovering and managing coverage providers."""
-    
+
     def __init__(self, registry: Optional[ProviderRegistry] = None) -> None:
         """Initialize the discovery service."""
 ```
@@ -19,10 +19,10 @@ class ProviderDiscoveryService:
 ```python
 def discover_and_register_providers(self) -> Dict[str, ProviderMetadata]:
     """Discover providers via entry points and register them.
-    
+
     Returns:
         Dictionary mapping provider names to their metadata
-        
+
     Raises:
         Exception: If provider discovery or registration fails
     """
@@ -39,7 +39,7 @@ providers = service.discover_and_register_providers()
 ```python
 def list_providers(self) -> Dict[str, ProviderMetadata]:
     """List all registered providers with their metadata.
-    
+
     Returns:
         Dictionary mapping provider names to their metadata
     """
@@ -57,10 +57,10 @@ for name, metadata in providers.items():
 ```python
 def get_provider(self, name: str) -> Optional[CoverageProvider]:
     """Get a specific provider by name.
-    
+
     Args:
         name: Provider name
-        
+
     Returns:
         Provider instance or None if not found
     """
@@ -78,7 +78,7 @@ if provider:
 ```python
 def get_default_provider(self) -> Optional[CoverageProvider]:
     """Get the default provider.
-    
+
     Returns:
         Default provider instance or None if not set
     """
@@ -89,10 +89,10 @@ def get_default_provider(self) -> Optional[CoverageProvider]:
 ```python
 def set_default_provider(self, name: str) -> None:
     """Set the default provider.
-    
+
     Args:
         name: Provider name to set as default
-        
+
     Raises:
         ValueError: If provider is not registered
     """
@@ -108,7 +108,7 @@ service.set_default_provider("codecov")
 ```python
 def get_capability_matrix(self) -> Dict[str, Dict[str, str]]:
     """Generate a capability matrix for all providers.
-    
+
     Returns:
         Dictionary mapping provider names to their capability support levels
     """
@@ -132,10 +132,10 @@ def get_providers_for_capability(
     self, capability: ProviderCapability
 ) -> Dict[str, str]:
     """Get all providers that support a specific capability.
-    
+
     Args:
         capability: Capability to search for
-        
+
     Returns:
         Dictionary mapping provider names to their support levels
     """
@@ -153,10 +153,10 @@ providers = service.get_providers_for_capability(
 ```python
 def get_provider_health(self, name: str) -> Optional[ProviderHealth]:
     """Get health status of a specific provider.
-    
+
     Args:
         name: Provider name
-        
+
     Returns:
         Health status or None if provider not found
     """
@@ -167,7 +167,7 @@ def get_provider_health(self, name: str) -> Optional[ProviderHealth]:
 ```python
 def get_all_health_status(self) -> Dict[str, ProviderHealth]:
     """Get health status of all registered providers.
-    
+
     Returns:
         Dictionary mapping provider names to their health status
     """
@@ -178,7 +178,7 @@ def get_all_health_status(self) -> Dict[str, ProviderHealth]:
 ```python
 def aggregate_health(self) -> Dict[str, bool | int | float]:
     """Aggregate health status across all providers.
-    
+
     Returns:
         Dictionary with aggregated health metrics:
         - total_providers: Total number of registered providers
@@ -199,7 +199,7 @@ print(f"Health: {health['health_percentage']}%")
 ```python
 def get_provider_versions(self) -> Dict[str, str]:
     """Get versions of all registered providers.
-    
+
     Returns:
         Dictionary mapping provider names to their versions
     """
@@ -212,10 +212,10 @@ def select_best_provider(
     self, required_capabilities: Optional[List[ProviderCapability]] = None
 ) -> Optional[CoverageProvider]:
     """Select the best provider based on capabilities and health.
-    
+
     Args:
         required_capabilities: List of required capabilities
-        
+
     Returns:
         Best provider instance or None if no suitable provider found
     """
@@ -237,7 +237,7 @@ provider = service.select_best_provider(
 ```python
 class RepositoryHealthService:
     """Service for analyzing repository health across providers."""
-    
+
     def __init__(
         self, discovery_service: Optional[ProviderDiscoveryService] = None
     ) -> None:
@@ -253,11 +253,11 @@ def aggregate_coverage_metrics(
     self, repo_owner: str, repo_name: str
 ) -> Dict[str, Any]:
     """Aggregate coverage metrics from all available providers.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
-        
+
     Returns:
         Dictionary with aggregated metrics
     """
@@ -276,12 +276,12 @@ def identify_risks(
     self, repo_owner: str, repo_name: str, threshold: float = 80.0
 ) -> Dict[str, Any]:
     """Identify coverage risks in the repository.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         threshold: Coverage threshold (default 80%)
-        
+
     Returns:
         Dictionary with risk analysis
     """
@@ -300,11 +300,11 @@ def get_next_actions(
     self, repo_owner: str, repo_name: str
 ) -> List[str]:
     """Generate next actions for improving repository health.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
-        
+
     Returns:
         List of recommended next actions
     """
@@ -324,10 +324,10 @@ def get_provider_fallback_chain(
     self, required_capabilities: Optional[List[ProviderCapability]] = None
 ) -> List[str]:
     """Get a fallback chain of providers for multi-provider support.
-    
+
     Args:
         required_capabilities: List of required capabilities
-        
+
     Returns:
         List of provider names in fallback order
     """
@@ -349,7 +349,7 @@ chain = service.get_provider_fallback_chain(
 ```python
 class CoverageComparisonService:
     """Service for comparing coverage across references."""
-    
+
     def __init__(
         self, discovery_service: Optional[ProviderDiscoveryService] = None
     ) -> None:
@@ -369,13 +369,13 @@ def compare_refs(
     head_ref: str,
 ) -> Dict[str, Any]:
     """Compare coverage between two references.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         base_ref: Base reference (branch, tag, or commit)
         head_ref: Head reference to compare against
-        
+
     Returns:
         Dictionary with comparison results
     """
@@ -399,14 +399,14 @@ def detect_regressions(
     threshold: float = 1.0,
 ) -> Dict[str, Any]:
     """Detect coverage regressions between references.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         base_ref: Base reference
         head_ref: Head reference
         threshold: Regression threshold percentage (default 1%)
-        
+
     Returns:
         Dictionary with regression analysis
     """
@@ -432,13 +432,13 @@ def detect_improvements(
     head_ref: str,
 ) -> Dict[str, Any]:
     """Detect coverage improvements between references.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         base_ref: Base reference
         head_ref: Head reference
-        
+
     Returns:
         Dictionary with improvement analysis
     """
@@ -462,13 +462,13 @@ def compare_components(
     head_ref: str,
 ) -> Dict[str, Any]:
     """Compare coverage at component level between references.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         base_ref: Base reference
         head_ref: Head reference
-        
+
     Returns:
         Dictionary with component-level comparison
     """
@@ -485,13 +485,13 @@ def compare_flags(
     head_ref: str,
 ) -> Dict[str, Any]:
     """Compare coverage flags between references.
-    
+
     Args:
         repo_owner: Repository owner
         repo_name: Repository name
         base_ref: Base reference
         head_ref: Head reference
-        
+
     Returns:
         Dictionary with flag comparison
     """

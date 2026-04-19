@@ -286,13 +286,13 @@ To add a new intelligence service:
    ```python
    # services/my_service.py
    from test_coverage_mcp.services.discovery import ProviderDiscoveryService
-   
+
    class MyIntelligenceService:
        """Service for specific coverage intelligence."""
-       
+
        def __init__(self, discovery_service: Optional[ProviderDiscoveryService] = None) -> None:
            self._discovery = discovery_service or ProviderDiscoveryService()
-       
+
        def analyze(self, repo_owner: str, repo_name: str) -> Dict[str, Any]:
            """Analyze coverage using multiple providers."""
            pass
@@ -301,7 +301,7 @@ To add a new intelligence service:
 2. Add to `test-coverage-mcp/src/test_coverage_mcp/services/__init__.py`:
    ```python
    from test_coverage_mcp.services.my_service import MyIntelligenceService
-   
+
    __all__ = [..., "MyIntelligenceService"]
    ```
 
