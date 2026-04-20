@@ -32,7 +32,7 @@
    # Python packages to PyPI
    uv build
    uv publish
-   
+
    # Docker images to ghcr.io
    docker build -t ghcr.io/Chisanan232/test-coverage-mcp:v1.0.0 .
    docker push ghcr.io/Chisanan232/test-coverage-mcp:v1.0.0

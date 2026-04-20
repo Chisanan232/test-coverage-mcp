@@ -4,19 +4,19 @@
 server:
   # Transport type: sse or http
   transport: sse
-  
+
   # Host to bind to
   host: 0.0.0.0
-  
+
   # Port to bind to
   port: 8000
-  
+
   # Logging level: debug, info, warning, error
   log_level: info
-  
+
   # Enable integrated mode (combined web server and MCP)
   integrated: true
-  
+
   # Enable auto-reload on code changes (development only)
   reload: false
 
@@ -25,17 +25,17 @@ providers:
   codecov:
     # Codecov API token
     token: ${CODECOV_TOKEN}
-    
+
     # Optional: Custom API endpoint
     # endpoint: https://api.codecov.io
-    
+
     # Optional: Request timeout in seconds
     # timeout: 30
-  
+
   coveralls:
     # Coveralls API token
     token: ${COVERALLS_TOKEN}
-    
+
     # Optional: Custom API endpoint
     # endpoint: https://coveralls.io/api
 
@@ -43,7 +43,7 @@ providers:
 features:
   # Enable all features
   all: true
-  
+
   # Individual feature control
   provider_discovery: true
   health_checks: true
@@ -55,10 +55,10 @@ features:
 cache:
   # Enable caching
   enabled: true
-  
+
   # Cache TTL in seconds
   ttl: 3600
-  
+
   # Cache backend: memory, redis
   backend: memory
 
@@ -66,10 +66,10 @@ cache:
 monitoring:
   # Enable metrics collection
   enabled: true
-  
+
   # Metrics endpoint
   endpoint: /metrics
-  
+
   # Include detailed metrics
   detailed: false
 
@@ -77,13 +77,13 @@ monitoring:
 security:
   # Enable CORS
   cors_enabled: true
-  
+
   # CORS allowed origins
   cors_origins:
     - "*"
-  
+
   # Enable rate limiting
   rate_limiting_enabled: false
-  
+
   # Rate limit requests per minute
   rate_limit_rpm: 60

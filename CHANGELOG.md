@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Development and production Docker Compose configurations
   - GitHub Actions for automated image builds and publishing
   - .dockerignore for build optimization
-  
+
 - **CLI Deployment**:
   - Stdio transport for Claude Desktop integration
   - HTTP transport for web clients

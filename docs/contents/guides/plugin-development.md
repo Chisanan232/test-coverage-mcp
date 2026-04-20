@@ -105,7 +105,7 @@ class MyProvider(CoverageProvider):
 
     def __init__(self, api_token: str):
         """Initialize provider.
-        
+
         Args:
             api_token: API token for authentication
         """
@@ -172,7 +172,7 @@ class MyProvider(CoverageProvider):
         base = self.client.get_coverage(repo_slug, base_ref)
         head = self.client.get_coverage(repo_slug, head_ref)
         delta = head["coverage_percent"] - base["coverage_percent"]
-        
+
         return {
             "repo_slug": repo_slug,
             "base_ref": base_ref,
@@ -255,7 +255,7 @@ class MyAPIClient:
         params = {"repo": repo_slug}
         if ref:
             params["ref"] = ref
-        
+
         response = self.client.get(
             f"{self.BASE_URL}/coverage",
             params=params,
@@ -270,7 +270,7 @@ class MyAPIClient:
         params = {"repo": repo_slug, "file": file_path}
         if ref:
             params["ref"] = ref
-        
+
         response = self.client.get(
             f"{self.BASE_URL}/coverage/file",
             params=params,
@@ -285,7 +285,7 @@ class MyAPIClient:
         params = {"repo": repo_slug, "file": file_path}
         if ref:
             params["ref"] = ref
-        
+
         response = self.client.get(
             f"{self.BASE_URL}/coverage/uncovered",
             params=params,

@@ -108,7 +108,7 @@ Example:
 class TestCoverageComparison:
     def test_compare_refs_with_valid_inputs(self):
         pass
-    
+
     def test_compare_refs_with_invalid_repo(self):
         pass
 ```
