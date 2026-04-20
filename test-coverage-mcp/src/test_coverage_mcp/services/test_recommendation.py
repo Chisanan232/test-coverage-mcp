@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List, Optional
 
-from test_coverage_mcp.domain.models import TestRecommendation
+from test_coverage_mcp.domain.models import CoverageTestRecommendation
 
 
 class RecommendationService:
@@ -249,7 +249,7 @@ class RecommendationService:
 
     def recommend_tests(
         self, uncovered_regions: List[Dict[str, Any]], max_recommendations: int = 10
-    ) -> List[TestRecommendation]:
+    ) -> List[CoverageTestRecommendation]:
         """Generate test recommendations for uncovered regions.
 
         Args:
@@ -273,7 +273,7 @@ class RecommendationService:
             scenarios = self.generate_scenarios(region_type)
             rationale = self.explain_rationale(gap)
 
-            recommendation = TestRecommendation(
+            recommendation = CoverageTestRecommendation(
                 file_path=gap["file_path"],
                 start_line=gap["start_line"],
                 end_line=gap["end_line"],

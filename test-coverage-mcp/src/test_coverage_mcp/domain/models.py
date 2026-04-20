@@ -103,7 +103,7 @@ class UncoveredRegion(BaseModel):
     risk_level: RiskLevel = Field(..., description="Risk level of this uncovered region")
 
 
-class TestRecommendation(BaseModel):
+class CoverageTestRecommendation(BaseModel):
     """Recommendation for test coverage improvement."""
 
     file_path: str = Field(..., description="Path to the file")
