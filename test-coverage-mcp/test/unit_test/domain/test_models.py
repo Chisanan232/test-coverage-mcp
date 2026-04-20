@@ -8,13 +8,13 @@ from test_coverage_mcp.domain import (
     AnalysisDepth,
     ConfigDiagnosis,
     CoverageDelta,
+    CoverageTestRecommendation,
     ExecutionMetadata,
     FileCoverage,
     ProviderCapability,
     RepositoryCoverageSummary,
     RiskLevel,
     SupportLevel,
-    TestRecommendation,
     ToolResponseBase,
     UncoveredRegion,
 )
@@ -228,12 +228,12 @@ class TestUncoveredRegion:
         assert region.risk_level == RiskLevel.HIGH
 
 
-class TestTestRecommendation:
-    """Tests for TestRecommendation model."""
+class TestCoverageTestRecommendation:
+    """Tests for CoverageTestRecommendation model."""
 
     def test_test_recommendation_creation(self) -> None:
-        """Test creating TestRecommendation."""
-        recommendation = TestRecommendation(
+        """Test creating CoverageTestRecommendation."""
+        recommendation = CoverageTestRecommendation(
             file_path="src/utils.py",
             start_line=50,
             end_line=75,

@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List
 
-from test_coverage_mcp.services.test_recommendation import TestRecommendationService
+from test_coverage_mcp.services.test_recommendation import RecommendationService
 
 
 def recommend_test_plan(
@@ -45,7 +45,7 @@ def recommend_test_plan(
         }
 
     # Initialize test recommendation service
-    recommendation_service = TestRecommendationService()
+    recommendation_service = RecommendationService()
 
     # Get uncovered regions (in real implementation, would fetch from provider)
     uncovered_regions: List[Dict[str, Any]] = []
