@@ -1,10 +1,10 @@
-"""Unit tests for TestRecommendationService."""
+"""Unit tests for RecommendationService."""
 
 from typing import Any
 
 import pytest
 
-from test_coverage_mcp.services.test_recommendation import TestRecommendationService
+from test_coverage_mcp.services.test_recommendation import RecommendationService
 
 
 class TestTestRecommendationService:
@@ -12,7 +12,7 @@ class TestTestRecommendationService:
 
     def test_identify_test_gaps(self) -> None:
         """Test identifying test gaps."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": "src/main.py",
@@ -32,7 +32,7 @@ class TestTestRecommendationService:
 
     def test_suggest_test_types_function(self) -> None:
         """Test suggesting test types for function."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.suggest_test_types("function")
 
@@ -42,7 +42,7 @@ class TestTestRecommendationService:
 
     def test_suggest_test_types_class(self) -> None:
         """Test suggesting test types for class."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.suggest_test_types("class")
 
@@ -52,7 +52,7 @@ class TestTestRecommendationService:
 
     def test_suggest_test_types_method(self) -> None:
         """Test suggesting test types for method."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.suggest_test_types("method")
 
@@ -61,7 +61,7 @@ class TestTestRecommendationService:
 
     def test_rank_by_priority(self) -> None:
         """Test ranking gaps by priority."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gaps = [
             {
                 "file_path": "src/main.py",
@@ -91,7 +91,7 @@ class TestTestRecommendationService:
 
     def test_generate_scenarios_function(self) -> None:
         """Test generating scenarios for function."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.generate_scenarios("function")
 
@@ -101,7 +101,7 @@ class TestTestRecommendationService:
 
     def test_generate_scenarios_class(self) -> None:
         """Test generating scenarios for class."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.generate_scenarios("class")
 
@@ -110,7 +110,7 @@ class TestTestRecommendationService:
 
     def test_generate_scenarios_method(self) -> None:
         """Test generating scenarios for method."""
-        service = TestRecommendationService()
+        service = RecommendationService()
 
         result = service.generate_scenarios("method")
 
@@ -119,7 +119,7 @@ class TestTestRecommendationService:
 
     def test_explain_rationale_critical(self) -> None:
         """Test explaining rationale for critical gap."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gap = {
             "file_path": "src/main.py",
             "start_line": 10,
@@ -137,7 +137,7 @@ class TestTestRecommendationService:
 
     def test_explain_rationale_high(self) -> None:
         """Test explaining rationale for high risk gap."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gap = {
             "file_path": "src/main.py",
             "start_line": 10,
@@ -154,7 +154,7 @@ class TestTestRecommendationService:
 
     def test_recommend_tests(self) -> None:
         """Test generating test recommendations."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": "src/main.py",
@@ -191,7 +191,7 @@ class TestTestRecommendationService:
 
     def test_recommend_tests_max_recommendations(self) -> None:
         """Test limiting recommendations."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": f"src/file{i}.py",
@@ -210,22 +210,22 @@ class TestTestRecommendationService:
 
     def test_score_to_priority_critical(self) -> None:
         """Test converting score to critical priority."""
-        result = TestRecommendationService._score_to_priority(85.0)
+        result = RecommendationService._score_to_priority(85.0)
         assert result == "critical"
 
     def test_score_to_priority_high(self) -> None:
         """Test converting score to high priority."""
-        result = TestRecommendationService._score_to_priority(65.0)
+        result = RecommendationService._score_to_priority(65.0)
         assert result == "high"
 
     def test_score_to_priority_medium(self) -> None:
         """Test converting score to medium priority."""
-        result = TestRecommendationService._score_to_priority(45.0)
+        result = RecommendationService._score_to_priority(45.0)
         assert result == "medium"
 
     def test_score_to_priority_low(self) -> None:
         """Test converting score to low priority."""
-        result = TestRecommendationService._score_to_priority(20.0)
+        result = RecommendationService._score_to_priority(20.0)
         assert result == "low"
 
 
@@ -234,13 +234,13 @@ class TestTestRecommendationEdgeCases:
 
     def test_identify_test_gaps_empty_list(self) -> None:
         """Test identifying gaps with empty list."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         result = service.identify_test_gaps([])
         assert result == []
 
     def test_identify_test_gaps_multiple_regions(self) -> None:
         """Test identifying gaps with multiple regions."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": "src/main.py",
@@ -265,20 +265,20 @@ class TestTestRecommendationEdgeCases:
 
     def test_suggest_test_types_unknown_type(self) -> None:
         """Test suggesting test types for unknown type."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         result = service.suggest_test_types("unknown")
         assert isinstance(result, list)
         assert "unit" in result
 
     def test_rank_by_priority_empty_list(self) -> None:
         """Test ranking empty list."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         result = service.rank_by_priority([])
         assert result == []
 
     def test_rank_by_priority_single_gap(self) -> None:
         """Test ranking single gap."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gaps = [
             {
                 "file_path": "src/main.py",
@@ -294,7 +294,7 @@ class TestTestRecommendationEdgeCases:
 
     def test_rank_by_priority_maintains_order(self) -> None:
         """Test that ranking maintains correct order."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gaps = [
             {
                 "file_path": "src/low.py",
@@ -324,7 +324,7 @@ class TestTestRecommendationEdgeCases:
 
     def test_rank_by_priority_all_same_risk(self) -> None:
         """Test ranking when all gaps have same risk level."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         gaps = [
             {
                 "file_path": "src/file1.py",
@@ -352,7 +352,7 @@ class TestTestRecommendationEdgeCases:
 
     def test_suggest_test_types_all_types(self) -> None:
         """Test suggesting test types for all region types."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         region_types = ["function", "class", "method", "block", "branch", "line"]
 
         for region_type in region_types:
@@ -362,7 +362,7 @@ class TestTestRecommendationEdgeCases:
 
     def test_identify_test_gaps_preserves_data(self) -> None:
         """Test that identifying gaps preserves all data."""
-        service = TestRecommendationService()
+        service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": "src/main.py",

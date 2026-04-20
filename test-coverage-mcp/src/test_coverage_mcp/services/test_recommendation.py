@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 from test_coverage_mcp.domain.models import TestRecommendation
 
 
-class TestRecommendationService:
+class RecommendationService:
     """Service for generating test recommendations.
 
     Provides intelligent test recommendations based on:

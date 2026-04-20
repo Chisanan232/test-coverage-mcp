@@ -1,6 +1,6 @@
 """Core domain models for coverage analysis."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from pydantic import BaseModel, Field
@@ -24,7 +24,10 @@ class ExecutionMetadata(BaseModel):
     )
     analysis_depth: AnalysisDepth = Field(..., description="Depth of analysis performed")
     execution_time_ms: float = Field(..., description="Execution time in milliseconds")
-    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Execution timestamp")
+    timestamp: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Execution timestamp",
+    )
     degradation_reason: Optional[str] = Field(
         None, description="Reason for any degradation from requested capabilities"
     )
