@@ -1,5 +1,7 @@
 """Unit tests for CLI commands."""
 
+from typing import Any
+
 import pytest
 from click.testing import CliRunner
 
@@ -39,7 +41,7 @@ class TestCLIMain:
 class TestServeCommand:
     """Tests for serve command."""
 
-    def test_serve_help(self):
+    def test_serve_help(self) -> None:
         """Test serve command help."""
         runner = CliRunner()
         result = runner.invoke(cli, ["serve", "--help"])
@@ -47,7 +49,7 @@ class TestServeCommand:
         assert result.exit_code == 0
         assert "Start the test-coverage-mcp MCP server" in result.output
 
-    def test_serve_default_options(self):
+    def test_serve_default_options(self) -> None:
         """Test serve command with default options."""
         runner = CliRunner()
         result = runner.invoke(cli, ["serve"])
@@ -55,7 +57,7 @@ class TestServeCommand:
         assert result.exit_code == 0
         assert "Starting MCP server" in result.output
 
-    def test_serve_with_http_transport(self):
+    def test_serve_with_http_transport(self) -> None:
         """Test serve command with HTTP transport."""
         runner = CliRunner()
         result = runner.invoke(cli, ["serve", "--transport", "http"])
@@ -63,7 +65,7 @@ class TestServeCommand:
         assert result.exit_code == 0
         assert "Starting MCP server" in result.output
 
-    def test_serve_with_custom_host_port(self):
+    def test_serve_with_custom_host_port(self) -> None:
         """Test serve command with custom host and port."""
         runner = CliRunner()
         result = runner.invoke(
@@ -76,7 +78,7 @@ class TestServeCommand:
 class TestProvidersCommand:
     """Tests for providers command."""
 
-    def test_providers_help(self):
+    def test_providers_help(self) -> None:
         """Test providers command help."""
         runner = CliRunner()
         result = runner.invoke(cli, ["providers", "--help"])
@@ -84,7 +86,7 @@ class TestProvidersCommand:
         assert result.exit_code == 0
         assert "Manage coverage providers" in result.output
 
-    def test_providers_list(self):
+    def test_providers_list(self) -> None:
         """Test providers list command."""
         runner = CliRunner()
         result = runner.invoke(cli, ["providers", "list"])
@@ -93,7 +95,7 @@ class TestProvidersCommand:
         assert "Available providers:" in result.output
         assert "codecov" in result.output
 
-    def test_providers_describe_codecov(self):
+    def test_providers_describe_codecov(self) -> None:
         """Test providers describe command for codecov."""
         runner = CliRunner()
         result = runner.invoke(cli, ["providers", "describe", "codecov"])
@@ -102,7 +104,7 @@ class TestProvidersCommand:
         assert "codecov" in result.output
         assert "Capabilities:" in result.output
 
-    def test_providers_describe_unknown(self):
+    def test_providers_describe_unknown(self) -> None:
         """Test providers describe command for unknown provider."""
         runner = CliRunner()
         result = runner.invoke(cli, ["providers", "describe", "unknown"])

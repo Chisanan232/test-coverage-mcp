@@ -296,7 +296,7 @@ class TestEdgeCases:
         # Should handle gracefully without division by zero
         assert isinstance(result, list)
 
-    def test_score_pr_risk_large_number_of_files(self, risk_service):
+    def test_score_pr_risk_large_number_of_files(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with large number of changed files."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -309,7 +309,7 @@ class TestEdgeCases:
         assert "risk_level" in result
         assert "risk_score" in result
 
-    def test_identify_high_risk_files_all_covered(self, risk_service):
+    def test_identify_high_risk_files_all_covered(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test identifying high-risk files when all are well-covered."""
         file_coverage_data = {
             "file1.py": {"coverage": 95.0, "uncovered_lines": 5, "total_lines": 100},

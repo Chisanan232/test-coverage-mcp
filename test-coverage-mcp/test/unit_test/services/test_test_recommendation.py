@@ -1,5 +1,7 @@
 """Unit tests for TestRecommendationService."""
 
+from typing import Any
+
 import pytest
 
 from test_coverage_mcp.services.test_recommendation import TestRecommendationService
@@ -8,7 +10,7 @@ from test_coverage_mcp.services.test_recommendation import TestRecommendationSer
 class TestTestRecommendationService:
     """Tests for TestRecommendationService."""
 
-    def test_identify_test_gaps(self):
+    def test_identify_test_gaps(self) -> None:
         """Test identifying test gaps."""
         service = TestRecommendationService()
         uncovered_regions = [
@@ -28,7 +30,7 @@ class TestTestRecommendationService:
         assert len(result) == 1
         assert result[0]["file_path"] == "src/main.py"
 
-    def test_suggest_test_types_function(self):
+    def test_suggest_test_types_function(self) -> None:
         """Test suggesting test types for function."""
         service = TestRecommendationService()
 
@@ -38,7 +40,7 @@ class TestTestRecommendationService:
         assert "unit" in result
         assert "integration" in result
 
-    def test_suggest_test_types_class(self):
+    def test_suggest_test_types_class(self) -> None:
         """Test suggesting test types for class."""
         service = TestRecommendationService()
 
@@ -48,7 +50,7 @@ class TestTestRecommendationService:
         assert "unit" in result
         assert "integration" in result
 
-    def test_suggest_test_types_method(self):
+    def test_suggest_test_types_method(self) -> None:
         """Test suggesting test types for method."""
         service = TestRecommendationService()
 
@@ -57,7 +59,7 @@ class TestTestRecommendationService:
         assert isinstance(result, list)
         assert "unit" in result
 
-    def test_rank_by_priority(self):
+    def test_rank_by_priority(self) -> None:
         """Test ranking gaps by priority."""
         service = TestRecommendationService()
         gaps = [
@@ -87,7 +89,7 @@ class TestTestRecommendationService:
         assert result[0]["risk_level"] == "critical"
         assert "priority_score" in result[0]
 
-    def test_generate_scenarios_function(self):
+    def test_generate_scenarios_function(self) -> None:
         """Test generating scenarios for function."""
         service = TestRecommendationService()
 
@@ -97,7 +99,7 @@ class TestTestRecommendationService:
         assert len(result) > 0
         assert all("name" in s and "description" in s for s in result)
 
-    def test_generate_scenarios_class(self):
+    def test_generate_scenarios_class(self) -> None:
         """Test generating scenarios for class."""
         service = TestRecommendationService()
 
@@ -106,7 +108,7 @@ class TestTestRecommendationService:
         assert isinstance(result, list)
         assert len(result) > 0
 
-    def test_generate_scenarios_method(self):
+    def test_generate_scenarios_method(self) -> None:
         """Test generating scenarios for method."""
         service = TestRecommendationService()
 
@@ -115,7 +117,7 @@ class TestTestRecommendationService:
         assert isinstance(result, list)
         assert len(result) > 0
 
-    def test_explain_rationale_critical(self):
+    def test_explain_rationale_critical(self) -> None:
         """Test explaining rationale for critical gap."""
         service = TestRecommendationService()
         gap = {
@@ -133,7 +135,7 @@ class TestTestRecommendationService:
         assert len(result) > 0
         assert "critical" in result.lower()
 
-    def test_explain_rationale_high(self):
+    def test_explain_rationale_high(self) -> None:
         """Test explaining rationale for high risk gap."""
         service = TestRecommendationService()
         gap = {
@@ -150,7 +152,7 @@ class TestTestRecommendationService:
         assert isinstance(result, str)
         assert len(result) > 0
 
-    def test_recommend_tests(self):
+    def test_recommend_tests(self) -> None:
         """Test generating test recommendations."""
         service = TestRecommendationService()
         uncovered_regions = [
@@ -187,7 +189,7 @@ class TestTestRecommendationService:
             assert rec.priority
             assert rec.rationale
 
-    def test_recommend_tests_max_recommendations(self):
+    def test_recommend_tests_max_recommendations(self) -> None:
         """Test limiting recommendations."""
         service = TestRecommendationService()
         uncovered_regions = [
@@ -206,22 +208,22 @@ class TestTestRecommendationService:
 
         assert len(result) <= 5
 
-    def test_score_to_priority_critical(self):
+    def test_score_to_priority_critical(self) -> None:
         """Test converting score to critical priority."""
         result = TestRecommendationService._score_to_priority(85.0)
         assert result == "critical"
 
-    def test_score_to_priority_high(self):
+    def test_score_to_priority_high(self) -> None:
         """Test converting score to high priority."""
         result = TestRecommendationService._score_to_priority(65.0)
         assert result == "high"
 
-    def test_score_to_priority_medium(self):
+    def test_score_to_priority_medium(self) -> None:
         """Test converting score to medium priority."""
         result = TestRecommendationService._score_to_priority(45.0)
         assert result == "medium"
 
-    def test_score_to_priority_low(self):
+    def test_score_to_priority_low(self) -> None:
         """Test converting score to low priority."""
         result = TestRecommendationService._score_to_priority(20.0)
         assert result == "low"

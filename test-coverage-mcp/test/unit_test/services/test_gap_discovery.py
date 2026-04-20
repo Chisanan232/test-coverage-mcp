@@ -1,5 +1,7 @@
 """Unit tests for CoverageGapDiscoveryService."""
 
+from typing import Any
+
 import pytest
 
 from test_coverage_mcp.domain import RiskLevel
@@ -7,7 +9,7 @@ from test_coverage_mcp.services.gap_discovery import CoverageGapDiscoveryService
 
 
 @pytest.fixture
-def gap_service():
+def gap_service() -> CoverageGapDiscoveryService:
     """Create a CoverageGapDiscoveryService instance."""
     return CoverageGapDiscoveryService()
 
@@ -15,7 +17,7 @@ def gap_service():
 class TestAnalyzeChangedCode:
     """Tests for changed code analysis."""
 
-    def test_analyze_changed_code_all_covered(self, gap_service):
+    def test_analyze_changed_code_all_covered(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing changed code that is all covered."""
         file_coverage_data = {
             "src/module.py": {
@@ -33,7 +35,7 @@ class TestAnalyzeChangedCode:
         assert result["uncovered_changed_lines"] == 0
         assert result["coverage_percentage"] == 100.0
 
-    def test_analyze_changed_code_partial_coverage(self, gap_service):
+    def test_analyze_changed_code_partial_coverage(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing changed code with partial coverage."""
         file_coverage_data = {
             "src/module1.py": {
@@ -56,7 +58,7 @@ class TestAnalyzeChangedCode:
         assert result["coverage_percentage"] == 70.0
         assert len(result["files_with_gaps"]) == 2
 
-    def test_analyze_changed_code_no_coverage(self, gap_service):
+    def test_analyze_changed_code_no_coverage(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing changed code with no coverage."""
         file_coverage_data = {
             "src/module.py": {
@@ -72,7 +74,7 @@ class TestAnalyzeChangedCode:
         assert result["coverage_percentage"] == 0.0
         assert result["uncovered_changed_lines"] == 25
 
-    def test_analyze_changed_code_no_data(self, gap_service):
+    def test_analyze_changed_code_no_data(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing changed code with no file data."""
         result = gap_service.analyze_changed_code(
             "owner", "repo", "main", "feature", {}
@@ -85,7 +87,7 @@ class TestAnalyzeChangedCode:
 class TestDetectUncoveredRegions:
     """Tests for uncovered region detection."""
 
-    def test_detect_uncovered_regions_single_region(self, gap_service):
+    def test_detect_uncovered_regions_single_region(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test detecting a single uncovered region."""
         coverage_data = {
             "uncovered_lines": [10, 11, 12, 13, 14],
@@ -98,7 +100,7 @@ class TestDetectUncoveredRegions:
         assert result[0]["end_line"] == 14
         assert result[0]["lines_count"] == 5
 
-    def test_detect_uncovered_regions_multiple_regions(self, gap_service):
+    def test_detect_uncovered_regions_multiple_regions(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test detecting multiple uncovered regions."""
         coverage_data = {
             "uncovered_lines": [10, 11, 12, 20, 21, 22, 30],
@@ -112,7 +114,7 @@ class TestDetectUncoveredRegions:
         assert result[1]["start_line"] == 20
         assert result[2]["start_line"] == 30
 
-    def test_detect_uncovered_regions_with_risk_levels(self, gap_service):
+    def test_detect_uncovered_regions_with_risk_levels(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test that uncovered regions have risk levels."""
         coverage_data = {
             "uncovered_lines": list(range(10, 70)),  # 60 lines
@@ -129,7 +131,7 @@ class TestDetectUncoveredRegions:
             RiskLevel.CRITICAL.value,
         ]
 
-    def test_detect_uncovered_regions_empty(self, gap_service):
+    def test_detect_uncovered_regions_empty(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test detecting uncovered regions with no uncovered lines."""
         coverage_data = {"uncovered_lines": []}
 
@@ -141,7 +143,7 @@ class TestDetectUncoveredRegions:
 class TestAnalyzePartiallyCoveredRegions:
     """Tests for partially covered region analysis."""
 
-    def test_analyze_partially_covered_regions_basic(self, gap_service):
+    def test_analyze_partially_covered_regions_basic(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing partially covered regions."""
         coverage_data = {
             "coverage_by_line": {
@@ -160,7 +162,7 @@ class TestAnalyzePartiallyCoveredRegions:
         assert all("coverage_percentage" in r for r in result)
         assert all("risk_level" in r for r in result)
 
-    def test_analyze_partially_covered_regions_empty(self, gap_service):
+    def test_analyze_partially_covered_regions_empty(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing partially covered regions with no data."""
         coverage_data = {"coverage_by_line": {}}
 
@@ -168,7 +170,7 @@ class TestAnalyzePartiallyCoveredRegions:
 
         assert len(result) == 0
 
-    def test_analyze_partially_covered_regions_all_covered(self, gap_service):
+    def test_analyze_partially_covered_regions_all_covered(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing when all lines are covered."""
         coverage_data = {
             "coverage_by_line": {
@@ -183,7 +185,7 @@ class TestAnalyzePartiallyCoveredRegions:
         # Should return empty since there's no mixed coverage
         assert len(result) == 0
 
-    def test_analyze_partially_covered_regions_risk_levels(self, gap_service):
+    def test_analyze_partially_covered_regions_risk_levels(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test that partially covered regions have correct risk levels."""
         coverage_data = {
             "coverage_by_line": {
@@ -213,7 +215,7 @@ class TestAnalyzePartiallyCoveredRegions:
 class TestHandlePendingAnalysis:
     """Tests for pending analysis handling."""
 
-    def test_handle_pending_analysis_with_pending(self, gap_service):
+    def test_handle_pending_analysis_with_pending(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test handling pending analysis."""
         pending_data = {
             "coverage": 75.0,
@@ -231,7 +233,7 @@ class TestHandlePendingAnalysis:
         assert result["estimated_coverage"] == 85.0
         assert len(result["recommendations"]) > 0
 
-    def test_handle_pending_analysis_no_pending(self, gap_service):
+    def test_handle_pending_analysis_no_pending(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test handling when no pending analysis."""
         pending_data = {
             "coverage": 90.0,
@@ -244,7 +246,7 @@ class TestHandlePendingAnalysis:
         assert result["pending_regions_count"] == 0
         assert len(result["recommendations"]) == 0
 
-    def test_handle_pending_analysis_includes_recommendations(self, gap_service):
+    def test_handle_pending_analysis_includes_recommendations(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test that pending analysis includes recommendations."""
         pending_data = {
             "coverage": 70.0,
@@ -260,7 +262,7 @@ class TestHandlePendingAnalysis:
 class TestGroupUncoveredLines:
     """Tests for grouping uncovered lines."""
 
-    def test_group_uncovered_lines_single_group(self, gap_service):
+    def test_group_uncovered_lines_single_group(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test grouping consecutive uncovered lines."""
         uncovered_lines = [10, 11, 12, 13, 14]
 
@@ -270,7 +272,7 @@ class TestGroupUncoveredLines:
         assert result[0]["start"] == 10
         assert result[0]["end"] == 14
 
-    def test_group_uncovered_lines_multiple_groups(self, gap_service):
+    def test_group_uncovered_lines_multiple_groups(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test grouping non-consecutive uncovered lines."""
         uncovered_lines = [10, 11, 12, 20, 21, 30]
 
@@ -281,13 +283,13 @@ class TestGroupUncoveredLines:
         assert result[1]["start"] == 20
         assert result[2]["start"] == 30
 
-    def test_group_uncovered_lines_empty(self, gap_service):
+    def test_group_uncovered_lines_empty(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test grouping empty uncovered lines."""
         result = gap_service._group_uncovered_lines([])
 
         assert len(result) == 0
 
-    def test_group_uncovered_lines_duplicates(self, gap_service):
+    def test_group_uncovered_lines_duplicates(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test grouping with duplicate line numbers."""
         uncovered_lines = [10, 10, 11, 11, 12]
 
@@ -301,27 +303,27 @@ class TestGroupUncoveredLines:
 class TestInferRegionType:
     """Tests for region type inference."""
 
-    def test_infer_region_type_class(self, gap_service):
+    def test_infer_region_type_class(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test inferring class region type."""
         region_type = gap_service._infer_region_type(100, {})
         assert region_type == "class"
 
-    def test_infer_region_type_function(self, gap_service):
+    def test_infer_region_type_function(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test inferring function region type."""
         region_type = gap_service._infer_region_type(30, {})
         assert region_type == "function"
 
-    def test_infer_region_type_method(self, gap_service):
+    def test_infer_region_type_method(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test inferring method region type."""
         region_type = gap_service._infer_region_type(15, {})
         assert region_type == "method"
 
-    def test_infer_region_type_block(self, gap_service):
+    def test_infer_region_type_block(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test inferring block region type."""
         region_type = gap_service._infer_region_type(5, {})
         assert region_type == "block"
 
-    def test_infer_region_type_line(self, gap_service):
+    def test_infer_region_type_line(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test inferring line region type."""
         region_type = gap_service._infer_region_type(1, {})
         assert region_type == "line"
@@ -330,23 +332,23 @@ class TestInferRegionType:
 class TestGenerateGapSummary:
     """Tests for gap summary generation."""
 
-    def test_generate_gap_summary_all_covered(self, gap_service):
+    def test_generate_gap_summary_all_covered(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test gap summary when all changes are covered."""
         summary = gap_service._generate_gap_summary(20, 0, 100.0)
         assert "All 20 changed lines are covered" in summary
 
-    def test_generate_gap_summary_none_covered(self, gap_service):
+    def test_generate_gap_summary_none_covered(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test gap summary when no changes are covered."""
         summary = gap_service._generate_gap_summary(20, 20, 0.0)
         assert "None of the 20 changed lines are covered" in summary
 
-    def test_generate_gap_summary_partial(self, gap_service):
+    def test_generate_gap_summary_partial(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test gap summary with partial coverage."""
         summary = gap_service._generate_gap_summary(50, 10, 80.0)
         assert "10 of 50" in summary
         assert "80.0%" in summary
 
-    def test_generate_gap_summary_no_changes(self, gap_service):
+    def test_generate_gap_summary_no_changes(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test gap summary with no changes."""
         summary = gap_service._generate_gap_summary(0, 0, 0.0)
         assert "No changes detected" in summary
@@ -355,7 +357,7 @@ class TestGenerateGapSummary:
 class TestEdgeCasesGapDiscovery:
     """Tests for edge cases in gap discovery."""
 
-    def test_analyze_changed_code_with_none_data(self, gap_service):
+    def test_analyze_changed_code_with_none_data(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing changed code with None data."""
         result = gap_service.analyze_changed_code(
             "owner", "repo", "main", "feature", None
@@ -364,7 +366,7 @@ class TestEdgeCasesGapDiscovery:
         assert result["total_changed_lines"] == 0
         assert result["coverage_percentage"] == 0.0
 
-    def test_detect_uncovered_regions_large_file(self, gap_service):
+    def test_detect_uncovered_regions_large_file(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test detecting uncovered regions in large file."""
         coverage_data = {
             "uncovered_lines": list(range(1, 1001)),  # 1000 uncovered lines
@@ -375,7 +377,7 @@ class TestEdgeCasesGapDiscovery:
         assert len(result) == 1
         assert result[0]["lines_count"] == 1000
 
-    def test_detect_uncovered_regions_sparse_coverage(self, gap_service):
+    def test_detect_uncovered_regions_sparse_coverage(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test detecting uncovered regions with sparse coverage."""
         coverage_data = {
             "uncovered_lines": [1, 5, 10, 15, 20, 25, 30],
@@ -385,7 +387,7 @@ class TestEdgeCasesGapDiscovery:
 
         assert len(result) == 7  # Each line is its own region
 
-    def test_analyze_changed_code_mixed_coverage(self, gap_service):
+    def test_analyze_changed_code_mixed_coverage(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing with mixed coverage across files."""
         file_coverage_data = {
             "src/fully_covered.py": {
@@ -411,7 +413,7 @@ class TestEdgeCasesGapDiscovery:
         assert result["coverage_percentage"] == 50.0
         assert len(result["files_with_gaps"]) == 2
 
-    def test_group_uncovered_lines_unsorted(self, gap_service):
+    def test_group_uncovered_lines_unsorted(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test grouping unsorted uncovered lines."""
         uncovered_lines = [30, 10, 20, 11, 12, 31]
 
@@ -420,7 +422,7 @@ class TestEdgeCasesGapDiscovery:
         # Should handle unsorted input
         assert len(result) >= 1
 
-    def test_infer_region_type_boundary_values(self, gap_service):
+    def test_infer_region_type_boundary_values(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test region type inference at boundary values."""
         # Test exact boundary values
         assert gap_service._infer_region_type(50, {}) in [
@@ -438,7 +440,7 @@ class TestEdgeCasesGapDiscovery:
             "block",
         ]
 
-    def test_analyze_changed_code_files_with_no_changes(self, gap_service):
+    def test_analyze_changed_code_files_with_no_changes(self, gap_service: CoverageGapDiscoveryService) -> None:
         """Test analyzing files with zero changed lines."""
         file_coverage_data = {
             "src/unchanged.py": {

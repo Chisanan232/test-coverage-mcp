@@ -146,7 +146,7 @@ def test_generate_risk_recommendations_high():
 class TestRepositoryHealthServiceEdgeCases:
     """Tests for edge cases in repository health service."""
 
-    def test_aggregate_coverage_metrics_no_providers(self, mock_registry):
+    def test_aggregate_coverage_metrics_no_providers(self, mock_registry: ProviderRegistry) -> None:
         """Test aggregating metrics with no providers."""
         discovery = ProviderDiscoveryService(mock_registry)
         service = RepositoryHealthService(discovery)
@@ -156,7 +156,7 @@ class TestRepositoryHealthServiceEdgeCases:
         assert metrics["providers_queried"] == 0
         assert metrics["average_coverage"] == 0.0
 
-    def test_aggregate_coverage_metrics_multiple_providers(self, mock_registry):
+    def test_aggregate_coverage_metrics_multiple_providers(self, mock_registry: ProviderRegistry) -> None:
         """Test aggregating metrics with multiple providers."""
         provider1 = MagicMock()
         provider1.get_metadata.return_value = ProviderMetadata(

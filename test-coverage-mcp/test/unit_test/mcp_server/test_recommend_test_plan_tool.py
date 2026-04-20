@@ -1,5 +1,7 @@
 """Unit tests for recommend_test_plan tool."""
 
+from typing import Any
+
 import pytest
 
 from test_coverage_mcp.mcp_server.tools.recommend_test_plan import (
@@ -10,7 +12,7 @@ from test_coverage_mcp.mcp_server.tools.recommend_test_plan import (
 class TestRecommendTestPlanTool:
     """Tests for recommend_test_plan tool."""
 
-    def test_recommend_test_plan_valid_input_repo(self):
+    def test_recommend_test_plan_valid_input_repo(self) -> None:
         """Test recommending test plan for repository."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
@@ -26,7 +28,7 @@ class TestRecommendTestPlanTool:
         assert result["target"] == "repo"
         assert isinstance(result["recommendations"], list)
 
-    def test_recommend_test_plan_valid_input_pr(self):
+    def test_recommend_test_plan_valid_input_pr(self) -> None:
         """Test recommending test plan for pull request."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
@@ -37,7 +39,7 @@ class TestRecommendTestPlanTool:
         assert isinstance(result, dict)
         assert result["target"] == "pr"
 
-    def test_recommend_test_plan_valid_input_file(self):
+    def test_recommend_test_plan_valid_input_file(self) -> None:
         """Test recommending test plan for specific file."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
@@ -48,7 +50,7 @@ class TestRecommendTestPlanTool:
         assert isinstance(result, dict)
         assert result["target"] == "src/main.py"
 
-    def test_recommend_test_plan_invalid_repo_slug(self):
+    def test_recommend_test_plan_invalid_repo_slug(self) -> None:
         """Test with invalid repo slug format."""
         result = recommend_test_plan(
             repo_slug="invalid",
@@ -58,7 +60,7 @@ class TestRecommendTestPlanTool:
         assert "error" in result
         assert result["error_code"] == "INVALID_REPO_SLUG"
 
-    def test_recommend_test_plan_invalid_target(self):
+    def test_recommend_test_plan_invalid_target(self) -> None:
         """Test with invalid target."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
@@ -69,7 +71,7 @@ class TestRecommendTestPlanTool:
         assert "error" in result
         assert result["error_code"] == "INVALID_TARGET"
 
-    def test_recommend_test_plan_default_target(self):
+    def test_recommend_test_plan_default_target(self) -> None:
         """Test with default target."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
@@ -78,7 +80,7 @@ class TestRecommendTestPlanTool:
 
         assert result["target"] == "repo"
 
-    def test_recommend_test_plan_returns_recommendations(self):
+    def test_recommend_test_plan_returns_recommendations(self) -> None:
         """Test that recommendations are returned."""
         result = recommend_test_plan(
             repo_slug="owner/repo",
