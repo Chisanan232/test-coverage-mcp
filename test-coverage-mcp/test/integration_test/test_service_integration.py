@@ -3,6 +3,7 @@
 Tests service layer interactions and data flow between components.
 """
 
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -33,7 +34,7 @@ def mock_registry() -> ProviderRegistry:
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -62,7 +63,7 @@ def mock_provider():
 
 
 @pytest.fixture
-def discovery_service(mock_registry, mock_provider):
+def discovery_service(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> ProviderDiscoveryService:
     """Create a discovery service with mock provider."""
     mock_registry.register(mock_provider)
     return ProviderDiscoveryService(mock_registry)
@@ -71,7 +72,7 @@ def discovery_service(mock_registry, mock_provider):
 class TestServiceIntegration:
     """Integration tests for service layer."""
 
-    def test_discovery_service_with_registry(self, discovery_service):
+    def test_discovery_service_with_registry(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test discovery service integration with provider registry."""
         # List providers
         providers = discovery_service.list_providers()
@@ -85,7 +86,7 @@ class TestServiceIntegration:
         metadata = provider.get_metadata()
         assert metadata.name == "test_provider"
 
-    def test_health_check_with_providers(self, discovery_service):
+    def test_health_check_with_providers(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test health check service with multiple providers."""
         # Get health of specific provider
         health = discovery_service.get_provider_health("test_provider")
@@ -101,7 +102,7 @@ class TestServiceIntegration:
         assert aggregated["total_providers"] == 1
         assert aggregated["healthy_providers"] == 1
 
-    def test_comparison_service_workflow(self, discovery_service):
+    def test_comparison_service_workflow(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test complete comparison service workflow."""
         comparison = CoverageComparisonService(discovery_service)
         
@@ -120,7 +121,7 @@ class TestServiceIntegration:
         improvement = comparison.detect_improvements("owner", "repo", "main", "feature")
         assert "has_improvement" in improvement
 
-    def test_gap_discovery_service_workflow(self):
+    def test_gap_discovery_service_workflow(self) -> None:
         """Test complete gap discovery service workflow."""
         gap_service = CoverageGapDiscoveryService()
         
@@ -144,7 +145,7 @@ class TestServiceIntegration:
         regions = gap_service.detect_uncovered_regions("src/main.py", coverage_data)
         assert len(regions) > 0
 
-    def test_risk_analysis_service_workflow(self):
+    def test_risk_analysis_service_workflow(self) -> None:
         """Test complete risk analysis service workflow."""
         risk_service = CoverageRiskAnalysisService()
         
@@ -171,7 +172,7 @@ class TestServiceIntegration:
 class TestServiceDataFlow:
     """Test data flow between services."""
 
-    def test_gap_discovery_to_risk_analysis(self):
+    def test_gap_discovery_to_risk_analysis(self) -> None:
         """Test data flow from gap discovery to risk analysis."""
         gap_service = CoverageGapDiscoveryService()
         risk_service = CoverageRiskAnalysisService()
@@ -198,7 +199,7 @@ class TestServiceDataFlow:
         
         assert pr_risk["risk_score"] > 0
 
-    def test_gap_discovery_to_test_recommendation(self):
+    def test_gap_discovery_to_test_recommendation(self) -> None:
         """Test data flow from gap discovery to test recommendation."""
         gap_service = CoverageGapDiscoveryService()
         recommendation_service = TestRecommendationService()
@@ -217,7 +218,7 @@ class TestServiceDataFlow:
         ranked = recommendation_service.rank_by_priority(gaps)
         assert len(ranked) > 0
 
-    def test_config_diagnosis_to_excludable_code(self):
+    def test_config_diagnosis_to_excludable_code(self) -> None:
         """Test data flow from config diagnosis to excludable code."""
         config_service = CoverageConfigDiagnosisService()
         excludable_service = ExcludableCodeCandidateService()
@@ -249,7 +250,7 @@ class TestServiceDataFlow:
 class TestServiceErrorHandling:
     """Test error handling in service interactions."""
 
-    def test_discovery_with_failing_provider(self, mock_registry):
+    def test_discovery_with_failing_provider(self, mock_registry: ProviderRegistry) -> None:
         """Test discovery service with failing provider."""
         # Don't register a failing provider - just test with empty registry
         discovery = ProviderDiscoveryService(mock_registry)
@@ -258,7 +259,7 @@ class TestServiceErrorHandling:
         providers = discovery.list_providers()
         assert isinstance(providers, dict)
 
-    def test_comparison_with_no_providers(self, mock_registry):
+    def test_comparison_with_no_providers(self, mock_registry: ProviderRegistry) -> None:
         """Test comparison service with no providers."""
         discovery = ProviderDiscoveryService(mock_registry)
         comparison = CoverageComparisonService(discovery)
@@ -268,7 +269,7 @@ class TestServiceErrorHandling:
         assert result["base_coverage"] == 0.0
         assert result["head_coverage"] == 0.0
 
-    def test_health_service_with_failing_providers(self, mock_registry):
+    def test_health_service_with_failing_providers(self, mock_registry: ProviderRegistry) -> None:
         """Test health service with failing providers."""
         # Test with empty registry (no providers)
         discovery = ProviderDiscoveryService(mock_registry)
@@ -282,7 +283,7 @@ class TestServiceErrorHandling:
 class TestServiceChaining:
     """Test chaining multiple services together."""
 
-    def test_complete_analysis_chain(self, discovery_service):
+    def test_complete_analysis_chain(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test complete analysis chain."""
         # Step 1: Compare coverage
         comparison = CoverageComparisonService(discovery_service)
@@ -326,7 +327,7 @@ class TestServiceChaining:
         
         assert len(recommendations) > 0
 
-    def test_health_analysis_chain(self, discovery_service):
+    def test_health_analysis_chain(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test health analysis chain."""
         # Step 1: Aggregate metrics
         health_service = RepositoryHealthService(discovery_service)
