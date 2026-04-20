@@ -1,5 +1,6 @@
 """Unit tests for ProviderDiscoveryService."""
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -23,7 +24,7 @@ def mock_registry() -> ProviderRegistry:
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -49,13 +50,13 @@ def mock_provider():
     return provider
 
 
-def test_discovery_service_initialization(mock_registry):
+def test_discovery_service_initialization(mock_registry: ProviderRegistry) -> None:
     """Test service initialization."""
     service = ProviderDiscoveryService(mock_registry)
     assert service._registry is mock_registry
 
 
-def test_list_providers(mock_registry, mock_provider):
+def test_list_providers(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test listing providers."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -65,7 +66,7 @@ def test_list_providers(mock_registry, mock_provider):
     assert providers["test_provider"].name == "test_provider"
 
 
-def test_get_provider(mock_registry, mock_provider):
+def test_get_provider(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test getting a specific provider."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -75,14 +76,14 @@ def test_get_provider(mock_registry, mock_provider):
     assert provider.get_metadata().name == "test_provider"
 
 
-def test_get_nonexistent_provider(mock_registry):
+def test_get_nonexistent_provider(mock_registry: ProviderRegistry) -> None:
     """Test getting a nonexistent provider."""
     service = ProviderDiscoveryService(mock_registry)
     provider = service.get_provider("nonexistent")
     assert provider is None
 
 
-def test_set_default_provider(mock_registry, mock_provider):
+def test_set_default_provider(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test setting default provider."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -93,7 +94,7 @@ def test_set_default_provider(mock_registry, mock_provider):
     assert default.get_metadata().name == "test_provider"
 
 
-def test_capability_matrix(mock_registry, mock_provider):
+def test_capability_matrix(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test capability matrix generation."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -104,7 +105,7 @@ def test_capability_matrix(mock_registry, mock_provider):
     assert matrix["test_provider"]["repository_summary"] == "advanced"
 
 
-def test_get_providers_for_capability(mock_registry, mock_provider):
+def test_get_providers_for_capability(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test getting providers for a capability."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -116,7 +117,7 @@ def test_get_providers_for_capability(mock_registry, mock_provider):
     assert providers["test_provider"] == "advanced"
 
 
-def test_get_provider_health(mock_registry, mock_provider):
+def test_get_provider_health(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test getting provider health."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -127,7 +128,7 @@ def test_get_provider_health(mock_registry, mock_provider):
     assert health.response_time_ms == 100.0
 
 
-def test_get_all_health_status(mock_registry, mock_provider):
+def test_get_all_health_status(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test getting all health status."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -137,7 +138,7 @@ def test_get_all_health_status(mock_registry, mock_provider):
     assert health_status["test_provider"].is_healthy is True
 
 
-def test_aggregate_health_empty(mock_registry):
+def test_aggregate_health_empty(mock_registry: ProviderRegistry) -> None:
     """Test aggregating health with no providers."""
     service = ProviderDiscoveryService(mock_registry)
     health = service.aggregate_health()
@@ -147,7 +148,7 @@ def test_aggregate_health_empty(mock_registry):
     assert health["health_percentage"] == 0.0
 
 
-def test_aggregate_health_with_providers(mock_registry, mock_provider):
+def test_aggregate_health_with_providers(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test aggregating health with providers."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -159,7 +160,7 @@ def test_aggregate_health_with_providers(mock_registry, mock_provider):
     assert health["avg_response_time_ms"] == 100.0
 
 
-def test_get_provider_versions(mock_registry, mock_provider):
+def test_get_provider_versions(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test getting provider versions."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -169,7 +170,7 @@ def test_get_provider_versions(mock_registry, mock_provider):
     assert versions["test_provider"] == "1.0.0"
 
 
-def test_select_best_provider_with_default(mock_registry, mock_provider):
+def test_select_best_provider_with_default(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test selecting best provider with default set."""
     mock_registry.register(mock_provider)
     mock_registry.set_default("test_provider")
@@ -180,7 +181,7 @@ def test_select_best_provider_with_default(mock_registry, mock_provider):
     assert best.get_metadata().name == "test_provider"
 
 
-def test_select_best_provider_no_default(mock_registry, mock_provider):
+def test_select_best_provider_no_default(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test selecting best provider without default."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -190,7 +191,7 @@ def test_select_best_provider_no_default(mock_registry, mock_provider):
     assert best.get_metadata().name == "test_provider"
 
 
-def test_select_best_provider_with_required_capabilities(mock_registry, mock_provider):
+def test_select_best_provider_with_required_capabilities(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test selecting best provider with required capabilities."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)

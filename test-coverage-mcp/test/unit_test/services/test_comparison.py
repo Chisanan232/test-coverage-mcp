@@ -1,5 +1,6 @@
 """Unit tests for CoverageComparisonService."""
 
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -24,7 +25,7 @@ def mock_registry() -> ProviderRegistry:
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -47,19 +48,19 @@ def mock_provider():
 
 
 @pytest.fixture
-def discovery_service(mock_registry, mock_provider):
+def discovery_service(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> ProviderDiscoveryService:
     """Create a discovery service with mock provider."""
     mock_registry.register(mock_provider)
     return ProviderDiscoveryService(mock_registry)
 
 
-def test_comparison_service_initialization(discovery_service):
+def test_comparison_service_initialization(discovery_service: ProviderDiscoveryService) -> None:
     """Test service initialization."""
     service = CoverageComparisonService(discovery_service)
     assert service._discovery is discovery_service
 
 
-def test_compare_refs(discovery_service):
+def test_compare_refs(discovery_service: ProviderDiscoveryService) -> None:
     """Test comparing refs."""
     service = CoverageComparisonService(discovery_service)
 
@@ -73,7 +74,7 @@ def test_compare_refs(discovery_service):
     assert "regression" in result
 
 
-def test_detect_regressions_no_regression(discovery_service):
+def test_detect_regressions_no_regression(discovery_service: ProviderDiscoveryService) -> None:
     """Test detecting no regression."""
     service = CoverageComparisonService(discovery_service)
 
@@ -83,7 +84,7 @@ def test_detect_regressions_no_regression(discovery_service):
     assert "severity" in result
 
 
-def test_detect_regressions_with_regression():
+def test_detect_regressions_with_regression() -> None:
     """Test detecting regression."""
     service = CoverageComparisonService()
 
@@ -94,7 +95,7 @@ def test_detect_regressions_with_regression():
     assert isinstance(result["severity"], str)
 
 
-def test_detect_improvements(discovery_service):
+def test_detect_improvements(discovery_service: ProviderDiscoveryService) -> None:
     """Test detecting improvements."""
     service = CoverageComparisonService(discovery_service)
 
@@ -104,7 +105,7 @@ def test_detect_improvements(discovery_service):
     assert "improvement_percentage" in result
 
 
-def test_compare_components(discovery_service):
+def test_compare_components(discovery_service: ProviderDiscoveryService) -> None:
     """Test comparing components."""
     service = CoverageComparisonService(discovery_service)
 
@@ -114,7 +115,7 @@ def test_compare_components(discovery_service):
     assert "components" in result
 
 
-def test_compare_flags(discovery_service):
+def test_compare_flags(discovery_service: ProviderDiscoveryService) -> None:
     """Test comparing flags."""
     service = CoverageComparisonService(discovery_service)
 
@@ -124,7 +125,7 @@ def test_compare_flags(discovery_service):
     assert "flags" in result
 
 
-def test_calculate_severity_none():
+def test_calculate_severity_none() -> None:
     """Test severity calculation for no regression."""
     service = CoverageComparisonService()
 

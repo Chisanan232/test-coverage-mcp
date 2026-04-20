@@ -1,5 +1,6 @@
 """Integration tests for service interactions."""
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -31,7 +32,7 @@ def mock_registry() -> ProviderRegistry:
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -60,7 +61,7 @@ def mock_provider():
 
 
 @pytest.fixture
-def discovery_service(mock_registry, mock_provider):
+def discovery_service(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> ProviderDiscoveryService:
     """Create a discovery service with mock provider."""
     mock_registry.register(mock_provider)
     return ProviderDiscoveryService(mock_registry)
@@ -69,7 +70,7 @@ def discovery_service(mock_registry, mock_provider):
 class TestDiscoveryAndComparisonIntegration:
     """Test integration between discovery and comparison services."""
 
-    def test_discovery_provides_providers_for_comparison(self, discovery_service):
+    def test_discovery_provides_providers_for_comparison(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test that discovery service provides providers for comparison."""
         comparison_service = CoverageComparisonService(discovery_service)
 
@@ -80,7 +81,7 @@ class TestDiscoveryAndComparisonIntegration:
         assert "head_ref" in result
         assert "delta_percentage" in result
 
-    def test_discovery_health_affects_comparison(self, discovery_service):
+    def test_discovery_health_affects_comparison(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test that provider health affects comparison results."""
         comparison_service = CoverageComparisonService(discovery_service)
 
@@ -96,7 +97,7 @@ class TestDiscoveryAndComparisonIntegration:
 class TestRiskAnalysisAndGapDiscoveryIntegration:
     """Test integration between risk analysis and gap discovery."""
 
-    def test_gap_discovery_feeds_risk_analysis(self):
+    def test_gap_discovery_feeds_risk_analysis(self) -> None:
         """Test that gap discovery results feed into risk analysis."""
         gap_service = CoverageGapDiscoveryService()
         risk_service = CoverageRiskAnalysisService()
@@ -124,7 +125,7 @@ class TestRiskAnalysisAndGapDiscoveryIntegration:
         # Risk level should be one of the valid levels
         assert pr_risk["risk_level"] in [RiskLevel.LOW.value, RiskLevel.MEDIUM.value, RiskLevel.HIGH.value, RiskLevel.CRITICAL.value]
 
-    def test_uncovered_regions_become_test_recommendations(self):
+    def test_uncovered_regions_become_test_recommendations(self) -> None:
         """Test that uncovered regions become test recommendations."""
         gap_service = CoverageGapDiscoveryService()
         recommendation_service = TestRecommendationService()

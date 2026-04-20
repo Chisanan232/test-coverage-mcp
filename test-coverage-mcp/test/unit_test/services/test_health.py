@@ -1,5 +1,6 @@
 """Unit tests for RepositoryHealthService."""
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -24,7 +25,7 @@ def mock_registry() -> ProviderRegistry:
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -47,19 +48,19 @@ def mock_provider():
 
 
 @pytest.fixture
-def discovery_service(mock_registry, mock_provider):
+def discovery_service(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> ProviderDiscoveryService:
     """Create a discovery service with mock provider."""
     mock_registry.register(mock_provider)
     return ProviderDiscoveryService(mock_registry)
 
 
-def test_health_service_initialization(discovery_service):
+def test_health_service_initialization(discovery_service: ProviderDiscoveryService) -> None:
     """Test service initialization."""
     service = RepositoryHealthService(discovery_service)
     assert service._discovery is discovery_service
 
 
-def test_aggregate_coverage_metrics(discovery_service):
+def test_aggregate_coverage_metrics(discovery_service: ProviderDiscoveryService) -> None:
     """Test aggregating coverage metrics."""
     service = RepositoryHealthService(discovery_service)
 
@@ -70,7 +71,7 @@ def test_aggregate_coverage_metrics(discovery_service):
     assert "coverage_range" in metrics
 
 
-def test_identify_risks_low(discovery_service):
+def test_identify_risks_low(discovery_service: ProviderDiscoveryService) -> None:
     """Test identifying low risk."""
     service = RepositoryHealthService(discovery_service)
 
@@ -80,7 +81,7 @@ def test_identify_risks_low(discovery_service):
     assert "recommendations" in risk
 
 
-def test_identify_risks_high(discovery_service):
+def test_identify_risks_high(discovery_service: ProviderDiscoveryService) -> None:
     """Test identifying high risk."""
     service = RepositoryHealthService(discovery_service)
 
@@ -89,7 +90,7 @@ def test_identify_risks_high(discovery_service):
     assert isinstance(risk["recommendations"], list)
 
 
-def test_get_next_actions(discovery_service):
+def test_get_next_actions(discovery_service: ProviderDiscoveryService) -> None:
     """Test getting next actions."""
     service = RepositoryHealthService(discovery_service)
 
@@ -97,7 +98,7 @@ def test_get_next_actions(discovery_service):
     assert isinstance(actions, list)
 
 
-def test_get_provider_fallback_chain(discovery_service):
+def test_get_provider_fallback_chain(discovery_service: ProviderDiscoveryService) -> None:
     """Test getting provider fallback chain."""
     service = RepositoryHealthService(discovery_service)
 
@@ -106,7 +107,7 @@ def test_get_provider_fallback_chain(discovery_service):
     assert len(chain) > 0
 
 
-def test_get_provider_fallback_chain_with_capabilities(discovery_service):
+def test_get_provider_fallback_chain_with_capabilities(discovery_service: ProviderDiscoveryService) -> None:
     """Test getting provider fallback chain with required capabilities."""
     service = RepositoryHealthService(discovery_service)
 
@@ -116,7 +117,7 @@ def test_get_provider_fallback_chain_with_capabilities(discovery_service):
     assert isinstance(chain, list)
 
 
-def test_generate_risk_recommendations():
+def test_generate_risk_recommendations() -> None:
     """Test generating risk recommendations."""
     service = RepositoryHealthService()
 
