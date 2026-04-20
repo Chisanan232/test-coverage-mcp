@@ -211,3 +211,123 @@ def test_select_best_provider_missing_capability(mock_registry, mock_provider):
         required_capabilities=[ProviderCapability.COVERAGE_TRENDS]
     )
     assert best is None
+
+
+def test_discover_and_register_providers(mock_registry):
+    """Test discovering and registering providers."""
+    service = ProviderDiscoveryService(mock_registry)
+
+    with patch("test_coverage_mcp.services.discovery.discover_providers") as mock_discover:
+        mock_provider = MagicMock()
+        mock_provider.get_metadata.return_value = ProviderMetadata(
+            name="discovered_provider",
+            version="1.0.0",
+            description="Discovered provider",
+            supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
+            support_levels={
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+            },
+            analysis_depths=[],
+        )
+        mock_discover.return_value = {"discovered_provider": mock_provider}
+
+        result = service.discover_and_register_providers()
+        assert "discovered_provider" in result
+
+
+def test_discover_and_register_providers_handles_duplicates(mock_registry, mock_provider):
+    """Test that duplicate provider registration is handled."""
+    mock_registry.register(mock_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    with patch("test_coverage_mcp.services.discovery.discover_providers") as mock_discover:
+        mock_discover.return_value = {"test_provider": mock_provider}
+
+        # Should not raise error for duplicate
+        result = service.discover_and_register_providers()
+        assert "test_provider" in result
+
+
+def test_get_provider_health_nonexistent(mock_registry):
+    """Test getting health of nonexistent provider."""
+    service = ProviderDiscoveryService(mock_registry)
+    health = service.get_provider_health("nonexistent")
+    assert health is None
+
+
+def test_aggregate_health_with_unhealthy_provider(mock_registry):
+    """Test aggregating health with unhealthy provider."""
+    unhealthy_provider = MagicMock()
+    unhealthy_provider.get_metadata.return_value = ProviderMetadata(
+        name="unhealthy_provider",
+        version="1.0.0",
+        description="Unhealthy provider",
+        supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
+        support_levels={
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+        },
+        analysis_depths=[],
+    )
+    unhealthy_provider.health_check.return_value = ProviderHealth(
+        is_healthy=False,
+        last_check="2024-01-01T00:00:00Z",
+        error_message="Connection timeout",
+        response_time_ms=5000.0,
+    )
+
+    mock_registry.register(unhealthy_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    health = service.aggregate_health()
+    assert health["total_providers"] == 1
+    assert health["healthy_providers"] == 0
+    assert health["health_percentage"] == 0.0
+
+
+def test_select_best_provider_by_response_time(mock_registry):
+    """Test selecting best provider by response time."""
+    fast_provider = MagicMock()
+    fast_provider.get_metadata.return_value = ProviderMetadata(
+        name="fast_provider",
+        version="1.0.0",
+        description="Fast provider",
+        supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
+        support_levels={
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+        },
+        analysis_depths=[],
+    )
+    fast_provider.health_check.return_value = ProviderHealth(
+        is_healthy=True,
+        last_check="2024-01-01T00:00:00Z",
+        error_message=None,
+        response_time_ms=50.0,
+    )
+
+    slow_provider = MagicMock()
+    slow_provider.get_metadata.return_value = ProviderMetadata(
+        name="slow_provider",
+        version="1.0.0",
+        description="Slow provider",
+        supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
+        support_levels={
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+        },
+        analysis_depths=[],
+    )
+    slow_provider.health_check.return_value = ProviderHealth(
+        is_healthy=True,
+        last_check="2024-01-01T00:00:00Z",
+        error_message=None,
+        response_time_ms=500.0,
+    )
+
+    mock_registry.register(fast_provider)
+    mock_registry.register(slow_provider)
+    service = ProviderDiscoveryService(mock_registry)
+
+    best = service.select_best_provider(
+        required_capabilities=[ProviderCapability.REPOSITORY_SUMMARY]
+    )
+    assert best is not None
+    assert best.get_metadata().name == "fast_provider"
