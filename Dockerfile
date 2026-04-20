@@ -15,14 +15,14 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY LICENSE README.md ./
 
-# Create virtual environment and install dependencies
-RUN uv venv /app/.venv && \
-    . /app/.venv/bin/activate && \
-    uv sync --locked
-
-# Copy all package directories (after dependencies are cached)
+# Copy all package directories (before installing to ensure they're available)
 COPY test-coverage-mcp/ ./test-coverage-mcp/
 COPY test-coverage-mcp-codecov/ ./test-coverage-mcp-codecov/
+
+# Create virtual environment and install dependencies
+RUN uv venv /app/.venv && \
+    /app/.venv/bin/pip install --upgrade pip && \
+    uv sync --locked
 
 # Final stage
 FROM python:3.13-slim
@@ -31,6 +31,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH" \
     SERVER_PORT=8000
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
