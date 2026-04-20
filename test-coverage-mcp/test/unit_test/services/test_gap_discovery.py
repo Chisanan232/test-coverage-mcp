@@ -350,3 +350,106 @@ class TestGenerateGapSummary:
         """Test gap summary with no changes."""
         summary = gap_service._generate_gap_summary(0, 0, 0.0)
         assert "No changes detected" in summary
+
+
+class TestEdgeCasesGapDiscovery:
+    """Tests for edge cases in gap discovery."""
+
+    def test_analyze_changed_code_with_none_data(self, gap_service):
+        """Test analyzing changed code with None data."""
+        result = gap_service.analyze_changed_code(
+            "owner", "repo", "main", "feature", None
+        )
+
+        assert result["total_changed_lines"] == 0
+        assert result["coverage_percentage"] == 0.0
+
+    def test_detect_uncovered_regions_large_file(self, gap_service):
+        """Test detecting uncovered regions in large file."""
+        coverage_data = {
+            "uncovered_lines": list(range(1, 1001)),  # 1000 uncovered lines
+        }
+
+        result = gap_service.detect_uncovered_regions("src/large_module.py", coverage_data)
+
+        assert len(result) == 1
+        assert result[0]["lines_count"] == 1000
+
+    def test_detect_uncovered_regions_sparse_coverage(self, gap_service):
+        """Test detecting uncovered regions with sparse coverage."""
+        coverage_data = {
+            "uncovered_lines": [1, 5, 10, 15, 20, 25, 30],
+        }
+
+        result = gap_service.detect_uncovered_regions("src/module.py", coverage_data)
+
+        assert len(result) == 7  # Each line is its own region
+
+    def test_analyze_changed_code_mixed_coverage(self, gap_service):
+        """Test analyzing with mixed coverage across files."""
+        file_coverage_data = {
+            "src/fully_covered.py": {
+                "changed_lines": 50,
+                "covered_changed_lines": 50,
+            },
+            "src/partially_covered.py": {
+                "changed_lines": 50,
+                "covered_changed_lines": 25,
+            },
+            "src/uncovered.py": {
+                "changed_lines": 50,
+                "covered_changed_lines": 0,
+            },
+        }
+
+        result = gap_service.analyze_changed_code(
+            "owner", "repo", "main", "feature", file_coverage_data
+        )
+
+        assert result["total_changed_lines"] == 150
+        assert result["covered_changed_lines"] == 75
+        assert result["coverage_percentage"] == 50.0
+        assert len(result["files_with_gaps"]) == 2
+
+    def test_group_uncovered_lines_unsorted(self, gap_service):
+        """Test grouping unsorted uncovered lines."""
+        uncovered_lines = [30, 10, 20, 11, 12, 31]
+
+        result = gap_service._group_uncovered_lines(uncovered_lines)
+
+        # Should handle unsorted input
+        assert len(result) >= 1
+
+    def test_infer_region_type_boundary_values(self, gap_service):
+        """Test region type inference at boundary values."""
+        # Test exact boundary values
+        assert gap_service._infer_region_type(50, {}) in [
+            "class",
+            "function",
+            "method",
+        ]
+        assert gap_service._infer_region_type(20, {}) in [
+            "function",
+            "method",
+            "block",
+        ]
+        assert gap_service._infer_region_type(10, {}) in [
+            "method",
+            "block",
+        ]
+
+    def test_analyze_changed_code_files_with_no_changes(self, gap_service):
+        """Test analyzing files with zero changed lines."""
+        file_coverage_data = {
+            "src/unchanged.py": {
+                "changed_lines": 0,
+                "covered_changed_lines": 0,
+            },
+        }
+
+        result = gap_service.analyze_changed_code(
+            "owner", "repo", "main", "feature", file_coverage_data
+        )
+
+        assert result["total_changed_lines"] == 0
+        assert len(result["files_with_gaps"]) == 0
