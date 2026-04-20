@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  test-coverage-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-coverage-mcp-dev
+    ports:
+      - "8000:8000"
+    environment:
+      TRANSPORT: sse
+      HOST: 0.0.0.0
+      PORT: 8000
+      LOG_LEVEL: debug
+      RELOAD: "true"
+      CODECOV_TOKEN: ${CODECOV_TOKEN:-}
+      COVERALLS_TOKEN: ${COVERALLS_TOKEN:-}
+    volumes:
+      - ./test-coverage-mcp/src:/app/test-coverage-mcp/src
+      - ./test-coverage-mcp-codecov/src:/app/test-coverage-mcp-codecov/src
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - test-coverage-mcp
+
+networks:
+  test-coverage-mcp:
+    driver: bridge
