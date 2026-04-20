@@ -1,0 +1,62 @@
+# Coverage.py configuration for test-coverage-mcp
+# This file manages all test coverage reporting settings
+
+[run]
+# Source code to measure coverage for
+source = src/test_coverage_mcp
+
+# Enable branch coverage measurement
+branch = True
+
+# Enable parallel coverage collection (for parallel test execution)
+parallel = True
+
+# Files/directories to omit from coverage
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */site-packages/*
+    */venv/*
+    */.venv/*
+
+[report]
+# Decimal places for coverage percentages
+precision = 2
+
+# Show lines that weren't covered
+show_missing = True
+
+# Don't skip files with 100% coverage
+skip_covered = False
+
+# Skip empty files
+skip_empty = True
+
+# Sort output by coverage percentage
+sort = Cover
+
+# Lines to exclude from coverage measurement
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+    @abc.abstractmethod
+    pass
+    except ImportError:
+    except ModuleNotFoundError:
+    @overload
+    @typing.overload
+
+[html]
+# Directory for HTML coverage reports
+directory = htmlcov
+title = Test Coverage Report - test-coverage-mcp
+
+[xml]
+# Output file for XML coverage reports
+output = coverage.xml
