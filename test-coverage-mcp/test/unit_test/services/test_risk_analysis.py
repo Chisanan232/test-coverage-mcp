@@ -232,7 +232,7 @@ class TestRiskFactorCalculation:
         assert factors["uncovered_changes_risk"] == 0.0
         assert factors["changed_code_coverage_risk"] == 0.0
 
-    def test_calculate_risk_factors_regression(self, risk_service):
+    def test_calculate_risk_factors_regression(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test risk factors with coverage regression."""
         factors = risk_service._calculate_risk_factors(
             coverage_delta=-10.0,
@@ -249,22 +249,22 @@ class TestRiskFactorCalculation:
 class TestRiskLevelDetermination:
     """Tests for risk level determination."""
 
-    def test_determine_risk_level_critical(self, risk_service):
+    def test_determine_risk_level_critical(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test critical risk level determination."""
         risk_level = risk_service._determine_risk_level(80.0)
         assert risk_level == RiskLevel.CRITICAL
 
-    def test_determine_risk_level_high(self, risk_service):
+    def test_determine_risk_level_high(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test high risk level determination."""
         risk_level = risk_service._determine_risk_level(60.0)
         assert risk_level == RiskLevel.HIGH
 
-    def test_determine_risk_level_medium(self, risk_service):
+    def test_determine_risk_level_medium(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test medium risk level determination."""
         risk_level = risk_service._determine_risk_level(30.0)
         assert risk_level == RiskLevel.MEDIUM
 
-    def test_determine_risk_level_low(self, risk_service):
+    def test_determine_risk_level_low(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test low risk level determination."""
         risk_level = risk_service._determine_risk_level(10.0)
         assert risk_level == RiskLevel.LOW
@@ -273,7 +273,7 @@ class TestRiskLevelDetermination:
 class TestEdgeCases:
     """Tests for edge cases in risk analysis."""
 
-    def test_score_pr_risk_with_zero_total_lines(self, risk_service):
+    def test_score_pr_risk_with_zero_total_lines(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with zero total changed lines."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,

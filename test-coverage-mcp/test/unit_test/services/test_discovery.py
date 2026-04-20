@@ -236,7 +236,7 @@ def test_discover_and_register_providers(mock_registry):
         assert "discovered_provider" in result
 
 
-def test_discover_and_register_providers_handles_duplicates(mock_registry, mock_provider):
+def test_discover_and_register_providers_handles_duplicates(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test that duplicate provider registration is handled."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -249,14 +249,14 @@ def test_discover_and_register_providers_handles_duplicates(mock_registry, mock_
         assert "test_provider" in result
 
 
-def test_get_provider_health_nonexistent(mock_registry):
+def test_get_provider_health_nonexistent(mock_registry: ProviderRegistry) -> None:
     """Test getting health of nonexistent provider."""
     service = ProviderDiscoveryService(mock_registry)
     health = service.get_provider_health("nonexistent")
     assert health is None
 
 
-def test_aggregate_health_with_unhealthy_provider(mock_registry):
+def test_aggregate_health_with_unhealthy_provider(mock_registry: ProviderRegistry) -> None:
     """Test aggregating health with unhealthy provider."""
     unhealthy_provider = MagicMock()
     unhealthy_provider.get_metadata.return_value = ProviderMetadata(

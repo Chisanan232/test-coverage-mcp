@@ -167,7 +167,7 @@ def test_compare_coverage_between_refs_missing_refs():
 
 
 @patch("test_coverage_mcp.mcp_server.tools.comparison.ProviderDiscoveryService")
-def test_compare_coverage_between_refs_provider_not_found(mock_discovery_class):
+def test_compare_coverage_between_refs_provider_not_found(mock_discovery_class: MagicMock) -> None:
     """Test compare_coverage_between_refs with nonexistent provider."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -182,7 +182,7 @@ def test_compare_coverage_between_refs_provider_not_found(mock_discovery_class):
 
 
 @patch("test_coverage_mcp.mcp_server.tools.commit_summary.ProviderDiscoveryService")
-def test_get_commit_coverage_summary_error_handling(mock_discovery_class):
+def test_get_commit_coverage_summary_error_handling(mock_discovery_class: MagicMock) -> None:
     """Test get_commit_coverage_summary error handling."""
     mock_discovery_class.side_effect = Exception("Discovery failed")
 
@@ -194,7 +194,7 @@ def test_get_commit_coverage_summary_error_handling(mock_discovery_class):
 
 @patch("test_coverage_mcp.mcp_server.tools.comparison.CoverageComparisonService")
 @patch("test_coverage_mcp.mcp_server.tools.comparison.ProviderDiscoveryService")
-def test_compare_coverage_between_refs_error_handling(mock_discovery_class, mock_comparison_class):
+def test_compare_coverage_between_refs_error_handling(mock_discovery_class: MagicMock, mock_comparison_class: MagicMock) -> None:
     """Test compare_coverage_between_refs error handling."""
     mock_discovery_class.side_effect = Exception("Comparison failed")
 

@@ -107,7 +107,7 @@ def test_list_coverage_providers_basic(mock_discovery_class: MagicMock) -> None:
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_list_coverage_providers_with_capabilities(mock_discovery_class):
+def test_list_coverage_providers_with_capabilities(mock_discovery_class: MagicMock) -> None:
     """Test list_coverage_providers with capabilities."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -133,7 +133,7 @@ def test_list_coverage_providers_with_capabilities(mock_discovery_class):
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_describe_coverage_provider_success(mock_discovery_class):
+def test_describe_coverage_provider_success(mock_discovery_class: MagicMock) -> None:
     """Test describe_coverage_provider with valid provider."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
