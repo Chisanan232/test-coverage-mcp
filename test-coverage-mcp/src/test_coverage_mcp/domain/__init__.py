@@ -14,10 +14,10 @@ from test_coverage_mcp.domain.enums import (
 from test_coverage_mcp.domain.models import (
     ConfigDiagnosis,
     CoverageDelta,
+    CoverageTestRecommendation,
     ExecutionMetadata,
     FileCoverage,
     RepositoryCoverageSummary,
-    TestRecommendation,
     ToolResponseBase,
     UncoveredRegion,
 )
@@ -39,6 +39,6 @@ __all__ = [
     "FileCoverage",
     "CoverageDelta",
     "UncoveredRegion",
-    "TestRecommendation",
+    "CoverageTestRecommendation",
     "ConfigDiagnosis",
 ]
