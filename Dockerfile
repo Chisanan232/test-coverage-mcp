@@ -11,18 +11,18 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Copy workspace configuration
+# Copy only workspace configuration files first (for better layer caching)
 COPY pyproject.toml uv.lock ./
 COPY LICENSE README.md ./
 
-# Copy all package directories
-COPY test-coverage-mcp/ ./test-coverage-mcp/
-COPY test-coverage-mcp-codecov/ ./test-coverage-mcp-codecov/
-
-# Create virtual environment and install all workspace packages
+# Create virtual environment and install dependencies
 RUN uv venv /app/.venv && \
     . /app/.venv/bin/activate && \
     uv sync --locked
+
+# Copy all package directories (after dependencies are cached)
+COPY test-coverage-mcp/ ./test-coverage-mcp/
+COPY test-coverage-mcp-codecov/ ./test-coverage-mcp-codecov/
 
 # Final stage
 FROM python:3.13-slim
