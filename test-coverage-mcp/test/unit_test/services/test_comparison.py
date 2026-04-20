@@ -174,3 +174,89 @@ def test_extract_coverage_with_values():
     }
     coverage = service._extract_coverage(results, "base_coverage")
     assert coverage == 82.5
+
+
+def test_compare_refs_calculates_delta(discovery_service):
+    """Test that compare_refs calculates delta correctly."""
+    service = CoverageComparisonService(discovery_service)
+
+    result = service.compare_refs("owner", "repo", "main", "feature")
+    assert "delta_percentage" in result
+    assert isinstance(result["delta_percentage"], (int, float))
+
+
+def test_compare_refs_identifies_improvement(discovery_service):
+    """Test that compare_refs identifies improvements."""
+    service = CoverageComparisonService(discovery_service)
+
+    result = service.compare_refs("owner", "repo", "main", "feature")
+    if result["head_coverage"] > result["base_coverage"]:
+        assert result["improved"] is True
+        assert result["regression"] is False
+
+
+def test_compare_refs_identifies_regression(discovery_service):
+    """Test that compare_refs identifies regressions."""
+    service = CoverageComparisonService(discovery_service)
+
+    result = service.compare_refs("owner", "repo", "main", "feature")
+    if result["head_coverage"] < result["base_coverage"]:
+        assert result["improved"] is False
+        assert result["regression"] is True
+
+
+def test_detect_regressions_with_high_threshold(discovery_service):
+    """Test detecting regressions with high threshold."""
+    service = CoverageComparisonService(discovery_service)
+
+    result = service.detect_regressions(
+        "owner", "repo", "main", "feature", threshold=10.0
+    )
+    assert "has_regression" in result
+    assert isinstance(result["has_regression"], bool)
+
+
+def test_detect_regressions_with_low_threshold(discovery_service):
+    """Test detecting regressions with low threshold."""
+    service = CoverageComparisonService(discovery_service)
+
+    result = service.detect_regressions(
+        "owner", "repo", "main", "feature", threshold=0.1
+    )
+    assert "has_regression" in result
+    assert isinstance(result["has_regression"], bool)
+
+
+def test_extract_coverage_with_invalid_values():
+    """Test extracting coverage with invalid values."""
+    service = CoverageComparisonService()
+
+    results = {
+        "provider1": {"base_coverage": "invalid"},
+        "provider2": {"base_coverage": 85.0},
+    }
+    coverage = service._extract_coverage(results, "base_coverage")
+    assert coverage == 85.0
+
+
+def test_extract_coverage_with_missing_key():
+    """Test extracting coverage with missing key."""
+    service = CoverageComparisonService()
+
+    results = {
+        "provider1": {"other_key": 80.0},
+        "provider2": {"base_coverage": 85.0},
+    }
+    coverage = service._extract_coverage(results, "base_coverage")
+    assert coverage == 85.0
+
+
+def test_compare_refs_with_no_providers(mock_registry):
+    """Test comparing refs with no providers."""
+    discovery = ProviderDiscoveryService(mock_registry)
+    service = CoverageComparisonService(discovery)
+
+    result = service.compare_refs("owner", "repo", "main", "feature")
+    assert result["base_coverage"] == 0.0
+    assert result["head_coverage"] == 0.0
+    assert result["delta_percentage"] == 0.0
