@@ -20,7 +20,7 @@ from test_coverage_mcp.services.excludable_code import ExcludableCodeCandidateSe
 from test_coverage_mcp.services.gap_discovery import CoverageGapDiscoveryService
 from test_coverage_mcp.services.health import RepositoryHealthService
 from test_coverage_mcp.services.risk_analysis import CoverageRiskAnalysisService
-from test_coverage_mcp.services.test_recommendation import TestRecommendationService
+from test_coverage_mcp.services.test_recommendation import RecommendationService
 
 
 @pytest.fixture
@@ -128,7 +128,7 @@ class TestRiskAnalysisAndGapDiscoveryIntegration:
     def test_uncovered_regions_become_test_recommendations(self) -> None:
         """Test that uncovered regions become test recommendations."""
         gap_service = CoverageGapDiscoveryService()
-        recommendation_service = TestRecommendationService()
+        recommendation_service = RecommendationService()
 
         # Detect uncovered regions
         coverage_data = {
@@ -227,7 +227,7 @@ class TestFullWorkflowIntegration:
         comparison_service = CoverageComparisonService(discovery_service)
         gap_service = CoverageGapDiscoveryService()
         risk_service = CoverageRiskAnalysisService()
-        recommendation_service = TestRecommendationService()
+        recommendation_service = RecommendationService()
 
         # Step 1: Compare coverage
         comparison = comparison_service.compare_refs(

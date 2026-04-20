@@ -22,7 +22,7 @@ from test_coverage_mcp.services.excludable_code import ExcludableCodeCandidateSe
 from test_coverage_mcp.services.gap_discovery import CoverageGapDiscoveryService
 from test_coverage_mcp.services.health import RepositoryHealthService
 from test_coverage_mcp.services.risk_analysis import CoverageRiskAnalysisService
-from test_coverage_mcp.services.test_recommendation import TestRecommendationService
+from test_coverage_mcp.services.test_recommendation import RecommendationService
 
 
 @pytest.fixture
@@ -202,7 +202,7 @@ class TestServiceDataFlow:
     def test_gap_discovery_to_test_recommendation(self) -> None:
         """Test data flow from gap discovery to test recommendation."""
         gap_service = CoverageGapDiscoveryService()
-        recommendation_service = TestRecommendationService()
+        recommendation_service = RecommendationService()
 
         # Discover gaps
         coverage_data = {
@@ -312,7 +312,7 @@ class TestServiceChaining:
         )
 
         # Step 4: Get recommendations
-        recommendation_service = TestRecommendationService()
+        recommendation_service = RecommendationService()
         uncovered_regions = [
             {
                 "file_path": "src/main.py",
