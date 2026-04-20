@@ -290,6 +290,41 @@ const config: Config = {
         content: 'https://chisanan232.github.io/test-coverage-mcp/img/python_logo_icon.png',
       },
     },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:title',
+        content: 'test-coverage-mcp - Provider-Extensible MCP Server for Test Coverage Intelligence',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:description',
+        content: '🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:image',
+        content: 'https://chisanan232.github.io/test-coverage-mcp/img/python_logo_icon.png',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:creator',
+        content: '@Chisanan232',
+      },
+    },
   ],
 };
 
