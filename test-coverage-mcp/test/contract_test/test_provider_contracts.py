@@ -328,7 +328,7 @@ class TestProviderInterfaceContract:
             description="Test",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )

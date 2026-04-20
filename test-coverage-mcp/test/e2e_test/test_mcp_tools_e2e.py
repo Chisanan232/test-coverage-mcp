@@ -142,8 +142,8 @@ class TestCoverageProvidersToolE2E:
 
         result = list_coverage_providers(include_capabilities=False, include_health=False)
 
-        assert isinstance(result, str)
-        assert "test_provider" in result
+        assert isinstance(result, dict)
+        assert "providers" in result
 
     @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
     def test_describe_coverage_provider_tool(self, mock_discovery_class):
@@ -176,8 +176,8 @@ class TestCoverageProvidersToolE2E:
 
         result = describe_coverage_provider("test_provider")
 
-        assert isinstance(result, str)
-        assert "test_provider" in result
+        assert isinstance(result, dict)
+        assert "name" in result
 
 
 class TestRepositoryHealthToolE2E:
@@ -205,10 +205,13 @@ class TestRepositoryHealthToolE2E:
             "recommendations": ["Maintain current coverage level"],
         }
 
-        result = get_repository_test_health("owner", "repo", threshold=80.0)
+        result = get_repository_test_health(
+            repo_slug="owner/repo",
+            provider="test_provider",
+            threshold=80.0,
+        )
 
-        assert isinstance(result, str)
-        assert "owner" in result or "repo" in result
+        assert isinstance(result, dict)
 
 
 class TestPRAnalysisToolsE2E:
@@ -245,7 +248,8 @@ class TestLowCoverageFilesToolE2E:
         result = find_low_coverage_files(
             repo_slug="owner/repo",
             provider="test_provider",
-            risk_threshold=50.0,
+            ref="main",
+            threshold=50.0,
         )
 
         # Should return a dict with results
@@ -303,6 +307,7 @@ class TestExcludableCodeToolE2E:
         result = identify_excludable_code_candidates(
             repo_slug="owner/repo",
             provider="test_provider",
+            ref="main",
         )
 
         # Should return a dict with results
