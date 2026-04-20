@@ -39,6 +39,28 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: '🏗️ Architecture',
+      items: [
+        {
+          type: 'doc',
+          id: 'architecture/overview',
+          label: '📐 System Architecture',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🚀 Deployment',
+      items: [
+        {
+          type: 'doc',
+          id: 'deployment/overview',
+          label: '📦 Deployment Overview',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: '🧑‍💻 API References',
       items: [
         {
