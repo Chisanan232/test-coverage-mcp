@@ -20,7 +20,7 @@ export default function Feedback(): JSX.Element {
       const issueBody = `## Documentation Feedback\n\n${feedback}\n\n---\n_Submitted from documentation site_`;
       const url = `https://github.com/Chisanan232/test-coverage-mcp/issues/new?title=Documentation%20Feedback&body=${encodeURIComponent(issueBody)}`;
       window.open(url, '_blank');
-      
+
       setFeedback('');
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
@@ -33,7 +33,7 @@ export default function Feedback(): JSX.Element {
     <div className={styles.feedbackContainer}>
       <h3>📝 Documentation Feedback</h3>
       <p>Help us improve the documentation</p>
-      
+
       <form onSubmit={handleSubmit}>
         <textarea
           value={feedback}
@@ -42,10 +42,10 @@ export default function Feedback(): JSX.Element {
           rows={4}
           className={styles.textarea}
         />
-        
+
         {error && <div className={styles.error}>{error}</div>}
         {submitted && <div className={styles.success}>✅ Thank you for your feedback!</div>}
-        
+
         <button type="submit" className={styles.submitButton}>
           Submit Feedback
         </button>

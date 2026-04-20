@@ -14,7 +14,7 @@ find docs/contents -name "*.md" -type f | while read file; do
   grep -o '\[.*\](.*\.md)' "$file" | while read link; do
     # Extract the path
     path=$(echo "$link" | sed 's/.*(\(.*\.md\)).*/\1/')
-    
+
     # Check if the file exists
     if [ ! -f "docs/contents/$path" ]; then
       echo "❌ Broken link in $file: $path"
