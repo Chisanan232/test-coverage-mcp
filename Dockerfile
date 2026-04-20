@@ -20,9 +20,7 @@ COPY test-coverage-mcp/ ./test-coverage-mcp/
 COPY test-coverage-mcp-codecov/ ./test-coverage-mcp-codecov/
 
 # Create virtual environment and install dependencies
-RUN uv venv /app/.venv && \
-    /app/.venv/bin/pip install --upgrade pip && \
-    uv sync --locked
+RUN uv sync --locked
 
 # Final stage
 FROM python:3.13-slim
