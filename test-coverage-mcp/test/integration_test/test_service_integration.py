@@ -77,11 +77,11 @@ class TestServiceIntegration:
         # List providers
         providers = discovery_service.list_providers()
         assert "test_provider" in providers
-        
+
         # Get specific provider
         provider = discovery_service.get_provider("test_provider")
         assert provider is not None
-        
+
         # Get provider metadata
         metadata = provider.get_metadata()
         assert metadata.name == "test_provider"
@@ -92,11 +92,11 @@ class TestServiceIntegration:
         health = discovery_service.get_provider_health("test_provider")
         assert health is not None
         assert health.is_healthy is True
-        
+
         # Get all health status
         all_health = discovery_service.get_all_health_status()
         assert "test_provider" in all_health
-        
+
         # Aggregate health
         aggregated = discovery_service.aggregate_health()
         assert aggregated["total_providers"] == 1
@@ -105,18 +105,18 @@ class TestServiceIntegration:
     def test_comparison_service_workflow(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test complete comparison service workflow."""
         comparison = CoverageComparisonService(discovery_service)
-        
+
         # Compare refs
         result = comparison.compare_refs("owner", "repo", "main", "feature")
         assert "base_ref" in result
         assert "head_ref" in result
         assert "delta_percentage" in result
-        
+
         # Detect regressions
         regression = comparison.detect_regressions("owner", "repo", "main", "feature")
         assert "has_regression" in regression
         assert "severity" in regression
-        
+
         # Detect improvements
         improvement = comparison.detect_improvements("owner", "repo", "main", "feature")
         assert "has_improvement" in improvement
@@ -124,7 +124,7 @@ class TestServiceIntegration:
     def test_gap_discovery_service_workflow(self) -> None:
         """Test complete gap discovery service workflow."""
         gap_service = CoverageGapDiscoveryService()
-        
+
         # Analyze changed code
         file_coverage = {
             "src/main.py": {
@@ -137,7 +137,7 @@ class TestServiceIntegration:
         )
         assert analysis["total_changed_lines"] == 50
         assert analysis["coverage_percentage"] == 50.0
-        
+
         # Detect uncovered regions
         coverage_data = {
             "uncovered_lines": [10, 11, 12, 20, 21, 22],
@@ -148,7 +148,7 @@ class TestServiceIntegration:
     def test_risk_analysis_service_workflow(self) -> None:
         """Test complete risk analysis service workflow."""
         risk_service = CoverageRiskAnalysisService()
-        
+
         # Score PR risk
         pr_risk = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -159,7 +159,7 @@ class TestServiceIntegration:
         )
         assert "risk_level" in pr_risk
         assert "risk_score" in pr_risk
-        
+
         # Identify high-risk files
         file_coverage = {
             "src/main.py": {"coverage": 30.0, "uncovered_lines": 70, "total_lines": 100},
@@ -176,7 +176,7 @@ class TestServiceDataFlow:
         """Test data flow from gap discovery to risk analysis."""
         gap_service = CoverageGapDiscoveryService()
         risk_service = CoverageRiskAnalysisService()
-        
+
         # Discover gaps
         file_coverage = {
             "src/main.py": {
@@ -187,7 +187,7 @@ class TestServiceDataFlow:
         gaps = gap_service.analyze_changed_code(
             "owner", "repo", "main", "feature", file_coverage
         )
-        
+
         # Use gap data for risk analysis
         pr_risk = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -196,24 +196,24 @@ class TestServiceDataFlow:
             uncovered_changed_lines=gaps["uncovered_changed_lines"],
             total_changed_lines=gaps["total_changed_lines"],
         )
-        
+
         assert pr_risk["risk_score"] > 0
 
     def test_gap_discovery_to_test_recommendation(self) -> None:
         """Test data flow from gap discovery to test recommendation."""
         gap_service = CoverageGapDiscoveryService()
         recommendation_service = TestRecommendationService()
-        
+
         # Discover gaps
         coverage_data = {
             "uncovered_lines": [10, 11, 12, 20, 21, 22],
         }
         regions = gap_service.detect_uncovered_regions("src/module.py", coverage_data)
-        
+
         # Convert to test recommendations
         gaps = recommendation_service.identify_test_gaps(regions)
         assert len(gaps) > 0
-        
+
         # Rank by priority
         ranked = recommendation_service.rank_by_priority(gaps)
         assert len(ranked) > 0
@@ -222,18 +222,18 @@ class TestServiceDataFlow:
         """Test data flow from config diagnosis to excludable code."""
         config_service = CoverageConfigDiagnosisService()
         excludable_service = ExcludableCodeCandidateService()
-        
+
         # Diagnose config
         file_coverage = {
             "src/main.py": {"coverage": 80},
             "src/generated.pb2.py": {"coverage": 0},
         }
         config = config_service.retrieve_config("owner", "repo")
-        
+
         # Suggest exclusions
         suggestions = config_service.suggest_missing_exclusions(config, file_coverage)
         assert isinstance(suggestions, list)
-        
+
         # Find excludable candidates - test with valid file structure
         files = [
             {
@@ -254,7 +254,7 @@ class TestServiceErrorHandling:
         """Test discovery service with failing provider."""
         # Don't register a failing provider - just test with empty registry
         discovery = ProviderDiscoveryService(mock_registry)
-        
+
         # Should handle gracefully
         providers = discovery.list_providers()
         assert isinstance(providers, dict)
@@ -263,7 +263,7 @@ class TestServiceErrorHandling:
         """Test comparison service with no providers."""
         discovery = ProviderDiscoveryService(mock_registry)
         comparison = CoverageComparisonService(discovery)
-        
+
         # Should return default values
         result = comparison.compare_refs("owner", "repo", "main", "feature")
         assert result["base_coverage"] == 0.0
@@ -274,7 +274,7 @@ class TestServiceErrorHandling:
         # Test with empty registry (no providers)
         discovery = ProviderDiscoveryService(mock_registry)
         health = RepositoryHealthService(discovery)
-        
+
         # Should handle gracefully
         metrics = health.aggregate_coverage_metrics("owner", "repo")
         assert isinstance(metrics, dict)
@@ -288,7 +288,7 @@ class TestServiceChaining:
         # Step 1: Compare coverage
         comparison = CoverageComparisonService(discovery_service)
         comparison_result = comparison.compare_refs("owner", "repo", "main", "feature")
-        
+
         # Step 2: Analyze gaps
         gap_service = CoverageGapDiscoveryService()
         file_coverage = {
@@ -300,7 +300,7 @@ class TestServiceChaining:
         gap_result = gap_service.analyze_changed_code(
             "owner", "repo", "main", "feature", file_coverage
         )
-        
+
         # Step 3: Score risk
         risk_service = CoverageRiskAnalysisService()
         pr_risk = risk_service.score_pr_risk(
@@ -310,7 +310,7 @@ class TestServiceChaining:
             uncovered_changed_lines=gap_result["uncovered_changed_lines"],
             total_changed_lines=gap_result["total_changed_lines"],
         )
-        
+
         # Step 4: Get recommendations
         recommendation_service = TestRecommendationService()
         uncovered_regions = [
@@ -324,7 +324,7 @@ class TestServiceChaining:
             }
         ]
         recommendations = recommendation_service.recommend_tests(uncovered_regions)
-        
+
         assert len(recommendations) > 0
 
     def test_health_analysis_chain(self, discovery_service: ProviderDiscoveryService) -> None:
@@ -332,18 +332,18 @@ class TestServiceChaining:
         # Step 1: Aggregate metrics
         health_service = RepositoryHealthService(discovery_service)
         metrics = health_service.aggregate_coverage_metrics("owner", "repo")
-        
+
         # Step 2: Identify risks
         risk = health_service.identify_risks("owner", "repo", threshold=80.0)
-        
+
         # Step 3: Diagnose config
         config_service = CoverageConfigDiagnosisService()
         file_coverage = {
             "src/main.py": {"coverage": 80},
         }
         diagnosis = config_service.diagnose_config("owner", "repo", file_coverage, 85.0)
-        
+
         # Step 4: Get next actions
         actions = health_service.get_next_actions("owner", "repo")
-        
+
         assert isinstance(actions, list)
