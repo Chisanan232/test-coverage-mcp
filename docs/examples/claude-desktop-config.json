@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "test-coverage-mcp": {
+      "command": "test-coverage-mcp",
+      "args": ["serve", "--transport", "stdio"],
+      "env": {
+        "CODECOV_TOKEN": "your-codecov-token-here",
+        "COVERALLS_TOKEN": "your-coveralls-token-here",
+        "LOG_LEVEL": "info"
+      }
+    }
+  }
+}
