@@ -142,9 +142,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/python_logo_icon.png',
     navbar: {
-      title: 'UV-Template',
+      title: 'test-coverage-mcp',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'test-coverage-mcp Logo',
         src: 'img/python_logo_icon.png',
       },
       items: [
