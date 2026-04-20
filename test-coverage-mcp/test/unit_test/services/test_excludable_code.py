@@ -1,5 +1,7 @@
 """Unit tests for ExcludableCodeCandidateService with edge cases."""
 
+from typing import Any
+
 import pytest
 
 from test_coverage_mcp.services.excludable_code import ExcludableCodeCandidateService
@@ -8,7 +10,7 @@ from test_coverage_mcp.services.excludable_code import ExcludableCodeCandidateSe
 class TestExcludableCodeService:
     """Tests for ExcludableCodeCandidateService."""
 
-    def test_detect_generated_code_with_marker(self):
+    def test_detect_generated_code_with_marker(self) -> None:
         """Test detecting generated code with explicit marker."""
         service = ExcludableCodeCandidateService()
         content = "# AUTO-GENERATED\nclass GeneratedClass:\n    pass"
@@ -18,7 +20,7 @@ class TestExcludableCodeService:
         assert result["is_generated"] is True
         assert result["confidence"] > 0.5
 
-    def test_detect_generated_code_no_marker(self):
+    def test_detect_generated_code_no_marker(self) -> None:
         """Test detecting generated code without marker."""
         service = ExcludableCodeCandidateService()
         content = "class MyClass:\n    def method(self):\n        pass"
@@ -28,7 +30,7 @@ class TestExcludableCodeService:
         assert result["is_generated"] is False
         assert result["confidence"] <= 0.5
 
-    def test_detect_generated_code_by_extension(self):
+    def test_detect_generated_code_by_extension(self) -> None:
         """Test detecting generated code by file extension."""
         service = ExcludableCodeCandidateService()
         content = "some content"
@@ -40,7 +42,7 @@ class TestExcludableCodeService:
         # is_generated is True only if confidence > 0.5
         assert result["is_generated"] is (result["confidence"] > 0.5)
 
-    def test_detect_vendor_code_node_modules(self):
+    def test_detect_vendor_code_node_modules(self) -> None:
         """Test detecting vendor code in node_modules."""
         service = ExcludableCodeCandidateService()
 
@@ -50,7 +52,7 @@ class TestExcludableCodeService:
         assert result["confidence"] > 0.0
         assert result["is_vendor"] is (result["confidence"] > 0.5)
 
-    def test_detect_vendor_code_venv(self):
+    def test_detect_vendor_code_venv(self) -> None:
         """Test detecting vendor code in venv."""
         service = ExcludableCodeCandidateService()
 
@@ -58,7 +60,7 @@ class TestExcludableCodeService:
 
         assert result["is_vendor"] is True
 
-    def test_detect_vendor_code_not_vendor(self):
+    def test_detect_vendor_code_not_vendor(self) -> None:
         """Test detecting non-vendor code."""
         service = ExcludableCodeCandidateService()
 
@@ -66,7 +68,7 @@ class TestExcludableCodeService:
 
         assert result["is_vendor"] is False
 
-    def test_detect_migration_path_deprecated(self):
+    def test_detect_migration_path_deprecated(self) -> None:
         """Test detecting deprecated code."""
         service = ExcludableCodeCandidateService()
         content = "# DEPRECATED\ndef old_function():\n    pass"
@@ -77,7 +79,7 @@ class TestExcludableCodeService:
         assert result["confidence"] > 0.0
         assert result["is_migration"] is (result["confidence"] > 0.5)
 
-    def test_detect_migration_path_legacy(self):
+    def test_detect_migration_path_legacy(self) -> None:
         """Test detecting legacy code."""
         service = ExcludableCodeCandidateService()
         content = "# LEGACY implementation\nclass OldClass:\n    pass"
@@ -87,7 +89,7 @@ class TestExcludableCodeService:
         # Should detect migration code
         assert result["confidence"] > 0.0
 
-    def test_detect_migration_path_no_markers(self):
+    def test_detect_migration_path_no_markers(self) -> None:
         """Test detecting non-migration code."""
         service = ExcludableCodeCandidateService()
         content = "class NewClass:\n    pass"
@@ -96,7 +98,7 @@ class TestExcludableCodeService:
 
         assert result["is_migration"] is False
 
-    def test_analyze_zero_hit_signals_no_hits(self):
+    def test_analyze_zero_hit_signals_no_hits(self) -> None:
         """Test analyzing zero-hit signals."""
         service = ExcludableCodeCandidateService()
         coverage_data = {
@@ -111,7 +113,7 @@ class TestExcludableCodeService:
         assert result["has_zero_hit_signals"] is True
         assert result["confidence"] > 0.5
 
-    def test_analyze_zero_hit_signals_with_hits(self):
+    def test_analyze_zero_hit_signals_with_hits(self) -> None:
         """Test analyzing with coverage hits."""
         service = ExcludableCodeCandidateService()
         coverage_data = {
@@ -125,7 +127,7 @@ class TestExcludableCodeService:
 
         assert result["has_zero_hit_signals"] is False
 
-    def test_analyze_zero_hit_signals_unreachable(self):
+    def test_analyze_zero_hit_signals_unreachable(self) -> None:
         """Test analyzing unreachable code."""
         service = ExcludableCodeCandidateService()
         coverage_data = {
@@ -139,7 +141,7 @@ class TestExcludableCodeService:
 
         assert result["has_zero_hit_signals"] is True
 
-    def test_score_excludability_generated(self):
+    def test_score_excludability_generated(self) -> None:
         """Test scoring excludability for generated code."""
         service = ExcludableCodeCandidateService()
         content = "# AUTO-GENERATED\nclass Generated:\n    pass"
@@ -150,7 +152,7 @@ class TestExcludableCodeService:
         # Should have high excludability score for generated code
         assert result["excludability_score"] >= 0.3
 
-    def test_score_excludability_normal_code(self):
+    def test_score_excludability_normal_code(self) -> None:
         """Test scoring excludability for normal code."""
         service = ExcludableCodeCandidateService()
         content = "def my_function():\n    return 42"
@@ -161,7 +163,7 @@ class TestExcludableCodeService:
         assert result["should_exclude"] is False
         assert result["excludability_score"] < 0.5
 
-    def test_find_excludable_candidates(self):
+    def test_find_excludable_candidates(self) -> None:
         """Test finding excludable candidates."""
         service = ExcludableCodeCandidateService()
         files = [
@@ -184,7 +186,7 @@ class TestExcludableCodeService:
         # Generated file should be first
         assert "pb2" in result[0]["file_path"]
 
-    def test_find_excludable_candidates_min_confidence(self):
+    def test_find_excludable_candidates_min_confidence(self) -> None:
         """Test finding candidates with minimum confidence."""
         service = ExcludableCodeCandidateService()
         files = [
@@ -200,7 +202,7 @@ class TestExcludableCodeService:
         # Should be empty with high confidence threshold
         assert len(result) == 0
 
-    def test_validate_candidate_safe(self):
+    def test_validate_candidate_safe(self) -> None:
         """Test validating safe-to-exclude candidate."""
         service = ExcludableCodeCandidateService()
         content = "# AUTO-GENERATED\nclass Generated:\n    pass"
@@ -210,7 +212,7 @@ class TestExcludableCodeService:
         assert result["is_safe_to_exclude"] is True
         assert len(result["warnings"]) == 0
 
-    def test_validate_candidate_has_public_api(self):
+    def test_validate_candidate_has_public_api(self) -> None:
         """Test validating candidate with public API."""
         service = ExcludableCodeCandidateService()
         content = "__all__ = ['MyClass']\nclass MyClass:\n    pass"
@@ -220,7 +222,7 @@ class TestExcludableCodeService:
         assert result["is_safe_to_exclude"] is False
         assert len(result["warnings"]) > 0
 
-    def test_validate_candidate_has_side_effects(self):
+    def test_validate_candidate_has_side_effects(self) -> None:
         """Test validating candidate with side effects."""
         service = ExcludableCodeCandidateService()
         content = "import sys\nsys.path.insert(0, '/custom/path')"
@@ -234,7 +236,7 @@ class TestExcludableCodeService:
 class TestExcludableCodeEdgeCases:
     """Edge case tests for excludable code detection."""
 
-    def test_detect_generated_multiple_markers(self):
+    def test_detect_generated_multiple_markers(self) -> None:
         """Test detecting generated code with multiple markers."""
         service = ExcludableCodeCandidateService()
         content = "# AUTO-GENERATED\n# DO NOT EDIT\nclass Generated:\n    pass"
@@ -244,7 +246,7 @@ class TestExcludableCodeEdgeCases:
         assert result["is_generated"] is True
         assert result["confidence"] > 0.5
 
-    def test_detect_vendor_third_party(self):
+    def test_detect_vendor_third_party(self) -> None:
         """Test detecting third-party code."""
         service = ExcludableCodeCandidateService()
 
@@ -253,7 +255,7 @@ class TestExcludableCodeEdgeCases:
         # Should detect vendor code
         assert result["confidence"] > 0.0
 
-    def test_detect_migration_version_specific(self):
+    def test_detect_migration_version_specific(self) -> None:
         """Test detecting version-specific migration code."""
         service = ExcludableCodeCandidateService()
         content = "# v1 implementation"
@@ -263,7 +265,7 @@ class TestExcludableCodeEdgeCases:
         # Should detect migration code
         assert result["confidence"] > 0.0
 
-    def test_score_excludability_mixed_signals(self):
+    def test_score_excludability_mixed_signals(self) -> None:
         """Test scoring with mixed signals."""
         service = ExcludableCodeCandidateService()
         content = "# AUTO-GENERATED\ndef __all__():\n    pass"
@@ -274,7 +276,7 @@ class TestExcludableCodeEdgeCases:
         # Generated signal should dominate
         assert result["excludability_score"] >= 0.3
 
-    def test_validate_candidate_imports(self):
+    def test_validate_candidate_imports(self) -> None:
         """Test validating candidate with imports."""
         service = ExcludableCodeCandidateService()
         content = "from module import something\nimport sys"
@@ -283,7 +285,7 @@ class TestExcludableCodeEdgeCases:
 
         assert result["is_safe_to_exclude"] is False
 
-    def test_validate_candidate_monkey_patch(self):
+    def test_validate_candidate_monkey_patch(self) -> None:
         """Test validating candidate with monkey patching."""
         service = ExcludableCodeCandidateService()
         content = "# monkey patch\nmodule.function = new_function"
@@ -292,7 +294,7 @@ class TestExcludableCodeEdgeCases:
 
         assert result["is_safe_to_exclude"] is False
 
-    def test_find_candidates_empty_list(self):
+    def test_find_candidates_empty_list(self) -> None:
         """Test finding candidates from empty list."""
         service = ExcludableCodeCandidateService()
 
@@ -301,7 +303,7 @@ class TestExcludableCodeEdgeCases:
         assert isinstance(result, list)
         assert len(result) == 0
 
-    def test_find_candidates_all_normal(self):
+    def test_find_candidates_all_normal(self) -> None:
         """Test finding candidates when all files are normal."""
         service = ExcludableCodeCandidateService()
         files = [
@@ -318,7 +320,7 @@ class TestExcludableCodeEdgeCases:
         # Should find few or no candidates
         assert len(result) < len(files)
 
-    def test_validate_candidate_env_access(self):
+    def test_validate_candidate_env_access(self) -> None:
         """Test validating candidate with environment access."""
         service = ExcludableCodeCandidateService()
         content = "import os\npath = os.environ['HOME']"
@@ -327,7 +329,7 @@ class TestExcludableCodeEdgeCases:
 
         assert result["is_safe_to_exclude"] is False
 
-    def test_score_excludability_vendor_path(self):
+    def test_score_excludability_vendor_path(self) -> None:
         """Test scoring vendor code in path."""
         service = ExcludableCodeCandidateService()
         content = "def func(): pass"
