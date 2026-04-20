@@ -225,3 +225,159 @@ class TestTestRecommendationService:
         """Test converting score to low priority."""
         result = TestRecommendationService._score_to_priority(20.0)
         assert result == "low"
+
+
+class TestTestRecommendationEdgeCases:
+    """Tests for edge cases in test recommendations."""
+
+    def test_identify_test_gaps_empty_list(self):
+        """Test identifying gaps with empty list."""
+        service = TestRecommendationService()
+        result = service.identify_test_gaps([])
+        assert result == []
+
+    def test_identify_test_gaps_multiple_regions(self):
+        """Test identifying gaps with multiple regions."""
+        service = TestRecommendationService()
+        uncovered_regions = [
+            {
+                "file_path": "src/main.py",
+                "start_line": 10,
+                "end_line": 20,
+                "region_type": "function",
+                "risk_level": "high",
+                "lines_count": 10,
+            },
+            {
+                "file_path": "src/utils.py",
+                "start_line": 30,
+                "end_line": 40,
+                "region_type": "class",
+                "risk_level": "critical",
+                "lines_count": 10,
+            },
+        ]
+
+        result = service.identify_test_gaps(uncovered_regions)
+        assert len(result) == 2
+
+    def test_suggest_test_types_unknown_type(self):
+        """Test suggesting test types for unknown type."""
+        service = TestRecommendationService()
+        result = service.suggest_test_types("unknown")
+        assert isinstance(result, list)
+        assert "unit" in result
+
+    def test_rank_by_priority_empty_list(self):
+        """Test ranking empty list."""
+        service = TestRecommendationService()
+        result = service.rank_by_priority([])
+        assert result == []
+
+    def test_rank_by_priority_single_gap(self):
+        """Test ranking single gap."""
+        service = TestRecommendationService()
+        gaps = [
+            {
+                "file_path": "src/main.py",
+                "risk_level": "high",
+                "region_type": "function",
+                "lines_count": 20,
+            }
+        ]
+
+        result = service.rank_by_priority(gaps)
+        assert len(result) == 1
+        assert "priority_score" in result[0]
+
+    def test_rank_by_priority_maintains_order(self):
+        """Test that ranking maintains correct order."""
+        service = TestRecommendationService()
+        gaps = [
+            {
+                "file_path": "src/low.py",
+                "risk_level": "low",
+                "region_type": "line",
+                "lines_count": 1,
+            },
+            {
+                "file_path": "src/critical.py",
+                "risk_level": "critical",
+                "region_type": "class",
+                "lines_count": 100,
+            },
+            {
+                "file_path": "src/medium.py",
+                "risk_level": "medium",
+                "region_type": "function",
+                "lines_count": 30,
+            },
+        ]
+
+        result = service.rank_by_priority(gaps)
+        # Critical should be first
+        assert result[0]["risk_level"] == "critical"
+        # Low should be last
+        assert result[-1]["risk_level"] == "low"
+
+    def test_rank_by_priority_all_same_risk(self):
+        """Test ranking when all gaps have same risk level."""
+        service = TestRecommendationService()
+        gaps = [
+            {
+                "file_path": "src/file1.py",
+                "risk_level": "high",
+                "region_type": "function",
+                "lines_count": 10,
+            },
+            {
+                "file_path": "src/file2.py",
+                "risk_level": "high",
+                "region_type": "function",
+                "lines_count": 20,
+            },
+            {
+                "file_path": "src/file3.py",
+                "risk_level": "high",
+                "region_type": "class",
+                "lines_count": 30,
+            },
+        ]
+
+        result = service.rank_by_priority(gaps)
+        # Class should be ranked higher than function
+        assert result[0]["region_type"] == "class"
+
+    def test_suggest_test_types_all_types(self):
+        """Test suggesting test types for all region types."""
+        service = TestRecommendationService()
+        region_types = ["function", "class", "method", "block", "branch", "line"]
+
+        for region_type in region_types:
+            result = service.suggest_test_types(region_type)
+            assert isinstance(result, list)
+            assert len(result) > 0
+
+    def test_identify_test_gaps_preserves_data(self):
+        """Test that identifying gaps preserves all data."""
+        service = TestRecommendationService()
+        uncovered_regions = [
+            {
+                "file_path": "src/main.py",
+                "start_line": 10,
+                "end_line": 20,
+                "region_type": "function",
+                "lines_count": 11,
+                "risk_level": "high",
+            }
+        ]
+
+        result = service.identify_test_gaps(uncovered_regions)
+        gap = result[0]
+
+        assert gap["file_path"] == "src/main.py"
+        assert gap["start_line"] == 10
+        assert gap["end_line"] == 20
+        assert gap["region_type"] == "function"
+        assert gap["lines_count"] == 11
+        assert gap["risk_level"] == "high"
