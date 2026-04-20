@@ -1,5 +1,5 @@
 # Pre-Commit Configuration for Monorepo
-default_stages: [push]  # Hooks run on push only (not commit)
+default_stages: [pre-push]  # Hooks run on push only (not commit)
 ci:
   skip:
     # Skip Node.js-based hooks in CI due to version incompatibilities
@@ -23,7 +23,7 @@ repos:
 
   # Backend Python Hooks (Core + Codecov packages)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.10
+    rev: v0.15.11
     hooks:
       - id: ruff
         name: Ruff Linter (Backend Packages)
@@ -107,7 +107,7 @@ repos:
 
   # Frontend Documentation Hooks (Docusaurus)
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.2.0
+    rev: v10.2.1
     hooks:
       - id: eslint
         name: ESLint (Documentation Frontend)
@@ -162,7 +162,7 @@ repos:
 
   # UV Lock Check (Workspace)
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.6
+    rev: 0.11.7
     hooks:
       - id: uv-lock
         name: UV Lock Check (Workspace)
