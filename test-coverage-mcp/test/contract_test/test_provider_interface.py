@@ -130,7 +130,7 @@ class TestProviderInterfaceRobustness:
                 ProviderCapability.COVERAGE_DELTA: SupportLevel.ADVANCED,
                 ProviderCapability.COVERAGE_TRENDS: SupportLevel.BASIC,
             },
-            analysis_depths=["line", "function", "class"],
+            analysis_depths=["repo", "file", "segment"],
         )
         provider.health_check.return_value = ProviderHealth(
             is_healthy=True,
