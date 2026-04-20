@@ -218,7 +218,7 @@ class TestDetectConfigVsMissingTests:
 class TestRiskFactorCalculation:
     """Tests for risk factor calculation."""
 
-    def test_calculate_risk_factors_all_covered(self, risk_service):
+    def test_calculate_risk_factors_all_covered(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test risk factors when all changes are covered."""
         factors = risk_service._calculate_risk_factors(
             coverage_delta=5.0,

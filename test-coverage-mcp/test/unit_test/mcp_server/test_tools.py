@@ -171,7 +171,7 @@ def test_describe_coverage_provider_success(mock_discovery_class: MagicMock) -> 
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_describe_coverage_provider_not_found(mock_discovery_class):
+def test_describe_coverage_provider_not_found(mock_discovery_class: MagicMock) -> None:
     """Test describe_coverage_provider with nonexistent provider."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -185,7 +185,7 @@ def test_describe_coverage_provider_not_found(mock_discovery_class):
 
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.RepositoryHealthService")
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.ProviderDiscoveryService")
-def test_get_repository_test_health_success(mock_discovery_class, mock_health_class):
+def test_get_repository_test_health_success(mock_discovery_class: MagicMock, mock_health_class: MagicMock) -> None:
     """Test get_repository_test_health with valid input."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -218,7 +218,7 @@ def test_get_repository_test_health_success(mock_discovery_class, mock_health_cl
     assert "execution_metadata" in result
 
 
-def test_get_repository_test_health_invalid_slug():
+def test_get_repository_test_health_invalid_slug() -> None:
     """Test get_repository_test_health with invalid repo slug."""
     result = get_repository_test_health("invalid_slug")
 
@@ -228,7 +228,7 @@ def test_get_repository_test_health_invalid_slug():
 
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.RepositoryHealthService")
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.ProviderDiscoveryService")
-def test_get_repository_test_health_provider_not_found(mock_discovery_class, mock_health_class):
+def test_get_repository_test_health_provider_not_found(mock_discovery_class: MagicMock, mock_health_class: MagicMock) -> None:
     """Test get_repository_test_health with nonexistent provider."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -241,7 +241,7 @@ def test_get_repository_test_health_provider_not_found(mock_discovery_class, moc
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_list_coverage_providers_error_handling(mock_discovery_class):
+def test_list_coverage_providers_error_handling(mock_discovery_class: MagicMock) -> None:
     """Test list_coverage_providers error handling."""
     mock_discovery_class.side_effect = Exception("Discovery failed")
 
@@ -253,7 +253,7 @@ def test_list_coverage_providers_error_handling(mock_discovery_class):
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_describe_coverage_provider_error_handling(mock_discovery_class):
+def test_describe_coverage_provider_error_handling(mock_discovery_class: MagicMock) -> None:
     """Test describe_coverage_provider error handling."""
     mock_discovery_class.side_effect = Exception("Description failed")
 
@@ -265,7 +265,7 @@ def test_describe_coverage_provider_error_handling(mock_discovery_class):
 
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.RepositoryHealthService")
 @patch("test_coverage_mcp.mcp_server.tools.repository_health.ProviderDiscoveryService")
-def test_get_repository_test_health_error_handling(mock_discovery_class, mock_health_class):
+def test_get_repository_test_health_error_handling(mock_discovery_class: MagicMock, mock_health_class: MagicMock) -> None:
     """Test get_repository_test_health error handling."""
     mock_discovery_class.side_effect = Exception("Health analysis failed")
 

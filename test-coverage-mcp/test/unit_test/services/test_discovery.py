@@ -203,7 +203,7 @@ def test_select_best_provider_with_required_capabilities(mock_registry: Provider
     assert best.get_metadata().name == "test_provider"
 
 
-def test_select_best_provider_missing_capability(mock_registry, mock_provider):
+def test_select_best_provider_missing_capability(mock_registry: ProviderRegistry, mock_provider: MagicMock) -> None:
     """Test selecting best provider with missing capability."""
     mock_registry.register(mock_provider)
     service = ProviderDiscoveryService(mock_registry)
@@ -214,7 +214,7 @@ def test_select_best_provider_missing_capability(mock_registry, mock_provider):
     assert best is None
 
 
-def test_discover_and_register_providers(mock_registry):
+def test_discover_and_register_providers(mock_registry: ProviderRegistry) -> None:
     """Test discovering and registering providers."""
     service = ProviderDiscoveryService(mock_registry)
 
