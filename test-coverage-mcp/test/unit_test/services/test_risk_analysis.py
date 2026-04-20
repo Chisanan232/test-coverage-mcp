@@ -1,5 +1,7 @@
 """Unit tests for CoverageRiskAnalysisService."""
 
+from typing import Any
+
 import pytest
 
 from test_coverage_mcp.domain import RiskLevel
@@ -7,7 +9,7 @@ from test_coverage_mcp.services.risk_analysis import CoverageRiskAnalysisService
 
 
 @pytest.fixture
-def risk_service():
+def risk_service() -> CoverageRiskAnalysisService:
     """Create a CoverageRiskAnalysisService instance."""
     return CoverageRiskAnalysisService()
 
@@ -15,7 +17,7 @@ def risk_service():
 class TestScorePRRisk:
     """Tests for PR risk scoring."""
 
-    def test_score_pr_risk_low_risk(self, risk_service):
+    def test_score_pr_risk_low_risk(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with low-risk scenario."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -30,7 +32,7 @@ class TestScorePRRisk:
         assert result["coverage_delta"] == 2.0
         assert result["changed_code_coverage"] > 90.0
 
-    def test_score_pr_risk_high_risk(self, risk_service):
+    def test_score_pr_risk_high_risk(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with high-risk scenario."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -45,7 +47,7 @@ class TestScorePRRisk:
         assert result["coverage_delta"] == -5.0
         assert result["changed_code_coverage"] == 50.0
 
-    def test_score_pr_risk_critical(self, risk_service):
+    def test_score_pr_risk_critical(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with critical scenario."""
         result = risk_service.score_pr_risk(
             base_coverage=90.0,
@@ -60,7 +62,7 @@ class TestScorePRRisk:
         assert result["coverage_delta"] == -40.0
         assert result["changed_code_coverage"] == 0.0
 
-    def test_score_pr_risk_no_changes(self, risk_service):
+    def test_score_pr_risk_no_changes(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring with no changes."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -74,7 +76,7 @@ class TestScorePRRisk:
         assert result["changed_code_coverage"] == 0.0
         assert result["coverage_delta"] == 0.0
 
-    def test_score_pr_risk_includes_recommendations(self, risk_service):
+    def test_score_pr_risk_includes_recommendations(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test that PR risk scoring includes recommendations."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,
@@ -92,7 +94,7 @@ class TestScorePRRisk:
 class TestIdentifyHighRiskFiles:
     """Tests for high-risk file identification."""
 
-    def test_identify_high_risk_files_basic(self, risk_service):
+    def test_identify_high_risk_files_basic(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test identifying high-risk files."""
         file_coverage_data = {
             "src/module1.py": {
@@ -119,13 +121,13 @@ class TestIdentifyHighRiskFiles:
         assert result[0]["risk_score"] == 70.0
         assert result[1]["file_path"] == "src/module3.py"
 
-    def test_identify_high_risk_files_empty(self, risk_service):
+    def test_identify_high_risk_files_empty(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test identifying high-risk files with empty data."""
         result = risk_service.identify_high_risk_files({}, risk_threshold=50.0)
 
         assert len(result) == 0
 
-    def test_identify_high_risk_files_sorted(self, risk_service):
+    def test_identify_high_risk_files_sorted(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test that high-risk files are sorted by risk score."""
         file_coverage_data = {
             "low_risk.py": {"coverage": 90.0, "uncovered_lines": 10, "total_lines": 100},
@@ -138,7 +140,7 @@ class TestIdentifyHighRiskFiles:
         # Should be sorted by risk score (highest first)
         assert result[0]["risk_score"] >= result[1]["risk_score"]
 
-    def test_identify_high_risk_files_includes_recommendations(self, risk_service):
+    def test_identify_high_risk_files_includes_recommendations(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test that high-risk files include recommendations."""
         file_coverage_data = {
             "risky.py": {"coverage": 25.0, "uncovered_lines": 75, "total_lines": 100},
@@ -154,7 +156,7 @@ class TestIdentifyHighRiskFiles:
 class TestDetectConfigVsMissingTests:
     """Tests for config vs missing tests detection."""
 
-    def test_detect_missing_tests_scenario(self, risk_service):
+    def test_detect_missing_tests_scenario(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test detection of missing tests scenario."""
         coverage_data = {
             "coverage": 30.0,
@@ -169,7 +171,7 @@ class TestDetectConfigVsMissingTests:
         assert result["is_missing_tests"] is True
         assert "Add tests for uncovered code regions" in result["recommendations"]
 
-    def test_detect_config_issue_scenario(self, risk_service):
+    def test_detect_config_issue_scenario(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test detection of config issue scenario."""
         coverage_data = {"coverage": 75.0}
         config_data = {
@@ -183,7 +185,7 @@ class TestDetectConfigVsMissingTests:
         assert result["is_config_issue"] is True
         assert "Review and fix coverage configuration" in result["recommendations"]
 
-    def test_detect_both_issues(self, risk_service):
+    def test_detect_both_issues(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test detection when both config and missing tests issues exist."""
         coverage_data = {
             "coverage": 40.0,
@@ -202,7 +204,7 @@ class TestDetectConfigVsMissingTests:
         # Both issues detected should generate recommendations
         assert len(result["indicators"]) > 0
 
-    def test_detect_no_issues(self, risk_service):
+    def test_detect_no_issues(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test detection when no issues exist."""
         coverage_data = {"coverage": 95.0}
         config_data = {"is_valid": True, "issues": []}

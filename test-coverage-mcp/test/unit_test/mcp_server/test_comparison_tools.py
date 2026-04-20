@@ -1,5 +1,6 @@
 """Unit tests for comparison MCP tools."""
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -20,7 +21,7 @@ from test_coverage_mcp.mcp_server.tools.comparison import (
 
 
 @pytest.fixture(autouse=True)
-def reset_mcp_factory():
+def reset_mcp_factory() -> None:
     """Reset MCP factory before each test."""
     mcp_factory.reset()
     mcp_factory.create()
@@ -29,7 +30,7 @@ def reset_mcp_factory():
 
 
 @patch("test_coverage_mcp.mcp_server.tools.commit_summary.ProviderDiscoveryService")
-def test_get_commit_coverage_summary_success(mock_discovery_class):
+def test_get_commit_coverage_summary_success(mock_discovery_class: MagicMock) -> None:
     """Test get_commit_coverage_summary with valid input."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -62,7 +63,7 @@ def test_get_commit_coverage_summary_success(mock_discovery_class):
     assert result["commit_sha"] == "abc123def456"
 
 
-def test_get_commit_coverage_summary_invalid_slug():
+def test_get_commit_coverage_summary_invalid_slug() -> None:
     """Test get_commit_coverage_summary with invalid repo slug."""
     result = get_commit_coverage_summary("invalid_slug", "abc123def456")
 
@@ -70,7 +71,7 @@ def test_get_commit_coverage_summary_invalid_slug():
     assert "InvalidRepositorySlugError" in result.get("error_type", "")
 
 
-def test_get_commit_coverage_summary_invalid_sha():
+def test_get_commit_coverage_summary_invalid_sha() -> None:
     """Test get_commit_coverage_summary with invalid commit SHA."""
     result = get_commit_coverage_summary("owner/repo", "abc")
 
@@ -79,7 +80,7 @@ def test_get_commit_coverage_summary_invalid_sha():
 
 
 @patch("test_coverage_mcp.mcp_server.tools.commit_summary.ProviderDiscoveryService")
-def test_get_commit_coverage_summary_provider_not_found(mock_discovery_class):
+def test_get_commit_coverage_summary_provider_not_found(mock_discovery_class: MagicMock) -> None:
     """Test get_commit_coverage_summary with nonexistent provider."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
@@ -93,7 +94,7 @@ def test_get_commit_coverage_summary_provider_not_found(mock_discovery_class):
 
 @patch("test_coverage_mcp.mcp_server.tools.comparison.CoverageComparisonService")
 @patch("test_coverage_mcp.mcp_server.tools.comparison.ProviderDiscoveryService")
-def test_compare_coverage_between_refs_success(mock_discovery_class, mock_comparison_class):
+def test_compare_coverage_between_refs_success(mock_discovery_class: MagicMock, mock_comparison_class: MagicMock) -> None:
     """Test compare_coverage_between_refs with valid input."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery

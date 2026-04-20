@@ -271,7 +271,7 @@ class TestFullWorkflowIntegration:
         recommendations = recommendation_service.recommend_tests(uncovered_regions)
         assert len(recommendations) > 0
 
-    def test_repository_health_workflow(self, discovery_service):
+    def test_repository_health_workflow(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test repository health analysis workflow."""
         health_service = RepositoryHealthService(discovery_service)
         config_service = CoverageConfigDiagnosisService()
@@ -299,7 +299,7 @@ class TestFullWorkflowIntegration:
         actions = health_service.get_next_actions("owner", "repo")
         assert isinstance(actions, list)
 
-    def test_multi_provider_workflow(self, mock_registry):
+    def test_multi_provider_workflow(self, mock_registry: ProviderRegistry) -> None:
         """Test workflow with multiple providers."""
         # Create multiple providers
         provider1 = MagicMock()

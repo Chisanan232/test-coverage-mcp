@@ -1,5 +1,6 @@
 """Unit tests for MCP tools."""
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -22,7 +23,7 @@ from test_coverage_mcp.registry import ProviderRegistry
 
 
 @pytest.fixture(autouse=True)
-def reset_mcp_factory():
+def reset_mcp_factory() -> None:
     """Reset MCP factory before each test."""
     mcp_factory.reset()
     mcp_factory.create()
@@ -31,7 +32,7 @@ def reset_mcp_factory():
 
 
 @pytest.fixture
-def mock_registry():
+def mock_registry() -> ProviderRegistry:
     """Create a mock registry."""
     registry = ProviderRegistry()
     registry.clear()
@@ -39,7 +40,7 @@ def mock_registry():
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -66,7 +67,7 @@ def mock_provider():
 
 
 @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-def test_list_coverage_providers_basic(mock_discovery_class):
+def test_list_coverage_providers_basic(mock_discovery_class: MagicMock) -> None:
     """Test list_coverage_providers with basic output."""
     mock_discovery = MagicMock()
     mock_discovery_class.return_value = mock_discovery
