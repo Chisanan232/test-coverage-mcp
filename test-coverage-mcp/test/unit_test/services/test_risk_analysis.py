@@ -266,3 +266,100 @@ class TestRiskLevelDetermination:
         """Test low risk level determination."""
         risk_level = risk_service._determine_risk_level(10.0)
         assert risk_level == RiskLevel.LOW
+
+
+class TestEdgeCases:
+    """Tests for edge cases in risk analysis."""
+
+    def test_score_pr_risk_with_zero_total_lines(self, risk_service):
+        """Test PR risk scoring with zero total changed lines."""
+        result = risk_service.score_pr_risk(
+            base_coverage=85.0,
+            head_coverage=85.0,
+            changed_files_count=0,
+            uncovered_changed_lines=0,
+            total_changed_lines=0,
+        )
+
+        assert result["changed_code_coverage"] == 0.0
+        assert result["coverage_delta"] == 0.0
+
+    def test_identify_high_risk_files_with_zero_total_lines(self, risk_service):
+        """Test identifying high-risk files with zero total lines."""
+        file_coverage_data = {
+            "empty.py": {"coverage": 0.0, "uncovered_lines": 0, "total_lines": 0},
+        }
+
+        result = risk_service.identify_high_risk_files(file_coverage_data)
+        # Should handle gracefully without division by zero
+        assert isinstance(result, list)
+
+    def test_score_pr_risk_large_number_of_files(self, risk_service):
+        """Test PR risk scoring with large number of changed files."""
+        result = risk_service.score_pr_risk(
+            base_coverage=85.0,
+            head_coverage=80.0,
+            changed_files_count=100,
+            uncovered_changed_lines=500,
+            total_changed_lines=1000,
+        )
+
+        assert "risk_level" in result
+        assert "risk_score" in result
+
+    def test_identify_high_risk_files_all_covered(self, risk_service):
+        """Test identifying high-risk files when all are well-covered."""
+        file_coverage_data = {
+            "file1.py": {"coverage": 95.0, "uncovered_lines": 5, "total_lines": 100},
+            "file2.py": {"coverage": 98.0, "uncovered_lines": 2, "total_lines": 100},
+        }
+
+        result = risk_service.identify_high_risk_files(file_coverage_data, risk_threshold=50.0)
+        # No files should be high-risk
+        assert len(result) == 0
+
+    def test_detect_config_vs_missing_tests_with_no_config(self, risk_service):
+        """Test detection with no config data."""
+        coverage_data = {"coverage": 50.0, "uncovered_regions": []}
+
+        result = risk_service.detect_config_vs_missing_tests(coverage_data, config_data=None)
+
+        assert "is_config_issue" in result
+        assert "is_missing_tests" in result
+
+    def test_score_pr_risk_all_changes_uncovered(self, risk_service):
+        """Test PR risk scoring when all changes are uncovered."""
+        result = risk_service.score_pr_risk(
+            base_coverage=90.0,
+            head_coverage=50.0,
+            changed_files_count=5,
+            uncovered_changed_lines=100,
+            total_changed_lines=100,
+        )
+
+        assert result["changed_code_coverage"] == 0.0
+        assert result["risk_level"] == RiskLevel.CRITICAL.value
+
+    def test_identify_high_risk_files_threshold_boundary(self, risk_service):
+        """Test identifying high-risk files at threshold boundary."""
+        file_coverage_data = {
+            "boundary.py": {"coverage": 50.0, "uncovered_lines": 50, "total_lines": 100},
+        }
+
+        # Risk score = 100 - 50 = 50, which equals threshold
+        result = risk_service.identify_high_risk_files(file_coverage_data, risk_threshold=50.0)
+        assert len(result) == 1
+
+    def test_score_pr_risk_factors_included(self, risk_service):
+        """Test that risk factors are included in scoring."""
+        result = risk_service.score_pr_risk(
+            base_coverage=85.0,
+            head_coverage=80.0,
+            changed_files_count=5,
+            uncovered_changed_lines=10,
+            total_changed_lines=50,
+        )
+
+        assert "factors" in result
+        assert isinstance(result["factors"], dict)
+        assert len(result["factors"]) > 0
