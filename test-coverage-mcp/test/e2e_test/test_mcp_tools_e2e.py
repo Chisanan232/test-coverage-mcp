@@ -1,5 +1,6 @@
 """End-to-end tests for MCP tools."""
 
+from typing import Any, Generator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -15,7 +16,7 @@ from test_coverage_mcp.registry import ProviderRegistry
 
 
 @pytest.fixture(autouse=True)
-def reset_mcp_factory():
+def reset_mcp_factory() -> Generator[None, None, None]:
     """Reset MCP factory before each test."""
     mcp_factory.reset()
     yield
@@ -23,7 +24,7 @@ def reset_mcp_factory():
 
 
 @pytest.fixture
-def mock_registry():
+def mock_registry() -> ProviderRegistry:
     """Create a mock registry."""
     registry = ProviderRegistry()
     registry.clear()
@@ -31,7 +32,7 @@ def mock_registry():
 
 
 @pytest.fixture
-def mock_provider():
+def mock_provider() -> MagicMock:
     """Create a mock provider."""
     provider = MagicMock()
     provider.get_metadata.return_value = ProviderMetadata(
@@ -62,39 +63,39 @@ def mock_provider():
 class TestMCPServerE2E:
     """End-to-end tests for MCP server."""
 
-    def test_mcp_server_creation(self):
+    def test_mcp_server_creation(self) -> None:
         """Test that MCP server can be created."""
         server = mcp_factory.create()
         assert server is not None
         assert server.name == "TemplateMCPServer"
 
-    def test_mcp_server_singleton(self):
+    def test_mcp_server_singleton(self) -> None:
         """Test that MCP server is a singleton."""
         server1 = mcp_factory.create()
         server2 = mcp_factory.get()
         assert server1 is server2
 
-    def test_mcp_server_reset(self):
+    def test_mcp_server_reset(self) -> None:
         """Test that MCP server can be reset."""
         server1 = mcp_factory.create()
         mcp_factory.reset()
         server2 = mcp_factory.create()
         assert server1 is not server2
 
-    def test_mcp_server_has_sse_app(self):
+    def test_mcp_server_has_sse_app(self) -> None:
         """Test that MCP server can create SSE app."""
         server = mcp_factory.create()
         sse_app = server.sse_app()
         assert sse_app is not None
 
-    def test_mcp_server_has_http_app(self):
+    def test_mcp_server_has_http_app(self) -> None:
         """Test that MCP server can create HTTP app."""
         server = mcp_factory.create()
         http_app = server.streamable_http_app()
         assert http_app is not None
 
     @patch("test_coverage_mcp.mcp_server.app.FastMCP.run")
-    def test_mcp_server_stdio_transport(self, mock_run):
+    def test_mcp_server_stdio_transport(self, mock_run: MagicMock) -> None:
         """Test that MCP server can run with stdio transport."""
         server = mcp_factory.create()
         server.run(transport="stdio")
@@ -105,7 +106,7 @@ class TestCoverageProvidersToolE2E:
     """End-to-end tests for coverage providers tool."""
 
     @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-    def test_list_coverage_providers_tool(self, mock_discovery_class):
+    def test_list_coverage_providers_tool(self, mock_discovery_class: MagicMock) -> None:
         """Test list_coverage_providers tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.coverage_providers import (
             list_coverage_providers,
@@ -146,7 +147,7 @@ class TestCoverageProvidersToolE2E:
         assert "providers" in result
 
     @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-    def test_describe_coverage_provider_tool(self, mock_discovery_class):
+    def test_describe_coverage_provider_tool(self, mock_discovery_class: MagicMock) -> None:
         """Test describe_coverage_provider tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.coverage_providers import (
             describe_coverage_provider,
@@ -184,7 +185,7 @@ class TestRepositoryHealthToolE2E:
     """End-to-end tests for repository health tool."""
 
     @patch("test_coverage_mcp.mcp_server.tools.repository_health.RepositoryHealthService")
-    def test_get_repository_health_tool(self, mock_health_class):
+    def test_get_repository_health_tool(self, mock_health_class: MagicMock) -> None:
         """Test get_repository_test_health tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.repository_health import (
             get_repository_test_health,
@@ -217,7 +218,7 @@ class TestRepositoryHealthToolE2E:
 class TestPRAnalysisToolsE2E:
     """End-to-end tests for PR analysis tools."""
 
-    def test_analyze_pr_coverage_tool(self):
+    def test_analyze_pr_coverage_tool(self) -> None:
         """Test analyze_pr_coverage_risk tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.analyze_pr_risk import (
             analyze_pr_coverage_risk,
@@ -238,7 +239,7 @@ class TestPRAnalysisToolsE2E:
 class TestLowCoverageFilesToolE2E:
     """End-to-end tests for low coverage files tool."""
 
-    def test_identify_low_coverage_files_tool(self):
+    def test_identify_low_coverage_files_tool(self) -> None:
         """Test find_low_coverage_files tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.find_low_coverage_files import (
             find_low_coverage_files,
@@ -259,7 +260,7 @@ class TestLowCoverageFilesToolE2E:
 class TestTestRecommendationToolE2E:
     """End-to-end tests for test recommendation tool."""
 
-    def test_recommend_test_plan_tool(self):
+    def test_recommend_test_plan_tool(self) -> None:
         """Test recommend_test_plan tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.recommend_test_plan import (
             recommend_test_plan,
@@ -278,7 +279,7 @@ class TestTestRecommendationToolE2E:
 class TestConfigDiagnosisToolE2E:
     """End-to-end tests for config diagnosis tool."""
 
-    def test_diagnose_coverage_config_tool(self):
+    def test_diagnose_coverage_config_tool(self) -> None:
         """Test diagnose_coverage_configuration tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration import (
             diagnose_coverage_configuration,
@@ -297,7 +298,7 @@ class TestConfigDiagnosisToolE2E:
 class TestExcludableCodeToolE2E:
     """End-to-end tests for excludable code tool."""
 
-    def test_find_excludable_code_tool(self):
+    def test_find_excludable_code_tool(self) -> None:
         """Test identify_excludable_code_candidates tool end-to-end."""
         from test_coverage_mcp.mcp_server.tools.identify_excludable_code_candidates import (
             identify_excludable_code_candidates,
@@ -317,7 +318,7 @@ class TestExcludableCodeToolE2E:
 class TestMultiToolWorkflowE2E:
     """End-to-end tests for multi-tool workflows."""
 
-    def test_complete_pr_analysis_workflow(self):
+    def test_complete_pr_analysis_workflow(self) -> None:
         """Test complete PR analysis workflow."""
         from test_coverage_mcp.mcp_server.tools.coverage_providers import (
             list_coverage_providers,
@@ -338,7 +339,7 @@ class TestMultiToolWorkflowE2E:
         )
         assert isinstance(pr_analysis, dict)
 
-    def test_repository_health_workflow(self):
+    def test_repository_health_workflow(self) -> None:
         """Test repository health analysis workflow."""
         from test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration import (
             diagnose_coverage_configuration,
