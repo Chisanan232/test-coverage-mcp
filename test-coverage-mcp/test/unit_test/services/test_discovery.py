@@ -285,7 +285,7 @@ def test_aggregate_health_with_unhealthy_provider(mock_registry):
     assert health["health_percentage"] == 0.0
 
 
-def test_select_best_provider_by_response_time(mock_registry):
+def test_select_best_provider_by_response_time(mock_registry: ProviderRegistry) -> None:
     """Test selecting best provider by response time."""
     fast_provider = MagicMock()
     fast_provider.get_metadata.return_value = ProviderMetadata(

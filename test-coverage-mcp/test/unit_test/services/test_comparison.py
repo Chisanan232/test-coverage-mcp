@@ -133,7 +133,7 @@ def test_calculate_severity_none() -> None:
     assert severity == "none"
 
 
-def test_calculate_severity_minor():
+def test_calculate_severity_minor() -> None:
     """Test severity calculation for minor regression."""
     service = CoverageComparisonService()
 
@@ -141,7 +141,7 @@ def test_calculate_severity_minor():
     assert severity == "minor"
 
 
-def test_calculate_severity_major():
+def test_calculate_severity_major() -> None:
     """Test severity calculation for major regression."""
     service = CoverageComparisonService()
 
@@ -149,7 +149,7 @@ def test_calculate_severity_major():
     assert severity == "major"
 
 
-def test_calculate_severity_critical():
+def test_calculate_severity_critical() -> None:
     """Test severity calculation for critical regression."""
     service = CoverageComparisonService()
 
@@ -157,7 +157,7 @@ def test_calculate_severity_critical():
     assert severity == "critical"
 
 
-def test_extract_coverage_empty():
+def test_extract_coverage_empty() -> None:
     """Test extracting coverage from empty results."""
     service = CoverageComparisonService()
 
@@ -165,7 +165,7 @@ def test_extract_coverage_empty():
     assert coverage == 0.0
 
 
-def test_extract_coverage_with_values():
+def test_extract_coverage_with_values() -> None:
     """Test extracting coverage from results with values."""
     service = CoverageComparisonService()
 
@@ -177,7 +177,7 @@ def test_extract_coverage_with_values():
     assert coverage == 82.5
 
 
-def test_compare_refs_calculates_delta(discovery_service):
+def test_compare_refs_calculates_delta(discovery_service: ProviderDiscoveryService) -> None:
     """Test that compare_refs calculates delta correctly."""
     service = CoverageComparisonService(discovery_service)
 
@@ -186,7 +186,7 @@ def test_compare_refs_calculates_delta(discovery_service):
     assert isinstance(result["delta_percentage"], (int, float))
 
 
-def test_compare_refs_identifies_improvement(discovery_service):
+def test_compare_refs_identifies_improvement(discovery_service: ProviderDiscoveryService) -> None:
     """Test that compare_refs identifies improvements."""
     service = CoverageComparisonService(discovery_service)
 
@@ -196,7 +196,7 @@ def test_compare_refs_identifies_improvement(discovery_service):
         assert result["regression"] is False
 
 
-def test_compare_refs_identifies_regression(discovery_service):
+def test_compare_refs_identifies_regression(discovery_service: ProviderDiscoveryService) -> None:
     """Test that compare_refs identifies regressions."""
     service = CoverageComparisonService(discovery_service)
 
@@ -206,7 +206,7 @@ def test_compare_refs_identifies_regression(discovery_service):
         assert result["regression"] is True
 
 
-def test_detect_regressions_with_high_threshold(discovery_service):
+def test_detect_regressions_with_high_threshold(discovery_service: ProviderDiscoveryService) -> None:
     """Test detecting regressions with high threshold."""
     service = CoverageComparisonService(discovery_service)
 
@@ -217,7 +217,7 @@ def test_detect_regressions_with_high_threshold(discovery_service):
     assert isinstance(result["has_regression"], bool)
 
 
-def test_detect_regressions_with_low_threshold(discovery_service):
+def test_detect_regressions_with_low_threshold(discovery_service: ProviderDiscoveryService) -> None:
     """Test detecting regressions with low threshold."""
     service = CoverageComparisonService(discovery_service)
 
@@ -228,7 +228,7 @@ def test_detect_regressions_with_low_threshold(discovery_service):
     assert isinstance(result["has_regression"], bool)
 
 
-def test_extract_coverage_with_invalid_values():
+def test_extract_coverage_with_invalid_values() -> None:
     """Test extracting coverage with invalid values."""
     service = CoverageComparisonService()
 
@@ -240,7 +240,7 @@ def test_extract_coverage_with_invalid_values():
     assert coverage == 85.0
 
 
-def test_extract_coverage_with_missing_key():
+def test_extract_coverage_with_missing_key() -> None:
     """Test extracting coverage with missing key."""
     service = CoverageComparisonService()
 
@@ -252,7 +252,7 @@ def test_extract_coverage_with_missing_key():
     assert coverage == 85.0
 
 
-def test_compare_refs_with_no_providers(mock_registry):
+def test_compare_refs_with_no_providers(mock_registry: ProviderRegistry) -> None:
     """Test comparing refs with no providers."""
     discovery = ProviderDiscoveryService(mock_registry)
     service = CoverageComparisonService(discovery)

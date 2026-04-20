@@ -146,7 +146,7 @@ class TestRiskAnalysisAndGapDiscoveryIntegration:
 class TestHealthAndRiskIntegration:
     """Test integration between health and risk analysis services."""
 
-    def test_health_aggregation_identifies_risk(self, discovery_service):
+    def test_health_aggregation_identifies_risk(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test that health aggregation can identify risk."""
         health_service = RepositoryHealthService(discovery_service)
         risk_service = CoverageRiskAnalysisService()
@@ -160,7 +160,7 @@ class TestHealthAndRiskIntegration:
         assert "risk_level" in risk
         assert "recommendations" in risk
 
-    def test_provider_fallback_affects_health(self, discovery_service):
+    def test_provider_fallback_affects_health(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test that provider fallback chain affects health results."""
         health_service = RepositoryHealthService(discovery_service)
 
@@ -176,7 +176,7 @@ class TestHealthAndRiskIntegration:
 class TestConfigDiagnosisAndExcludableCodeIntegration:
     """Test integration between config diagnosis and excludable code services."""
 
-    def test_config_diagnosis_suggests_exclusions(self):
+    def test_config_diagnosis_suggests_exclusions(self) -> None:
         """Test that config diagnosis suggests exclusions for excludable code."""
         config_service = CoverageConfigDiagnosisService()
         excludable_service = ExcludableCodeCandidateService()
@@ -194,7 +194,7 @@ class TestConfigDiagnosisAndExcludableCodeIntegration:
         # Should suggest excluding generated code
         assert isinstance(suggestions, list)
 
-    def test_excludable_code_candidates_inform_config(self):
+    def test_excludable_code_candidates_inform_config(self) -> None:
         """Test that excludable code candidates inform config decisions."""
         excludable_service = ExcludableCodeCandidateService()
         config_service = CoverageConfigDiagnosisService()
@@ -221,7 +221,7 @@ class TestConfigDiagnosisAndExcludableCodeIntegration:
 class TestFullWorkflowIntegration:
     """Test full workflow integration across all services."""
 
-    def test_complete_pr_analysis_workflow(self, discovery_service):
+    def test_complete_pr_analysis_workflow(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test complete PR analysis workflow."""
         # Services
         comparison_service = CoverageComparisonService(discovery_service)
