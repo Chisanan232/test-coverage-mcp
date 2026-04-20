@@ -3,6 +3,7 @@
 Tests that providers implement the required interface correctly.
 """
 
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -19,7 +20,7 @@ class TestProviderInterfaceContract:
     """Contract tests for provider interface."""
 
     @pytest.fixture
-    def mock_provider(self):
+    def mock_provider(self) -> MagicMock:
         """Create a mock provider for testing."""
         provider = MagicMock()
         provider.get_metadata.return_value = ProviderMetadata(
@@ -44,14 +45,14 @@ class TestProviderInterfaceContract:
         )
         return provider
 
-    def test_provider_has_required_methods(self, mock_provider):
+    def test_provider_has_required_methods(self, mock_provider: MagicMock) -> None:
         """Test that provider implements all required methods."""
         assert hasattr(mock_provider, "get_metadata")
         assert callable(mock_provider.get_metadata)
         assert hasattr(mock_provider, "health_check")
         assert callable(mock_provider.health_check)
 
-    def test_provider_returns_correct_types(self, mock_provider):
+    def test_provider_returns_correct_types(self, mock_provider: MagicMock) -> None:
         """Test that provider returns correct types."""
         metadata = mock_provider.get_metadata()
         assert isinstance(metadata, ProviderMetadata)
@@ -59,7 +60,7 @@ class TestProviderInterfaceContract:
         health = mock_provider.health_check()
         assert isinstance(health, ProviderHealth)
 
-    def test_provider_handles_errors_correctly(self, mock_provider):
+    def test_provider_handles_errors_correctly(self, mock_provider: MagicMock) -> None:
         """Test that provider handles errors correctly."""
         # Test that provider can handle and report errors
         mock_provider.get_metadata.side_effect = Exception("Test error")
@@ -67,7 +68,7 @@ class TestProviderInterfaceContract:
         with pytest.raises(Exception):
             mock_provider.get_metadata()
 
-    def test_provider_respects_timeout(self, mock_provider):
+    def test_provider_respects_timeout(self, mock_provider: MagicMock) -> None:
         """Test that provider respects timeout settings."""
         health = mock_provider.health_check()
         
@@ -75,7 +76,7 @@ class TestProviderInterfaceContract:
         assert health.response_time_ms >= 0
         assert health.response_time_ms < 60000  # Less than 60 seconds
 
-    def test_provider_handles_invalid_input(self, mock_provider):
+    def test_provider_handles_invalid_input(self, mock_provider: MagicMock) -> None:
         """Test that provider handles invalid input gracefully."""
         # Provider should have consistent behavior
         metadata1 = mock_provider.get_metadata()
@@ -83,7 +84,7 @@ class TestProviderInterfaceContract:
         
         assert metadata1.name == metadata2.name
 
-    def test_provider_supports_required_capabilities(self, mock_provider):
+    def test_provider_supports_required_capabilities(self, mock_provider: MagicMock) -> None:
         """Test that provider supports required capabilities."""
         metadata = mock_provider.get_metadata()
         
@@ -94,7 +95,7 @@ class TestProviderInterfaceContract:
         for capability in metadata.supported_capabilities:
             assert capability in metadata.support_levels
 
-    def test_provider_version_compatibility(self, mock_provider):
+    def test_provider_version_compatibility(self, mock_provider: MagicMock) -> None:
         """Test provider version compatibility."""
         metadata = mock_provider.get_metadata()
         
@@ -111,7 +112,7 @@ class TestProviderInterfaceRobustness:
     """Test provider interface robustness and edge cases."""
 
     @pytest.fixture
-    def robust_provider(self):
+    def robust_provider(self) -> MagicMock:
         """Create a provider with all capabilities."""
         provider = MagicMock()
         provider.get_metadata.return_value = ProviderMetadata(
@@ -140,21 +141,21 @@ class TestProviderInterfaceRobustness:
         )
         return provider
 
-    def test_provider_with_multiple_capabilities(self, robust_provider):
+    def test_provider_with_multiple_capabilities(self, robust_provider: MagicMock) -> None:
         """Test provider with multiple capabilities."""
         metadata = robust_provider.get_metadata()
         
         assert len(metadata.supported_capabilities) == 4
         assert len(metadata.support_levels) == 4
 
-    def test_provider_with_analysis_depths(self, robust_provider):
+    def test_provider_with_analysis_depths(self, robust_provider: MagicMock) -> None:
         """Test provider with analysis depths."""
         metadata = robust_provider.get_metadata()
         
         assert isinstance(metadata.analysis_depths, list)
         assert len(metadata.analysis_depths) > 0
 
-    def test_provider_health_when_unhealthy(self):
+    def test_provider_health_when_unhealthy(self) -> None:
         """Test provider health reporting when unhealthy."""
         provider = MagicMock()
         provider.health_check.return_value = ProviderHealth(
@@ -170,7 +171,7 @@ class TestProviderInterfaceRobustness:
         assert health.error_message is not None
         assert len(health.error_message) > 0
 
-    def test_provider_metadata_consistency(self, robust_provider):
+    def test_provider_metadata_consistency(self, robust_provider: MagicMock) -> None:
         """Test that provider metadata is consistent across calls."""
         meta1 = robust_provider.get_metadata()
         meta2 = robust_provider.get_metadata()
@@ -180,7 +181,7 @@ class TestProviderInterfaceRobustness:
         assert meta1.version == meta2.version == meta3.version
         assert meta1.supported_capabilities == meta2.supported_capabilities
 
-    def test_provider_support_level_hierarchy(self, robust_provider):
+    def test_provider_support_level_hierarchy(self, robust_provider: MagicMock) -> None:
         """Test that support levels follow expected hierarchy."""
         metadata = robust_provider.get_metadata()
         
@@ -193,7 +194,7 @@ class TestProviderInterfaceRobustness:
 class TestProviderInterfaceErrorHandling:
     """Test error handling in provider interface."""
 
-    def test_provider_graceful_failure(self):
+    def test_provider_graceful_failure(self) -> None:
         """Test that provider fails gracefully."""
         provider = MagicMock()
         provider.get_metadata.side_effect = RuntimeError("Provider unavailable")
@@ -201,7 +202,7 @@ class TestProviderInterfaceErrorHandling:
         with pytest.raises(RuntimeError):
             provider.get_metadata()
 
-    def test_provider_timeout_handling(self):
+    def test_provider_timeout_handling(self) -> None:
         """Test provider timeout handling."""
         provider = MagicMock()
         provider.health_check.return_value = ProviderHealth(
@@ -214,7 +215,7 @@ class TestProviderInterfaceErrorHandling:
         health = provider.health_check()
         assert health.response_time_ms > 10000
 
-    def test_provider_partial_failure(self):
+    def test_provider_partial_failure(self) -> None:
         """Test provider with partial failures."""
         provider = MagicMock()
         
