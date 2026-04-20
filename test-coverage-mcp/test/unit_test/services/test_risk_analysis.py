@@ -286,7 +286,7 @@ class TestEdgeCases:
         assert result["changed_code_coverage"] == 0.0
         assert result["coverage_delta"] == 0.0
 
-    def test_identify_high_risk_files_with_zero_total_lines(self, risk_service):
+    def test_identify_high_risk_files_with_zero_total_lines(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test identifying high-risk files with zero total lines."""
         file_coverage_data = {
             "empty.py": {"coverage": 0.0, "uncovered_lines": 0, "total_lines": 0},
@@ -320,7 +320,7 @@ class TestEdgeCases:
         # No files should be high-risk
         assert len(result) == 0
 
-    def test_detect_config_vs_missing_tests_with_no_config(self, risk_service):
+    def test_detect_config_vs_missing_tests_with_no_config(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test detection with no config data."""
         coverage_data = {"coverage": 50.0, "uncovered_regions": []}
 
@@ -329,7 +329,7 @@ class TestEdgeCases:
         assert "is_config_issue" in result
         assert "is_missing_tests" in result
 
-    def test_score_pr_risk_all_changes_uncovered(self, risk_service):
+    def test_score_pr_risk_all_changes_uncovered(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test PR risk scoring when all changes are uncovered."""
         result = risk_service.score_pr_risk(
             base_coverage=90.0,
@@ -342,7 +342,7 @@ class TestEdgeCases:
         assert result["changed_code_coverage"] == 0.0
         assert result["risk_level"] == RiskLevel.CRITICAL.value
 
-    def test_identify_high_risk_files_threshold_boundary(self, risk_service):
+    def test_identify_high_risk_files_threshold_boundary(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test identifying high-risk files at threshold boundary."""
         file_coverage_data = {
             "boundary.py": {"coverage": 50.0, "uncovered_lines": 50, "total_lines": 100},
@@ -352,7 +352,7 @@ class TestEdgeCases:
         result = risk_service.identify_high_risk_files(file_coverage_data, risk_threshold=50.0)
         assert len(result) == 1
 
-    def test_score_pr_risk_factors_included(self, risk_service):
+    def test_score_pr_risk_factors_included(self, risk_service: CoverageRiskAnalysisService) -> None:
         """Test that risk factors are included in scoring."""
         result = risk_service.score_pr_risk(
             base_coverage=85.0,

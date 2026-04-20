@@ -127,7 +127,7 @@ def test_generate_risk_recommendations() -> None:
     assert any("30" in rec for rec in recommendations)
 
 
-def test_generate_risk_recommendations_critical():
+def test_generate_risk_recommendations_critical() -> None:
     """Test generating recommendations for critical coverage."""
     service = RepositoryHealthService()
 
@@ -135,7 +135,7 @@ def test_generate_risk_recommendations_critical():
     assert any("Critical" in rec for rec in recommendations)
 
 
-def test_generate_risk_recommendations_high():
+def test_generate_risk_recommendations_high() -> None:
     """Test generating recommendations for high coverage."""
     service = RepositoryHealthService()
 
@@ -203,7 +203,7 @@ class TestRepositoryHealthServiceEdgeCases:
 
         assert metrics["providers_queried"] == 2
 
-    def test_identify_risks_zero_coverage(self, discovery_service):
+    def test_identify_risks_zero_coverage(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test identifying risks with zero coverage."""
         service = RepositoryHealthService(discovery_service)
 
@@ -212,7 +212,7 @@ class TestRepositoryHealthServiceEdgeCases:
         assert "risk_level" in risk
         assert isinstance(risk["recommendations"], list)
 
-    def test_identify_risks_perfect_coverage(self, discovery_service):
+    def test_identify_risks_perfect_coverage(self, discovery_service: ProviderDiscoveryService) -> None:
         """Test identifying risks with perfect coverage."""
         service = RepositoryHealthService(discovery_service)
 
@@ -220,7 +220,7 @@ class TestRepositoryHealthServiceEdgeCases:
 
         assert "risk_level" in risk
 
-    def test_get_next_actions_empty(self, mock_registry):
+    def test_get_next_actions_empty(self, mock_registry: ProviderRegistry) -> None:
         """Test getting next actions with no providers."""
         discovery = ProviderDiscoveryService(mock_registry)
         service = RepositoryHealthService(discovery)
@@ -229,7 +229,7 @@ class TestRepositoryHealthServiceEdgeCases:
 
         assert isinstance(actions, list)
 
-    def test_get_provider_fallback_chain_empty(self, mock_registry):
+    def test_get_provider_fallback_chain_empty(self, mock_registry: ProviderRegistry) -> None:
         """Test getting fallback chain with no providers."""
         discovery = ProviderDiscoveryService(mock_registry)
         service = RepositoryHealthService(discovery)
@@ -239,7 +239,7 @@ class TestRepositoryHealthServiceEdgeCases:
         assert isinstance(chain, list)
         assert len(chain) == 0
 
-    def test_get_provider_fallback_chain_with_unhealthy(self, mock_registry):
+    def test_get_provider_fallback_chain_with_unhealthy(self, mock_registry: ProviderRegistry) -> None:
         """Test fallback chain with unhealthy provider."""
         unhealthy_provider = MagicMock()
         unhealthy_provider.get_metadata.return_value = ProviderMetadata(
@@ -268,7 +268,7 @@ class TestRepositoryHealthServiceEdgeCases:
         # Should still return the provider even if unhealthy
         assert isinstance(chain, list)
 
-    def test_generate_risk_recommendations_boundary(self):
+    def test_generate_risk_recommendations_boundary(self) -> None:
         """Test generating recommendations at boundary values."""
         service = RepositoryHealthService()
 
@@ -281,7 +281,7 @@ class TestRepositoryHealthServiceEdgeCases:
         assert isinstance(recommendations, list)
         assert len(recommendations) > 0
 
-    def test_aggregate_coverage_metrics_with_failures(self, mock_registry):
+    def test_aggregate_coverage_metrics_with_failures(self, mock_registry: ProviderRegistry) -> None:
         """Test aggregating metrics when no providers are available."""
         # Test with empty registry (no providers)
         discovery = ProviderDiscoveryService(mock_registry)

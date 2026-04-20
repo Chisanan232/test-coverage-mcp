@@ -232,13 +232,13 @@ class TestTestRecommendationService:
 class TestTestRecommendationEdgeCases:
     """Tests for edge cases in test recommendations."""
 
-    def test_identify_test_gaps_empty_list(self):
+    def test_identify_test_gaps_empty_list(self) -> None:
         """Test identifying gaps with empty list."""
         service = TestRecommendationService()
         result = service.identify_test_gaps([])
         assert result == []
 
-    def test_identify_test_gaps_multiple_regions(self):
+    def test_identify_test_gaps_multiple_regions(self) -> None:
         """Test identifying gaps with multiple regions."""
         service = TestRecommendationService()
         uncovered_regions = [
@@ -263,20 +263,20 @@ class TestTestRecommendationEdgeCases:
         result = service.identify_test_gaps(uncovered_regions)
         assert len(result) == 2
 
-    def test_suggest_test_types_unknown_type(self):
+    def test_suggest_test_types_unknown_type(self) -> None:
         """Test suggesting test types for unknown type."""
         service = TestRecommendationService()
         result = service.suggest_test_types("unknown")
         assert isinstance(result, list)
         assert "unit" in result
 
-    def test_rank_by_priority_empty_list(self):
+    def test_rank_by_priority_empty_list(self) -> None:
         """Test ranking empty list."""
         service = TestRecommendationService()
         result = service.rank_by_priority([])
         assert result == []
 
-    def test_rank_by_priority_single_gap(self):
+    def test_rank_by_priority_single_gap(self) -> None:
         """Test ranking single gap."""
         service = TestRecommendationService()
         gaps = [
@@ -292,7 +292,7 @@ class TestTestRecommendationEdgeCases:
         assert len(result) == 1
         assert "priority_score" in result[0]
 
-    def test_rank_by_priority_maintains_order(self):
+    def test_rank_by_priority_maintains_order(self) -> None:
         """Test that ranking maintains correct order."""
         service = TestRecommendationService()
         gaps = [
@@ -322,7 +322,7 @@ class TestTestRecommendationEdgeCases:
         # Low should be last
         assert result[-1]["risk_level"] == "low"
 
-    def test_rank_by_priority_all_same_risk(self):
+    def test_rank_by_priority_all_same_risk(self) -> None:
         """Test ranking when all gaps have same risk level."""
         service = TestRecommendationService()
         gaps = [
@@ -350,7 +350,7 @@ class TestTestRecommendationEdgeCases:
         # Class should be ranked higher than function
         assert result[0]["region_type"] == "class"
 
-    def test_suggest_test_types_all_types(self):
+    def test_suggest_test_types_all_types(self) -> None:
         """Test suggesting test types for all region types."""
         service = TestRecommendationService()
         region_types = ["function", "class", "method", "block", "branch", "line"]
@@ -360,7 +360,7 @@ class TestTestRecommendationEdgeCases:
             assert isinstance(result, list)
             assert len(result) > 0
 
-    def test_identify_test_gaps_preserves_data(self):
+    def test_identify_test_gaps_preserves_data(self) -> None:
         """Test that identifying gaps preserves all data."""
         service = TestRecommendationService()
         uncovered_regions = [

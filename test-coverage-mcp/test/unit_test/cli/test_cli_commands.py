@@ -11,7 +11,7 @@ from test_coverage_mcp.cli.main import cli
 class TestCLIMain:
     """Tests for main CLI."""
 
-    def test_cli_help(self):
+    def test_cli_help(self) -> None:
         """Test CLI help message."""
         runner = CliRunner()
         result = runner.invoke(cli, ["--help"])
@@ -20,7 +20,7 @@ class TestCLIMain:
         assert "Test Coverage MCP" in result.output
         assert "Usage:" in result.output
 
-    def test_cli_verbose_flag(self):
+    def test_cli_verbose_flag(self) -> None:
         """Test CLI verbose flag."""
         runner = CliRunner()
         result = runner.invoke(cli, ["--verbose", "--help"])
@@ -28,7 +28,7 @@ class TestCLIMain:
         assert result.exit_code == 0
         assert "Usage:" in result.output
 
-    def test_cli_config_option(self):
+    def test_cli_config_option(self) -> None:
         """Test CLI config option with non-existent file."""
         runner = CliRunner()
         result = runner.invoke(cli, ["--config", "/nonexistent/file.yaml", "--help"])
@@ -116,7 +116,7 @@ class TestProvidersCommand:
 class TestDoctorCommand:
     """Tests for doctor command."""
 
-    def test_doctor_help(self):
+    def test_doctor_help(self) -> None:
         """Test doctor command help."""
         runner = CliRunner()
         result = runner.invoke(cli, ["doctor", "--help"])
@@ -124,7 +124,7 @@ class TestDoctorCommand:
         assert result.exit_code == 0
         assert "Check environment and system health" in result.output
 
-    def test_doctor_basic(self):
+    def test_doctor_basic(self) -> None:
         """Test doctor command basic execution."""
         runner = CliRunner()
         result = runner.invoke(cli, ["doctor"])
@@ -136,7 +136,7 @@ class TestDoctorCommand:
         assert "Plugin Loading:" in result.output
         assert "Health Status:" in result.output
 
-    def test_doctor_verbose(self):
+    def test_doctor_verbose(self) -> None:
         """Test doctor command with verbose output."""
         runner = CliRunner()
         result = runner.invoke(cli, ["--verbose", "doctor"])
@@ -148,7 +148,7 @@ class TestDoctorCommand:
 class TestCompletionCommand:
     """Tests for completion command."""
 
-    def test_completion_help(self):
+    def test_completion_help(self) -> None:
         """Test completion command help."""
         runner = CliRunner()
         result = runner.invoke(cli, ["completion", "--help"])
@@ -156,7 +156,7 @@ class TestCompletionCommand:
         assert result.exit_code == 0
         assert "Generate shell completion script" in result.output
 
-    def test_completion_bash(self):
+    def test_completion_bash(self) -> None:
         """Test bash completion generation."""
         runner = CliRunner()
         result = runner.invoke(cli, ["completion", "--shell", "bash"])
@@ -165,7 +165,7 @@ class TestCompletionCommand:
         assert "Bash completion" in result.output
         assert "test-coverage-mcp" in result.output
 
-    def test_completion_zsh(self):
+    def test_completion_zsh(self) -> None:
         """Test zsh completion generation."""
         runner = CliRunner()
         result = runner.invoke(cli, ["completion", "--shell", "zsh"])
@@ -173,7 +173,7 @@ class TestCompletionCommand:
         assert result.exit_code == 0
         assert "Zsh completion" in result.output
 
-    def test_completion_fish(self):
+    def test_completion_fish(self) -> None:
         """Test fish completion generation."""
         runner = CliRunner()
         result = runner.invoke(cli, ["completion", "--shell", "fish"])
