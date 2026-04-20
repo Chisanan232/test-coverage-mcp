@@ -125,7 +125,7 @@ class TestProviderInterfaceRobustness:
                 ProviderCapability.COVERAGE_TRENDS,
             ],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
                 ProviderCapability.FILE_COVERAGE: SupportLevel.ADVANCED,
                 ProviderCapability.COVERAGE_DELTA: SupportLevel.ADVANCED,
                 ProviderCapability.COVERAGE_TRENDS: SupportLevel.BASIC,
@@ -185,7 +185,7 @@ class TestProviderInterfaceRobustness:
         metadata = robust_provider.get_metadata()
         
         # All support levels should be valid
-        valid_levels = {SupportLevel.BASIC, SupportLevel.ADVANCED, SupportLevel.FULL}
+        valid_levels = {SupportLevel.BASIC, SupportLevel.ADVANCED, SupportLevel.ENHANCED}
         for level in metadata.support_levels.values():
             assert level in valid_levels
 

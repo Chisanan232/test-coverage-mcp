@@ -225,7 +225,7 @@ def test_discover_and_register_providers(mock_registry):
             description="Discovered provider",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )
@@ -264,7 +264,7 @@ def test_aggregate_health_with_unhealthy_provider(mock_registry):
         description="Unhealthy provider",
         supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
         support_levels={
-            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
         },
         analysis_depths=[],
     )
@@ -293,7 +293,7 @@ def test_select_best_provider_by_response_time(mock_registry):
         description="Fast provider",
         supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
         support_levels={
-            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
         },
         analysis_depths=[],
     )
@@ -311,7 +311,7 @@ def test_select_best_provider_by_response_time(mock_registry):
         description="Slow provider",
         supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
         support_levels={
-            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+            ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
         },
         analysis_depths=[],
     )

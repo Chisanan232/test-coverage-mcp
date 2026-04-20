@@ -164,7 +164,7 @@ class TestRepositoryHealthServiceEdgeCases:
             description="Provider 1",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )
@@ -182,7 +182,7 @@ class TestRepositoryHealthServiceEdgeCases:
             description="Provider 2",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )
@@ -247,7 +247,7 @@ class TestRepositoryHealthServiceEdgeCases:
             description="Unhealthy provider",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )

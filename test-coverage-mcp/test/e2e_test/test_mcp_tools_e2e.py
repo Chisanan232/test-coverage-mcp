@@ -214,11 +214,11 @@ class TestRepositoryHealthToolE2E:
 class TestPRAnalysisToolsE2E:
     """End-to-end tests for PR analysis tools."""
 
-    @patch("test_coverage_mcp.mcp_server.tools.pr_analysis.CoverageComparisonService")
-    @patch("test_coverage_mcp.mcp_server.tools.pr_analysis.CoverageRiskAnalysisService")
+    @patch("test_coverage_mcp.mcp_server.tools.analyze_pr_risk.CoverageComparisonService")
+    @patch("test_coverage_mcp.mcp_server.tools.analyze_pr_risk.CoverageRiskAnalysisService")
     def test_analyze_pr_coverage_tool(self, mock_risk_class, mock_comparison_class):
         """Test analyze_pr_coverage tool end-to-end."""
-        from test_coverage_mcp.mcp_server.tools.pr_analysis import analyze_pr_coverage
+        from test_coverage_mcp.mcp_server.tools.analyze_pr_risk import analyze_pr_coverage
 
         mock_comparison = MagicMock()
         mock_comparison_class.return_value = mock_comparison
@@ -251,10 +251,10 @@ class TestPRAnalysisToolsE2E:
 class TestLowCoverageFilesToolE2E:
     """End-to-end tests for low coverage files tool."""
 
-    @patch("test_coverage_mcp.mcp_server.tools.low_coverage_files.CoverageRiskAnalysisService")
+    @patch("test_coverage_mcp.mcp_server.tools.find_low_coverage_files.CoverageRiskAnalysisService")
     def test_identify_low_coverage_files_tool(self, mock_risk_class):
         """Test identify_low_coverage_files tool end-to-end."""
-        from test_coverage_mcp.mcp_server.tools.low_coverage_files import (
+        from test_coverage_mcp.mcp_server.tools.find_low_coverage_files import (
             identify_low_coverage_files,
         )
 
@@ -283,10 +283,10 @@ class TestLowCoverageFilesToolE2E:
 class TestTestRecommendationToolE2E:
     """End-to-end tests for test recommendation tool."""
 
-    @patch("test_coverage_mcp.mcp_server.tools.test_recommendation.TestRecommendationService")
+    @patch("test_coverage_mcp.mcp_server.tools.recommend_test_plan.TestRecommendationService")
     def test_recommend_test_plan_tool(self, mock_recommendation_class):
         """Test recommend_test_plan tool end-to-end."""
-        from test_coverage_mcp.mcp_server.tools.test_recommendation import (
+        from test_coverage_mcp.mcp_server.tools.recommend_test_plan import (
             recommend_test_plan,
         )
 
@@ -325,10 +325,10 @@ class TestTestRecommendationToolE2E:
 class TestConfigDiagnosisToolE2E:
     """End-to-end tests for config diagnosis tool."""
 
-    @patch("test_coverage_mcp.mcp_server.tools.config_diagnosis.CoverageConfigDiagnosisService")
+    @patch("test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration.CoverageConfigDiagnosisService")
     def test_diagnose_coverage_config_tool(self, mock_config_class):
         """Test diagnose_coverage_config tool end-to-end."""
-        from test_coverage_mcp.mcp_server.tools.config_diagnosis import (
+        from test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration import (
             diagnose_coverage_config,
         )
 
@@ -357,10 +357,10 @@ class TestConfigDiagnosisToolE2E:
 class TestExcludableCodeToolE2E:
     """End-to-end tests for excludable code tool."""
 
-    @patch("test_coverage_mcp.mcp_server.tools.excludable_code.ExcludableCodeCandidateService")
+    @patch("test_coverage_mcp.mcp_server.tools.identify_excludable_code_candidates.ExcludableCodeCandidateService")
     def test_find_excludable_code_tool(self, mock_excludable_class):
         """Test find_excludable_code tool end-to-end."""
-        from test_coverage_mcp.mcp_server.tools.excludable_code import (
+        from test_coverage_mcp.mcp_server.tools.identify_excludable_code_candidates import (
             find_excludable_code,
         )
 
@@ -398,9 +398,9 @@ class TestMultiToolWorkflowE2E:
     """End-to-end tests for multi-tool workflows."""
 
     @patch("test_coverage_mcp.mcp_server.tools.coverage_providers.ProviderDiscoveryService")
-    @patch("test_coverage_mcp.mcp_server.tools.pr_analysis.CoverageComparisonService")
-    @patch("test_coverage_mcp.mcp_server.tools.pr_analysis.CoverageRiskAnalysisService")
-    @patch("test_coverage_mcp.mcp_server.tools.low_coverage_files.CoverageRiskAnalysisService")
+    @patch("test_coverage_mcp.mcp_server.tools.analyze_pr_risk.CoverageComparisonService")
+    @patch("test_coverage_mcp.mcp_server.tools.analyze_pr_risk.CoverageRiskAnalysisService")
+    @patch("test_coverage_mcp.mcp_server.tools.find_low_coverage_files.CoverageRiskAnalysisService")
     def test_complete_pr_analysis_workflow(
         self,
         mock_risk_class2,
@@ -412,7 +412,7 @@ class TestMultiToolWorkflowE2E:
         from test_coverage_mcp.mcp_server.tools.coverage_providers import (
             list_coverage_providers,
         )
-        from test_coverage_mcp.mcp_server.tools.pr_analysis import analyze_pr_coverage
+        from test_coverage_mcp.mcp_server.tools.analyze_pr_risk import analyze_pr_coverage
 
         # Setup mocks
         mock_discovery = MagicMock()
@@ -454,10 +454,10 @@ class TestMultiToolWorkflowE2E:
         assert isinstance(pr_analysis, str)
 
     @patch("test_coverage_mcp.mcp_server.tools.repository_health.RepositoryHealthService")
-    @patch("test_coverage_mcp.mcp_server.tools.config_diagnosis.CoverageConfigDiagnosisService")
+    @patch("test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration.CoverageConfigDiagnosisService")
     def test_repository_health_workflow(self, mock_config_class, mock_health_class):
         """Test repository health analysis workflow."""
-        from test_coverage_mcp.mcp_server.tools.config_diagnosis import (
+        from test_coverage_mcp.mcp_server.tools.diagnose_coverage_configuration import (
             diagnose_coverage_config,
         )
         from test_coverage_mcp.mcp_server.tools.repository_health import (

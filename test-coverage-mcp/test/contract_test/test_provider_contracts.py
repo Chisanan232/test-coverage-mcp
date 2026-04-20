@@ -222,9 +222,9 @@ class TestSupportLevelContract:
         """Test that ADVANCED support level exists."""
         assert hasattr(SupportLevel, "ADVANCED")
 
-    def test_full_support_level_exists(self):
-        """Test that FULL support level exists."""
-        assert hasattr(SupportLevel, "FULL")
+    def test_enhanced_support_level_exists(self):
+        """Test that ENHANCED support level exists."""
+        assert hasattr(SupportLevel, "ENHANCED")
 
     def test_all_support_levels_are_enum_members(self):
         """Test that all support levels are SupportLevel enum members."""
@@ -243,7 +243,7 @@ class TestProviderMetadataContract:
             description="Test",
             supported_capabilities=[ProviderCapability.REPOSITORY_SUMMARY],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
             },
             analysis_depths=[],
         )
@@ -261,7 +261,7 @@ class TestProviderMetadataContract:
                 ProviderCapability.COVERAGE_DELTA,
             ],
             support_levels={
-                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.FULL,
+                ProviderCapability.REPOSITORY_SUMMARY: SupportLevel.ADVANCED,
                 ProviderCapability.FILE_COVERAGE: SupportLevel.ADVANCED,
                 ProviderCapability.COVERAGE_DELTA: SupportLevel.BASIC,
             },
