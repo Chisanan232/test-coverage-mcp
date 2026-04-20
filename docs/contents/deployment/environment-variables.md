@@ -8,8 +8,8 @@ This document describes all environment variables supported by test-coverage-mcp
 
 ### CODECOV_TOKEN
 
-**Type**: String  
-**Required**: No (required if using Codecov provider)  
+**Type**: String
+**Required**: No (required if using Codecov provider)
 **Default**: None
 
 Codecov API token for authentication.
@@ -20,8 +20,8 @@ export CODECOV_TOKEN="your-codecov-token"
 
 ### COVERALLS_TOKEN
 
-**Type**: String  
-**Required**: No (required if using Coveralls provider)  
+**Type**: String
+**Required**: No (required if using Coveralls provider)
 **Default**: None
 
 Coveralls API token for authentication.
@@ -34,9 +34,9 @@ export COVERALLS_TOKEN="your-coveralls-token"
 
 ### TRANSPORT
 
-**Type**: String  
-**Required**: No  
-**Default**: `sse`  
+**Type**: String
+**Required**: No
+**Default**: `sse`
 **Valid Values**: `sse`, `http`
 
 Transport protocol for MCP communication.
@@ -47,8 +47,8 @@ export TRANSPORT=sse
 
 ### HOST
 
-**Type**: String  
-**Required**: No  
+**Type**: String
+**Required**: No
 **Default**: `0.0.0.0`
 
 Host address to bind the server to.
@@ -59,8 +59,8 @@ export HOST=0.0.0.0
 
 ### PORT
 
-**Type**: Integer  
-**Required**: No  
+**Type**: Integer
+**Required**: No
 **Default**: `8000`
 
 Port to bind the server to.
@@ -71,8 +71,8 @@ export PORT=8000
 
 ### SERVER_PORT
 
-**Type**: Integer  
-**Required**: No  
+**Type**: Integer
+**Required**: No
 **Default**: `8000`
 
 Alias for `PORT`. Used in Docker images.
@@ -85,9 +85,9 @@ export SERVER_PORT=8000
 
 ### LOG_LEVEL
 
-**Type**: String  
-**Required**: No  
-**Default**: `info`  
+**Type**: String
+**Required**: No
+**Default**: `info`
 **Valid Values**: `debug`, `info`, `warning`, `error`, `critical`
 
 Logging level for the application.
@@ -98,8 +98,8 @@ export LOG_LEVEL=info
 
 ### RELOAD
 
-**Type**: Boolean  
-**Required**: No  
+**Type**: Boolean
+**Required**: No
 **Default**: `false`
 
 Enable auto-reload on code changes (development only).
@@ -112,8 +112,8 @@ export RELOAD=true
 
 ### TEST_COVERAGE_MCP_CONFIG
 
-**Type**: String  
-**Required**: No  
+**Type**: String
+**Required**: No
 **Default**: None
 
 Path to configuration file.
@@ -124,8 +124,8 @@ export TEST_COVERAGE_MCP_CONFIG=/etc/test-coverage-mcp/config.yaml
 
 ### INTEGRATED
 
-**Type**: Boolean  
-**Required**: No  
+**Type**: Boolean
+**Required**: No
 **Default**: `true`
 
 Run in integrated mode (combined web server and MCP).
@@ -138,8 +138,8 @@ export INTEGRATED=true
 
 ### PYTHONDONTWRITEBYTECODE
 
-**Type**: Boolean  
-**Required**: No  
+**Type**: Boolean
+**Required**: No
 **Default**: `1`
 
 Prevent Python from writing bytecode files.
@@ -150,8 +150,8 @@ export PYTHONDONTWRITEBYTECODE=1
 
 ### PYTHONUNBUFFERED
 
-**Type**: Boolean  
-**Required**: No  
+**Type**: Boolean
+**Required**: No
 **Default**: `1`
 
 Run Python in unbuffered mode for real-time logging.
@@ -279,7 +279,7 @@ Variables are loaded in the following order (later overrides earlier):
    ```bash
    # Update token
    export CODECOV_TOKEN="new-token"
-   
+
    # Restart service
    docker-compose restart
    ```
