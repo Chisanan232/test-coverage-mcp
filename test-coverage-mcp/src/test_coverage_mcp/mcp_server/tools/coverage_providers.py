@@ -122,6 +122,15 @@ def list_coverage_providers(
         }
 
 
+_describe_metadata = TOOL_METADATA["describe_coverage_provider"]
+
+
+@mcp.tool(
+    title=_describe_metadata["title"],
+    name=_describe_metadata["name"],
+    description=_describe_metadata["description"],
+    annotations=_describe_metadata["annotations"],
+)
 def describe_coverage_provider(provider_name: str) -> Dict[str, Any]:
     """Get detailed information about a specific coverage provider.
 
