@@ -6,6 +6,7 @@ from test_coverage_mcp.domain import (
     AnalysisDepth,
     ExecutionMetadata,
     ProviderCapability,
+    ProviderDescriptionResponse,
     ProviderListResponse,
     SupportLevel,
 )
@@ -131,7 +132,7 @@ _describe_metadata = TOOL_METADATA["describe_coverage_provider"]
     description=_describe_metadata["description"],
     annotations=_describe_metadata["annotations"],
 )
-def describe_coverage_provider(provider_name: str) -> Dict[str, Any]:
+def describe_coverage_provider(provider_name: str) -> ProviderDescriptionResponse:
     """Get detailed information about a specific coverage provider.
 
     This tool provides comprehensive information about a provider including
