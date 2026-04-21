@@ -42,7 +42,7 @@ Live at: https://chisanan232.github.io/test-coverage-mcp/
 
 **File**: `.github/workflows/documentation.yaml`
 
-**Trigger**: 
+**Trigger**:
 - Push to master with documentation changes
 - Release workflow completion
 
