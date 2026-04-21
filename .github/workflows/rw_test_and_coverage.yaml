@@ -84,7 +84,7 @@ jobs:
   upload-coverage:
     name: Upload ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
     needs: organize-coverage
-    if: always() && needs.organize-coverage.result == 'success'
+    if: always() && needs.organize-coverage.result == 'success' && github.actor != 'dependabot[bot]'
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@develop
     with:
       project_name: ${{ inputs.project_name }}
