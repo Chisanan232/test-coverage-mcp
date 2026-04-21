@@ -25,7 +25,7 @@ def register_tools() -> None:
     """
     try:
         mcp = mcp_factory.get()
-        
+
         # Register list_coverage_providers
         metadata = TOOL_METADATA["list_coverage_providers"]
         mcp.tool(
@@ -34,7 +34,7 @@ def register_tools() -> None:
             description=metadata["description"],
             annotations=metadata["annotations"],
         )(list_coverage_providers)
-        
+
         # Register describe_coverage_provider
         metadata = TOOL_METADATA["describe_coverage_provider"]
         mcp.tool(
@@ -43,7 +43,7 @@ def register_tools() -> None:
             description=metadata["description"],
             annotations=metadata["annotations"],
         )(describe_coverage_provider)
-        
+
         # Register get_repository_test_health
         metadata = TOOL_METADATA["get_repository_test_health"]
         mcp.tool(
@@ -52,7 +52,7 @@ def register_tools() -> None:
             description=metadata["description"],
             annotations=metadata["annotations"],
         )(get_repository_test_health)
-        
+
         # Register get_commit_coverage_summary
         metadata = TOOL_METADATA["get_commit_coverage_summary"]
         mcp.tool(
@@ -61,7 +61,7 @@ def register_tools() -> None:
             description=metadata["description"],
             annotations=metadata["annotations"],
         )(get_commit_coverage_summary)
-        
+
         # Register compare_coverage_between_refs
         metadata = TOOL_METADATA["compare_coverage_between_refs"]
         mcp.tool(
