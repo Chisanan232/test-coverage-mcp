@@ -10,8 +10,6 @@ from test_coverage_mcp.domain import (
     ProviderListResponse,
     SupportLevel,
 )
-from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import ProviderDiscoveryService
 
 
@@ -34,16 +32,6 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
-mcp = mcp_factory.get()
-_metadata = TOOL_METADATA["list_coverage_providers"]
-
-
-@mcp.tool(
-    title=_metadata["title"],
-    name=_metadata["name"],
-    description=_metadata["description"],
-    annotations=_metadata["annotations"],
-)
 def list_coverage_providers(
     include_capabilities: bool = True,
     include_health: bool = True,
@@ -123,15 +111,6 @@ def list_coverage_providers(
         }
 
 
-_describe_metadata = TOOL_METADATA["describe_coverage_provider"]
-
-
-@mcp.tool(
-    title=_describe_metadata["title"],
-    name=_describe_metadata["name"],
-    description=_describe_metadata["description"],
-    annotations=_describe_metadata["annotations"],
-)
 def describe_coverage_provider(provider_name: str) -> ProviderDescriptionResponse:
     """Get detailed information about a specific coverage provider.
 
