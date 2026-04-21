@@ -136,3 +136,19 @@ class ConfigDiagnosis(BaseModel):
         default_factory=list, description="Issues with component/flag scoping"
     )
     summary: str = Field(..., description="Summary of diagnosis findings")
+
+
+class ExecutionMetadataResponse(BaseModel):
+    """Standardized execution metadata for tool responses."""
+
+    provider_name: str = Field(..., description="Name of the provider")
+    provider_version: str = Field(..., description="Version of the provider")
+    support_level: str = Field(..., description="Support level achieved")
+    used_capabilities: list[str] = Field(
+        default_factory=list, description="Capabilities used in execution"
+    )
+    analysis_depth: str = Field(..., description="Depth of analysis performed")
+    execution_time_ms: float = Field(..., description="Execution time in milliseconds")
+    timestamp: Optional[str] = Field(
+        None, description="ISO 8601 timestamp of execution"
+    )
