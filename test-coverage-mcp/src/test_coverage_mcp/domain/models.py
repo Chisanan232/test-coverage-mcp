@@ -152,3 +152,48 @@ class ExecutionMetadataResponse(BaseModel):
     timestamp: Optional[str] = Field(
         None, description="ISO 8601 timestamp of execution"
     )
+
+
+class ProviderInfo(BaseModel):
+    """Information about a coverage provider."""
+
+    name: str = Field(..., description="Provider name")
+    version: str = Field(..., description="Provider version")
+    description: str = Field(..., description="Provider description")
+    supported_capabilities: Optional[list[str]] = Field(
+        None, description="List of supported capabilities"
+    )
+    support_levels: Optional[dict[str, str]] = Field(
+        None, description="Support level for each capability"
+    )
+    health: Optional[dict[str, Any]] = Field(
+        None, description="Provider health status"
+    )
+
+
+class ProviderListResponse(BaseModel):
+    """Response from list_coverage_providers tool."""
+
+    providers: list[ProviderInfo] = Field(..., description="List of providers")
+    total_providers: int = Field(..., description="Total number of providers")
+    healthy_providers: Optional[int] = Field(
+        None, description="Number of healthy providers"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class ProviderDescriptionResponse(BaseModel):
+    """Response from describe_coverage_provider tool."""
+
+    name: str = Field(..., description="Provider name")
+    version: str = Field(..., description="Provider version")
+    description: str = Field(..., description="Provider description")
+    capabilities: dict[str, Any] = Field(..., description="Capability information")
+    health: Optional[dict[str, Any]] = Field(
+        None, description="Provider health status"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
