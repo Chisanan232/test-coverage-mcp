@@ -77,7 +77,7 @@ const config: Config = {
           },
         },
         includeCurrentVersion: true,
-        lastVersion: '0.1.0',
+        lastVersion: 'current',
       },
     ],
     [
@@ -101,7 +101,7 @@ const config: Config = {
           },
         },
         includeCurrentVersion: true,
-        lastVersion: '0.1.0',
+        lastVersion: 'current',
       },
     ],
     [
