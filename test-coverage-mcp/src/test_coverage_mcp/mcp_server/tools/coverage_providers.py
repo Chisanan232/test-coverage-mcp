@@ -6,6 +6,7 @@ from test_coverage_mcp.domain import (
     AnalysisDepth,
     ExecutionMetadata,
     ProviderCapability,
+    ProviderListResponse,
     SupportLevel,
 )
 from test_coverage_mcp.mcp_server.app import mcp_factory
@@ -45,7 +46,7 @@ _metadata = TOOL_METADATA["list_coverage_providers"]
 def list_coverage_providers(
     include_capabilities: bool = True,
     include_health: bool = True,
-) -> Dict[str, Any]:
+) -> ProviderListResponse:
     """List all available coverage providers with their metadata.
 
     This tool discovers and lists all registered coverage providers, optionally
