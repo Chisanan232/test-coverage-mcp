@@ -4,8 +4,11 @@ from typing import Any, Dict, Optional
 
 from test_coverage_mcp.domain import (
     AnalysisDepth,
+    CoverageComparisonResponse,
     SupportLevel,
 )
+from test_coverage_mcp.mcp_server.app import mcp_factory
+from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import (
     CoverageComparisonService,
     ProviderDiscoveryService,
@@ -31,13 +34,23 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
+mcp = mcp_factory.get()
+_metadata = TOOL_METADATA["compare_coverage_between_refs"]
+
+
+@mcp.tool(
+    title=_metadata["title"],
+    name=_metadata["name"],
+    description=_metadata["description"],
+    annotations=_metadata["annotations"],
+)
 def compare_coverage_between_refs(
     repo_slug: str,
     base_ref: str,
     head_ref: str,
     provider: Optional[str] = None,
     regression_threshold: float = 1.0,
-) -> Dict[str, Any]:
+) -> CoverageComparisonResponse:
     """Compare coverage between two references.
 
     This tool analyzes coverage differences between two git references
