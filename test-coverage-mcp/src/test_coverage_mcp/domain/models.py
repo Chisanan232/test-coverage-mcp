@@ -197,3 +197,56 @@ class ProviderDescriptionResponse(BaseModel):
     execution_metadata: ExecutionMetadataResponse = Field(
         ..., description="Execution metadata"
     )
+
+
+class RepositoryHealthResponse(BaseModel):
+    """Response from get_repository_test_health tool."""
+
+    repository_name: str = Field(..., description="Repository name")
+    coverage_percentage: float = Field(..., description="Overall coverage percentage")
+    test_count: int = Field(..., description="Total number of tests")
+    passing_tests: int = Field(..., description="Number of passing tests")
+    failing_tests: int = Field(..., description="Number of failing tests")
+    health_score: float = Field(..., ge=0.0, le=100.0, description="Health score 0-100")
+    risk_level: str = Field(..., description="Risk level assessment")
+    recommendations: list[str] = Field(
+        default_factory=list, description="Health improvement recommendations"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class CommitCoverageSummaryResponse(BaseModel):
+    """Response from get_commit_coverage_summary tool."""
+
+    commit_sha: str = Field(..., description="Commit SHA")
+    commit_message: str = Field(..., description="Commit message")
+    coverage_percentage: float = Field(..., description="Coverage percentage for commit")
+    coverage_change: float = Field(..., description="Coverage change from parent commit")
+    files_changed: int = Field(..., description="Number of files changed")
+    lines_added: int = Field(..., description="Lines added")
+    lines_removed: int = Field(..., description="Lines removed")
+    affected_files: list[dict[str, Any]] = Field(
+        default_factory=list, description="Details of affected files"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class CoverageComparisonResponse(BaseModel):
+    """Response from compare_coverage_between_refs tool."""
+
+    source_ref: str = Field(..., description="Source reference (branch/tag/commit)")
+    target_ref: str = Field(..., description="Target reference (branch/tag/commit)")
+    source_coverage: float = Field(..., description="Coverage percentage of source")
+    target_coverage: float = Field(..., description="Coverage percentage of target")
+    coverage_difference: float = Field(..., description="Difference in coverage")
+    improved: bool = Field(..., description="Whether coverage improved")
+    file_changes: list[dict[str, Any]] = Field(
+        default_factory=list, description="Coverage changes by file"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
