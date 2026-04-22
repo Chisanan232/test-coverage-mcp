@@ -9,7 +9,7 @@ dev = [
     "pytest-asyncio>=1.1.0",
     "coverage>=7.10.6",
     "pytest-rerunfailures>=16.0.1",
-    "aiohttp>=3.12.15",
+    "aiohttp>=3.13.5",
 ]
 pre-commit-ci = [
     "mypy>=1.17.1",
