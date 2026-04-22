@@ -88,7 +88,7 @@ All tools return structured responses with:
 {
   // Tool-specific data
   data: {...},
-  
+
   // Execution metadata
   execution_metadata: {
     provider_name: string,
@@ -98,7 +98,7 @@ All tools return structured responses with:
     analysis_depth: "FILE" | "FUNCTION" | "REPOSITORY",
     execution_time_ms: number
   },
-  
+
   // Error information (if applicable)
   error?: string,
   error_type?: string

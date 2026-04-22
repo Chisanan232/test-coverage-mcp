@@ -46,17 +46,17 @@ from test_coverage_mcp.domain import (
 
 class CoverageProvider(ABC):
     """Base interface for coverage providers."""
-    
+
     @abstractmethod
     async def get_metadata(self) -> ProviderMetadata:
         """Get provider metadata and capabilities."""
         pass
-    
+
     @abstractmethod
     async def health_check(self) -> ProviderHealth:
         """Check provider health and connectivity."""
         pass
-    
+
     @abstractmethod
     async def get_repository_coverage(
         self,
@@ -65,7 +65,7 @@ class CoverageProvider(ABC):
     ) -> RepositoryCoverageSummary:
         """Get coverage for a repository."""
         pass
-    
+
     @abstractmethod
     async def get_commit_coverage(
         self,
@@ -74,7 +74,7 @@ class CoverageProvider(ABC):
     ) -> CommitCoverageSummary:
         """Get coverage for a specific commit."""
         pass
-    
+
     @abstractmethod
     async def compare_coverage(
         self,
@@ -113,20 +113,20 @@ from typing import Optional, Dict, Any
 
 class YourProviderClient:
     """Client for Your Coverage Service API."""
-    
+
     def __init__(self, api_token: str, base_url: str = "https://api.yourservice.com"):
         self.api_token = api_token
         self.base_url = base_url
         self.session: Optional[aiohttp.ClientSession] = None
-    
+
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.session:
             await self.session.close()
-    
+
     async def get_repository_coverage(
         self,
         repo_slug: str,
@@ -136,7 +136,7 @@ class YourProviderClient:
         params = {"repo": repo_slug}
         if ref:
             params["ref"] = ref
-        
+
         async with self.session.get(
             f"{self.base_url}/coverage",
             params=params,
@@ -144,7 +144,7 @@ class YourProviderClient:
         ) as response:
             response.raise_for_status()
             return await response.json()
-    
+
     async def health_check(self) -> bool:
         """Check API connectivity."""
         try:
@@ -172,11 +172,11 @@ from .client import YourProviderClient
 
 class YourProvider(CoverageProvider):
     """Your Coverage Service provider implementation."""
-    
+
     def __init__(self, api_token: str):
         self.api_token = api_token
         self.client = YourProviderClient(api_token)
-    
+
     async def get_metadata(self) -> ProviderMetadata:
         """Return provider metadata."""
         return ProviderMetadata(
@@ -195,17 +195,17 @@ class YourProvider(CoverageProvider):
             },
             analysis_depths=[],
         )
-    
+
     async def health_check(self) -> ProviderHealth:
         """Check provider health."""
         import time
         start = time.time()
-        
+
         try:
             async with self.client as client:
                 is_healthy = await client.health_check()
                 response_time = (time.time() - start) * 1000
-                
+
                 return ProviderHealth(
                     is_healthy=is_healthy,
                     last_check=datetime.now(timezone.utc).isoformat(),
@@ -219,7 +219,7 @@ class YourProvider(CoverageProvider):
                 error_message=str(e),
                 response_time_ms=(time.time() - start) * 1000,
             )
-    
+
     async def get_repository_coverage(
         self,
         repo_slug: str,
@@ -228,7 +228,7 @@ class YourProvider(CoverageProvider):
         """Get repository coverage."""
         async with self.client as client:
             data = await client.get_repository_coverage(repo_slug, ref)
-            
+
             # Transform API response to domain model
             return RepositoryCoverageSummary(
                 repository_slug=repo_slug,
@@ -238,7 +238,7 @@ class YourProvider(CoverageProvider):
                 covered_lines=data["covered_lines"],
                 # ... other fields
             )
-    
+
     # Implement other required methods...
 ```
 
@@ -251,20 +251,20 @@ from test_coverage_mcp.providers.your_provider import YourProvider
 
 class ProviderRegistry:
     """Registry for coverage providers."""
-    
+
     _providers = {
         "your_provider": YourProvider,
         # ... other providers
     }
-    
+
     @classmethod
     def get_provider(cls, name: str, **kwargs) -> CoverageProvider:
         """Get a provider instance."""
         if name not in cls._providers:
             raise ProviderNotFoundError(f"Provider '{name}' not found")
-        
+
         return cls._providers[name](**kwargs)
-    
+
     @classmethod
     def list_providers(cls) -> List[str]:
         """List available providers."""
@@ -281,14 +281,14 @@ from pydantic import BaseSettings
 
 class YourProviderConfig(BaseSettings):
     """Configuration for Your Provider."""
-    
+
     api_token: str = os.getenv("YOUR_PROVIDER_API_TOKEN", "")
     base_url: str = os.getenv(
         "YOUR_PROVIDER_BASE_URL",
         "https://api.yourservice.com"
     )
     timeout_seconds: int = int(os.getenv("YOUR_PROVIDER_TIMEOUT", "30"))
-    
+
     class Config:
         env_prefix = "YOUR_PROVIDER_"
 ```
@@ -310,7 +310,7 @@ def provider():
 async def test_get_metadata(provider):
     """Test metadata retrieval."""
     metadata = await provider.get_metadata()
-    
+
     assert metadata.name == "your_provider"
     assert metadata.version == "1.0.0"
     assert len(metadata.supported_capabilities) > 0
@@ -320,9 +320,9 @@ async def test_health_check(provider):
     """Test health check."""
     with patch.object(provider.client, 'health_check', new_callable=AsyncMock) as mock:
         mock.return_value = True
-        
+
         health = await provider.health_check()
-        
+
         assert health.is_healthy is True
         assert health.response_time_ms > 0
 
@@ -335,9 +335,9 @@ async def test_get_repository_coverage(provider):
             "total_lines": 1000,
             "covered_lines": 855,
         }
-        
+
         coverage = await provider.get_repository_coverage("owner/repo")
-        
+
         assert coverage.coverage_percentage == 85.5
         assert coverage.total_lines == 1000
 ```
