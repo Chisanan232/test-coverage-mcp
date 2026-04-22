@@ -7,10 +7,15 @@ from test_coverage_mcp.domain import (
     CoverageComparisonResponse,
     SupportLevel,
 )
+from test_coverage_mcp.mcp_server.app import mcp_factory
+from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import (
     CoverageComparisonService,
     ProviderDiscoveryService,
 )
+
+# Get or create MCP instance for decorator registration
+_mcp = mcp_factory.get_or_create()
 
 
 def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
@@ -32,6 +37,15 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
+_comparison_metadata = TOOL_METADATA["compare_coverage_between_refs"]
+
+
+@_mcp.tool(
+    title=_comparison_metadata["title"],
+    name=_comparison_metadata["name"],
+    description=_comparison_metadata["description"],
+    annotations=_comparison_metadata["annotations"],
+)
 def compare_coverage_between_refs(
     repo_slug: str,
     base_ref: str,

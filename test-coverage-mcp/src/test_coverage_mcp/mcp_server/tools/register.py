@@ -1,18 +1,22 @@
-"""Tool registration for MCP server."""
+"""Tool registration for MCP server.
 
-from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.commit_summary import (
+This module imports all tool modules to trigger their decorator registration.
+Tools are registered at module import time using @mcp.tool() decorators
+with lazy MCP initialization via get_or_create().
+"""
+
+# Import all tool modules to trigger decorator registration
+from test_coverage_mcp.mcp_server.tools.commit_summary import (  # noqa: F401
     get_commit_coverage_summary,
 )
-from test_coverage_mcp.mcp_server.tools.comparison import (
+from test_coverage_mcp.mcp_server.tools.comparison import (  # noqa: F401
     compare_coverage_between_refs,
 )
-from test_coverage_mcp.mcp_server.tools.coverage_providers import (
+from test_coverage_mcp.mcp_server.tools.coverage_providers import (  # noqa: F401
     describe_coverage_provider,
     list_coverage_providers,
 )
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
-from test_coverage_mcp.mcp_server.tools.repository_health import (
+from test_coverage_mcp.mcp_server.tools.repository_health import (  # noqa: F401
     get_repository_test_health,
 )
 
@@ -20,55 +24,7 @@ from test_coverage_mcp.mcp_server.tools.repository_health import (
 def register_tools() -> None:
     """Register all tools with the MCP server.
 
-    This function should be called after the MCP server is created
-    to register all available tools.
+    This function is a no-op since tools are now registered at module import time
+    via @mcp.tool() decorators. It's kept for backward compatibility.
     """
-    try:
-        mcp = mcp_factory.get()
-        
-        # Register list_coverage_providers
-        metadata = TOOL_METADATA["list_coverage_providers"]
-        mcp.tool(
-            title=metadata["title"],
-            name=metadata["name"],
-            description=metadata["description"],
-            annotations=metadata["annotations"],
-        )(list_coverage_providers)
-        
-        # Register describe_coverage_provider
-        metadata = TOOL_METADATA["describe_coverage_provider"]
-        mcp.tool(
-            title=metadata["title"],
-            name=metadata["name"],
-            description=metadata["description"],
-            annotations=metadata["annotations"],
-        )(describe_coverage_provider)
-        
-        # Register get_repository_test_health
-        metadata = TOOL_METADATA["get_repository_test_health"]
-        mcp.tool(
-            title=metadata["title"],
-            name=metadata["name"],
-            description=metadata["description"],
-            annotations=metadata["annotations"],
-        )(get_repository_test_health)
-        
-        # Register get_commit_coverage_summary
-        metadata = TOOL_METADATA["get_commit_coverage_summary"]
-        mcp.tool(
-            title=metadata["title"],
-            name=metadata["name"],
-            description=metadata["description"],
-            annotations=metadata["annotations"],
-        )(get_commit_coverage_summary)
-        
-        # Register compare_coverage_between_refs
-        metadata = TOOL_METADATA["compare_coverage_between_refs"]
-        mcp.tool(
-            title=metadata["title"],
-            name=metadata["name"],
-            description=metadata["description"],
-            annotations=metadata["annotations"],
-        )(compare_coverage_between_refs)
-    except AssertionError:
-        pass
+    pass
