@@ -197,6 +197,38 @@ class MCPServerFactory(BaseServerFactory[FastMCP]):
         return _MCP_SERVER_INSTANCE
 
     @staticmethod
+    def get_or_create() -> FastMCP:
+        """Get the MCP server instance, creating it if necessary.
+
+        Retrieves the singleton FastMCP instance. If it hasn't been created yet,
+        creates it automatically. This is useful for decorator registration at
+        module import time.
+
+        Returns
+        -------
+        FastMCP
+            The configured FastMCP server instance
+
+        Examples
+        --------
+        .. code-block:: python
+
+            from test_coverage_mcp.mcp_server.app import mcp_factory
+
+            # Safe to use at module level - won't fail if not created yet
+            mcp = mcp_factory.get_or_create()
+
+            @mcp.tool(title="My Tool", name="my.tool")
+            def my_tool(param: str) -> dict:
+                return {"result": param}
+
+        """
+        global _MCP_SERVER_INSTANCE
+        if _MCP_SERVER_INSTANCE is None:
+            _MCP_SERVER_INSTANCE = FastMCP(name=SERVER_NAME)
+        return _MCP_SERVER_INSTANCE
+
+    @staticmethod
     def reset() -> None:
         """Reset the singleton instance (for testing purposes).
 

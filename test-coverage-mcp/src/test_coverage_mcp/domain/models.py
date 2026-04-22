@@ -136,3 +136,117 @@ class ConfigDiagnosis(BaseModel):
         default_factory=list, description="Issues with component/flag scoping"
     )
     summary: str = Field(..., description="Summary of diagnosis findings")
+
+
+class ExecutionMetadataResponse(BaseModel):
+    """Standardized execution metadata for tool responses."""
+
+    provider_name: str = Field(..., description="Name of the provider")
+    provider_version: str = Field(..., description="Version of the provider")
+    support_level: str = Field(..., description="Support level achieved")
+    used_capabilities: list[str] = Field(
+        default_factory=list, description="Capabilities used in execution"
+    )
+    analysis_depth: str = Field(..., description="Depth of analysis performed")
+    execution_time_ms: float = Field(..., description="Execution time in milliseconds")
+    timestamp: Optional[str] = Field(
+        None, description="ISO 8601 timestamp of execution"
+    )
+
+
+class ProviderInfo(BaseModel):
+    """Information about a coverage provider."""
+
+    name: str = Field(..., description="Provider name")
+    version: str = Field(..., description="Provider version")
+    description: str = Field(..., description="Provider description")
+    supported_capabilities: Optional[list[str]] = Field(
+        None, description="List of supported capabilities"
+    )
+    support_levels: Optional[dict[str, str]] = Field(
+        None, description="Support level for each capability"
+    )
+    health: Optional[dict[str, Any]] = Field(
+        None, description="Provider health status"
+    )
+
+
+class ProviderListResponse(BaseModel):
+    """Response from list_coverage_providers tool."""
+
+    providers: list[ProviderInfo] = Field(..., description="List of providers")
+    total_providers: int = Field(..., description="Total number of providers")
+    healthy_providers: Optional[int] = Field(
+        None, description="Number of healthy providers"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class ProviderDescriptionResponse(BaseModel):
+    """Response from describe_coverage_provider tool."""
+
+    name: str = Field(..., description="Provider name")
+    version: str = Field(..., description="Provider version")
+    description: str = Field(..., description="Provider description")
+    capabilities: dict[str, Any] = Field(..., description="Capability information")
+    health: Optional[dict[str, Any]] = Field(
+        None, description="Provider health status"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class RepositoryHealthResponse(BaseModel):
+    """Response from get_repository_test_health tool."""
+
+    repository_name: str = Field(..., description="Repository name")
+    coverage_percentage: float = Field(..., description="Overall coverage percentage")
+    test_count: int = Field(..., description="Total number of tests")
+    passing_tests: int = Field(..., description="Number of passing tests")
+    failing_tests: int = Field(..., description="Number of failing tests")
+    health_score: float = Field(..., ge=0.0, le=100.0, description="Health score 0-100")
+    risk_level: str = Field(..., description="Risk level assessment")
+    recommendations: list[str] = Field(
+        default_factory=list, description="Health improvement recommendations"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class CommitCoverageSummaryResponse(BaseModel):
+    """Response from get_commit_coverage_summary tool."""
+
+    commit_sha: str = Field(..., description="Commit SHA")
+    commit_message: str = Field(..., description="Commit message")
+    coverage_percentage: float = Field(..., description="Coverage percentage for commit")
+    coverage_change: float = Field(..., description="Coverage change from parent commit")
+    files_changed: int = Field(..., description="Number of files changed")
+    lines_added: int = Field(..., description="Lines added")
+    lines_removed: int = Field(..., description="Lines removed")
+    affected_files: list[dict[str, Any]] = Field(
+        default_factory=list, description="Details of affected files"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )
+
+
+class CoverageComparisonResponse(BaseModel):
+    """Response from compare_coverage_between_refs tool."""
+
+    source_ref: str = Field(..., description="Source reference (branch/tag/commit)")
+    target_ref: str = Field(..., description="Target reference (branch/tag/commit)")
+    source_coverage: float = Field(..., description="Coverage percentage of source")
+    target_coverage: float = Field(..., description="Coverage percentage of target")
+    coverage_difference: float = Field(..., description="Difference in coverage")
+    improved: bool = Field(..., description="Whether coverage improved")
+    file_changes: list[dict[str, Any]] = Field(
+        default_factory=list, description="Coverage changes by file"
+    )
+    execution_metadata: ExecutionMetadataResponse = Field(
+        ..., description="Execution metadata"
+    )

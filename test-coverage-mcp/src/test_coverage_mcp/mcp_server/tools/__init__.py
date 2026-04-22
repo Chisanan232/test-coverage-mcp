@@ -220,11 +220,10 @@ Import this package in your main MCP application:
 
 from __future__ import annotations
 
-# Import tool functions (not registered yet - registration happens in register.py)
+# Import tool functions - decorators are applied at module import time
 from .commit_summary import get_commit_coverage_summary
 from .comparison import compare_coverage_between_refs
 from .coverage_providers import describe_coverage_provider, list_coverage_providers
-from .register import register_tools
 from .repository_health import get_repository_test_health
 
 __all__ = [
@@ -233,7 +232,6 @@ __all__ = [
     "get_repository_test_health",
     "get_commit_coverage_summary",
     "compare_coverage_between_refs",
-    "register_tools",
 ]
 
 # Package metadata for tool discovery

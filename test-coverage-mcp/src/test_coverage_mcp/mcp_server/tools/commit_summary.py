@@ -4,9 +4,14 @@ from typing import Any, Dict, Optional
 
 from test_coverage_mcp.domain import (
     AnalysisDepth,
+    CommitCoverageSummaryResponse,
     SupportLevel,
 )
+from test_coverage_mcp.mcp_server.app import mcp_factory
 from test_coverage_mcp.services import ProviderDiscoveryService
+
+# Get or create MCP instance for decorator registration
+_mcp = mcp_factory.get_or_create()
 
 
 def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
@@ -28,11 +33,20 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
+@_mcp.tool(
+    title="Get Commit Coverage Summary",
+    name="coverage.commit.summary",
+    description="Get coverage summary for a specific commit including coverage change and affected files",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
+)
 def get_commit_coverage_summary(
     repo_slug: str,
     commit_sha: str,
     provider: Optional[str] = None,
-) -> Dict[str, Any]:
+) -> CommitCoverageSummaryResponse:
     """Get coverage summary for a specific commit.
 
     This tool retrieves coverage information for a specific commit,

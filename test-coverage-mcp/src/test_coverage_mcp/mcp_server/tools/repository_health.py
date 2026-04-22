@@ -5,9 +5,14 @@ from typing import Any, Dict, Optional
 from test_coverage_mcp.domain import (
     AnalysisDepth,
     ExecutionMetadata,
+    RepositoryHealthResponse,
     SupportLevel,
 )
+from test_coverage_mcp.mcp_server.app import mcp_factory
 from test_coverage_mcp.services import ProviderDiscoveryService, RepositoryHealthService
+
+# Get or create MCP instance for decorator registration
+_mcp = mcp_factory.get_or_create()
 
 
 def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
@@ -29,12 +34,21 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
+@_mcp.tool(
+    title="Get Repository Test Health",
+    name="coverage.repository.health",
+    description="Analyze repository test health including coverage metrics, test count, and risk assessment",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
+)
 def get_repository_test_health(
     repo_slug: str,
     provider: Optional[str] = None,
     ref: Optional[str] = None,
     threshold: float = 80.0,
-) -> Dict[str, Any]:
+) -> RepositoryHealthResponse:
     """Get test coverage health summary for a repository.
 
     This tool analyzes the test coverage health of a repository using available
