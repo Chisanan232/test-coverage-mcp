@@ -11,7 +11,6 @@ from test_coverage_mcp.domain import (
     SupportLevel,
 )
 from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import ProviderDiscoveryService
 
 # Get or create MCP instance for decorator registration
@@ -37,14 +36,14 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
-_list_metadata = TOOL_METADATA["list_coverage_providers"]
-
-
 @_mcp.tool(
-    title=_list_metadata["title"],
-    name=_list_metadata["name"],
-    description=_list_metadata["description"],
-    annotations=_list_metadata["annotations"],
+    title="List Coverage Providers",
+    name="coverage.providers.list",
+    description="Discover all available coverage providers with their capabilities and health status",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
 )
 def list_coverage_providers(
     include_capabilities: bool = True,
@@ -125,14 +124,14 @@ def list_coverage_providers(
         }
 
 
-_describe_metadata = TOOL_METADATA["describe_coverage_provider"]
-
-
 @_mcp.tool(
-    title=_describe_metadata["title"],
-    name=_describe_metadata["name"],
-    description=_describe_metadata["description"],
-    annotations=_describe_metadata["annotations"],
+    title="Describe Coverage Provider",
+    name="coverage.providers.describe",
+    description="Get detailed information about a specific coverage provider including capabilities and health status",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
 )
 def describe_coverage_provider(provider_name: str) -> ProviderDescriptionResponse:
     """Get detailed information about a specific coverage provider.

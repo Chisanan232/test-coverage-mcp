@@ -8,7 +8,6 @@ from test_coverage_mcp.domain import (
     SupportLevel,
 )
 from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import ProviderDiscoveryService
 
 # Get or create MCP instance for decorator registration
@@ -34,14 +33,14 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
-_commit_metadata = TOOL_METADATA["get_commit_coverage_summary"]
-
-
 @_mcp.tool(
-    title=_commit_metadata["title"],
-    name=_commit_metadata["name"],
-    description=_commit_metadata["description"],
-    annotations=_commit_metadata["annotations"],
+    title="Get Commit Coverage Summary",
+    name="coverage.commit.summary",
+    description="Get coverage summary for a specific commit including coverage change and affected files",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
 )
 def get_commit_coverage_summary(
     repo_slug: str,

@@ -8,7 +8,6 @@ from test_coverage_mcp.domain import (
     SupportLevel,
 )
 from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import (
     CoverageComparisonService,
     ProviderDiscoveryService,
@@ -37,14 +36,14 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
-_comparison_metadata = TOOL_METADATA["compare_coverage_between_refs"]
-
-
 @_mcp.tool(
-    title=_comparison_metadata["title"],
-    name=_comparison_metadata["name"],
-    description=_comparison_metadata["description"],
-    annotations=_comparison_metadata["annotations"],
+    title="Compare Coverage Between Refs",
+    name="coverage.comparison.refs",
+    description="Compare coverage metrics between two git references (branches, tags, commits)",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
 )
 def compare_coverage_between_refs(
     repo_slug: str,

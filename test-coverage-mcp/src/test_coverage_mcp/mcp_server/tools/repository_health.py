@@ -9,7 +9,6 @@ from test_coverage_mcp.domain import (
     SupportLevel,
 )
 from test_coverage_mcp.mcp_server.app import mcp_factory
-from test_coverage_mcp.mcp_server.tools.metadata import TOOL_METADATA
 from test_coverage_mcp.services import ProviderDiscoveryService, RepositoryHealthService
 
 # Get or create MCP instance for decorator registration
@@ -35,14 +34,14 @@ def _create_execution_metadata(tool_name: str) -> Dict[str, Any]:
     }
 
 
-_health_metadata = TOOL_METADATA["get_repository_test_health"]
-
-
 @_mcp.tool(
-    title=_health_metadata["title"],
-    name=_health_metadata["name"],
-    description=_health_metadata["description"],
-    annotations=_health_metadata["annotations"],
+    title="Get Repository Test Health",
+    name="coverage.repository.health",
+    description="Analyze repository test health including coverage metrics, test count, and risk assessment",
+    annotations={
+        "destructiveHint": False,
+        "openWorldHint": True,
+    },
 )
 def get_repository_test_health(
     repo_slug: str,
