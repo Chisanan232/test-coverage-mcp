@@ -1,5 +1,11 @@
 # test-coverage-mcp
 
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Chisanan232/test-coverage-mcp)](https://github.com/Chisanan232/test-coverage-mcp/releases)
+[![PyPI](https://img.shields.io/pypi/v/test-coverage-mcp)](https://pypi.org/project/test-coverage-mcp/)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/Chisanan232/test-coverage-mcp/pkgs/container/test-coverage-mcp)
+
 🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.
 
 ## Overview
@@ -13,10 +19,10 @@
 - **11 MCP Tools**: Comprehensive coverage analysis and recommendations
 - **Multiple Transports**: stdio, HTTP, SSE support
 - **Web API**: FastAPI-based REST interface
+- **Docker Support**: Production-ready containerization
+- **Full Documentation**: Complete guides and API reference
 
 ## Python Versions Support
-
-[![Supported Versions](https://img.shields.io/pypi/pyversions/test-coverage-mcp.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/test-coverage-mcp)
 
 Requires Python 3.12 or higher (3.12, 3.13, 3.14)
 
@@ -65,7 +71,19 @@ cd test-coverage-mcp && uv run pytest
 
 ## Documentation
 
-📚 Full documentation: [Coming Soon]
+📚 **Full Documentation**: https://test-coverage-mcp.readthedocs.io/
+
+### Quick Links
+
+- **[Getting Started](docs/contents/deployment/overview.md)** - Installation and quick start
+- **[Architecture Overview](docs/contents/architecture/overview.md)** - System design and components
+- **[MCP Tools Reference](docs/contents/mcp-tools/reference.md)** - Complete tool documentation
+- **[Deployment Guides](docs/contents/deployment/)** - CLI, Docker, Kubernetes deployment
+- **[Plugin Development](docs/contents/guides/plugin-development.md)** - Create custom providers
+- **[Troubleshooting](docs/contents/troubleshooting.md)** - Common issues and solutions
+- **[CHANGELOG](CHANGELOG.md)** - Version history and releases
+
+### Development
 
 See `CONTRIBUTING.md` for development workflow and workspace details.
 

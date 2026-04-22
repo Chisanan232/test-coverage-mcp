@@ -3,8 +3,8 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src._base import BaseServerFactory
-from src.mcp_server.app import MCPServerFactory, mcp_factory
+from test_coverage_mcp._base import BaseServerFactory
+from test_coverage_mcp.mcp_server.app import MCPServerFactory, mcp_factory
 
 
 class TestMCPServerFactory:
@@ -147,7 +147,7 @@ class TestMcpServerIntegration:
         http_app = server.streamable_http_app()
         assert http_app is not None
 
-    @patch("src.mcp_server.app.FastMCP.run")
+    @patch("test_coverage_mcp.mcp_server.app.FastMCP.run")
     def test_server_stdio_run(self, mock_run: MagicMock) -> None:
         """Test running server with stdio transport."""
         # Create server

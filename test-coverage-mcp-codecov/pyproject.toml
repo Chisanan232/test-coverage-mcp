@@ -39,12 +39,12 @@ Homepage = "https://github.com/Chisanan232/test-coverage-mcp"
 Repository = "https://github.com/Chisanan232/test-coverage-mcp"
 
 [project.entry-points."test_coverage_mcp.providers"]
-codecov = "test_coverage_mcp_codecov:CodecovProvider"
+codecov = "test_coverage_mcp.providers.codecov:CodecovProvider"
 
 [tool.hatch.build.targets.sdist]
 include = ["src/"]
-packages = ["src"]
+packages = ["src/test_coverage_mcp"]
 
 [tool.hatch.build.targets.wheel]
 include = ["src/"]
-packages = ["src"]
+packages = ["src/test_coverage_mcp"]

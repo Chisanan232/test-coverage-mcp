@@ -1,0 +1,97 @@
+###################################################################################################################################
+#
+# Workflow Description:
+#     Unified reusable workflow for running tests and handling coverage reports in a monorepo.
+#     Combines: test execution → coverage organization → coverage upload into a single workflow.
+#     This ensures that if a package has no tests or no coverage is generated, the organize and
+#     upload steps are skipped cleanly to prevent false failures.
+#
+# Workflow input parameters:
+#     * package: Package identifier ('core' or 'codecov')
+#     * project_name: Full project name (e.g., 'test-coverage-mcp' or 'test-coverage-mcp-codecov')
+#     * test_working_directory: Working directory for test execution (e.g., './test-coverage-mcp')
+#     * test_type: Type of test ('unit-test', 'integration-test', 'contract-test')
+#     * test_folder: Folder containing tests (e.g., './test/unit_test')
+#     * python_versions: JSON array of Python versions to test
+#     * operating_systems: JSON array of operating systems to test
+#
+# Workflow secrets:
+#     * codecov_token: Token for uploading to Codecov
+#     * sonar_token: Token for uploading to SonarQube
+#
+###################################################################################################################################
+
+name: Test and Coverage - Unified Workflow
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: "Package identifier (core or codecov)"
+        type: string
+        required: true
+      project_name:
+        description: "Full project name for coverage reports"
+        type: string
+        required: true
+      test_working_directory:
+        description: "Working directory for test execution"
+        type: string
+        required: true
+      test_type:
+        description: "Type of test (unit-test, integration-test, contract-test)"
+        type: string
+        required: true
+      test_folder:
+        description: "Folder containing tests"
+        type: string
+        required: true
+      python_versions:
+        description: "JSON array of Python versions"
+        type: string
+        required: true
+      operating_systems:
+        description: "JSON array of operating systems"
+        type: string
+        required: true
+    secrets:
+      codecov_token:
+        description: "Codecov token for uploading coverage"
+        required: false
+
+jobs:
+  run-tests:
+    name: Run ${{ inputs.test_type }} - ${{ inputs.package }}
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_uv_run_test.yaml@master
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
+      test_folder: ${{ inputs.test_folder }}
+      python-versions: ${{ inputs.python_versions }}
+      operating-systems: ${{ inputs.operating_systems }}
+
+  organize-coverage:
+    name: Organize ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
+    needs: run-tests
+    if: always() && needs.run-tests.result == 'success' && needs.run-tests.outputs.has-coverage == 'true'
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_organize_test_cov_reports.yaml@develop
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
+
+  upload-coverage:
+    name: Upload ${{ inputs.test_type }} Coverage - ${{ inputs.package }}
+    needs: organize-coverage
+    if: always() && needs.organize-coverage.result == 'success' && github.actor != 'dependabot[bot]'
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_upload_test_cov_report.yaml@develop
+    with:
+      project_name: ${{ inputs.project_name }}
+      test_working_directory: ${{ inputs.test_working_directory }}
+      test_type: ${{ inputs.test_type }}
+      upload-to-codecov: true
+      codecov_name: ${{ inputs.project_name }}
+      codecov_flags: ${{ inputs.package }},${{ inputs.test_type }}
+    secrets:
+      codecov_token: ${{ secrets.codecov_token }}

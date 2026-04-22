@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 from pydantic import ValidationError
-from src.config import Settings, get_settings, reset_settings
+from test_coverage_mcp.config import Settings, get_settings, reset_settings
 
 
 class TestSettings:

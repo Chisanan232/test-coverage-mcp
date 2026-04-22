@@ -136,7 +136,68 @@ uv run pytest test-coverage-mcp/test/
 uv run pytest test-coverage-mcp-codecov/test/
 ```
 
-### Running Linters and Type Checkers
+### Development Tooling Setup
+
+The workspace uses three main development tools configured at the workspace level:
+
+**Note**: Linting and type checking are automatically validated by [pre-commit.ci](https://pre-commit.ci) on every PR, so a separate CI workflow is not needed. Developers should run these tools locally before pushing.
+
+#### MyPy (Type Checking)
+
+**Configuration**: `mypy.ini`
+- Checks all package source code and tests
+- Supports namespace packages with `explicit_package_bases`
+- Per-package overrides available
+
+```bash
+# Type check core package
+uv run mypy test-coverage-mcp/src
+
+# Type check codecov provider
+uv run mypy test-coverage-mcp-codecov/src
+
+# Type check all packages
+uv run mypy test-coverage-mcp/src test-coverage-mcp-codecov/src
+```
+
+#### Ruff (Linting & Formatting)
+
+**Configuration**: `ruff.toml`
+- Comprehensive rule set (E, F, UP, B, SIM, I, N, etc.)
+- Workspace-aware `known-first-party` packages
+- Per-file ignores for tests and special files
+
+```bash
+# Check code style
+uv run ruff check .
+
+# Format code (auto-fix)
+uv run ruff format .
+
+# Check and format together
+uv run ruff check . && uv run ruff format .
+```
+
+#### Pre-Commit Hooks
+
+**Configuration**: `.pre-commit-config.yaml`
+- Runs on `push` (not on commit by default)
+- Includes ruff, mypy, YAML checks, and more
+- Workspace-aware file patterns
+
+```bash
+# Run all pre-commit hooks
+uv run pre-commit run --all-files
+
+# Run specific hook
+uv run pre-commit run ruff --all-files
+uv run pre-commit run mypy --all-files
+
+# Install hooks (runs automatically on push)
+uv run pre-commit install
+```
+
+### Running All Quality Checks
 
 ```bash
 # From root directory
@@ -216,6 +277,46 @@ git push origin feature/your-feature-name
 ```
 
 Then create a Pull Request on GitHub.
+
+## Adding a New Service
+
+To add a new intelligence service:
+
+1. Create a new file in `test-coverage-mcp/src/test_coverage_mcp/services/`:
+   ```python
+   # services/my_service.py
+   from test_coverage_mcp.services.discovery import ProviderDiscoveryService
+
+   class MyIntelligenceService:
+       """Service for specific coverage intelligence."""
+
+       def __init__(self, discovery_service: Optional[ProviderDiscoveryService] = None) -> None:
+           self._discovery = discovery_service or ProviderDiscoveryService()
+
+       def analyze(self, repo_owner: str, repo_name: str) -> Dict[str, Any]:
+           """Analyze coverage using multiple providers."""
+           pass
+   ```
+
+2. Add to `test-coverage-mcp/src/test_coverage_mcp/services/__init__.py`:
+   ```python
+   from test_coverage_mcp.services.my_service import MyIntelligenceService
+
+   __all__ = [..., "MyIntelligenceService"]
+   ```
+
+3. Write unit tests in `test-coverage-mcp/test/unit_test/services/test_my_service.py`
+
+4. Write integration tests in `test-coverage-mcp/test/integration_test/test_services_integration.py`
+
+5. Document in `docs/contents/api/services.md`
+
+**Key Patterns**:
+- Inject `ProviderDiscoveryService` for provider access
+- Aggregate data from multiple providers
+- Implement graceful degradation (continue if some providers fail)
+- Use type hints and docstrings
+- Write comprehensive tests
 
 ## Adding a New Provider
 

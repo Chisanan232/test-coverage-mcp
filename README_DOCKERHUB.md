@@ -1,15 +1,14 @@
-# 🦾 ClickUp MCP Server
+# 🔬 Test Coverage MCP Server
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/chisanan232/clickup-mcp-server)](https://hub.docker.com/r/chisanan232/clickup-mcp-server)
-[![Docker Image Size](https://img.shields.io/docker/image-size/chisanan232/clickup-mcp-server/latest)](https://hub.docker.com/r/chisanan232/clickup-mcp-server)
-[![Docker Stars](https://img.shields.io/docker/stars/chisanan232/clickup-mcp-server)](https://hub.docker.com/r/chisanan232/clickup-mcp-server)
-[![Docker Automated build](https://img.shields.io/docker/automated/chisanan232/clickup-mcp-server)](https://hub.docker.com/r/chisanan232/clickup-mcp-server)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
+[![Docker Pulls](https://img.shields.io/docker/pulls/chisanan232/test-coverage-mcp)](https://hub.docker.com/r/chisanan232/test-coverage-mcp)
+[![Docker Image Size](https://img.shields.io/docker/image-size/chisanan232/test-coverage-mcp/latest)](https://hub.docker.com/r/chisanan232/test-coverage-mcp)
+[![Docker Stars](https://img.shields.io/docker/stars/chisanan232/test-coverage-mcp)](https://hub.docker.com/r/chisanan232/test-coverage-mcp)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Type checking: mypy](https://img.shields.io/badge/type%20checking-mypy-blue)](https://github.com/python/mypy)
 
 ## 🔍 Overview
 
-A powerful FastAPI web server that exposes ClickUp functionality through a REST API using the Model-Controller-Provider (MCP) pattern.
+A provider-extensible MCP (Model Context Protocol) server for test coverage intelligence. Offers a stable capability-driven tool contract with provider-specific enrichments for analyzing and understanding test coverage reports from multiple sources.
 
 ## 🐳 Docker Usage
 
@@ -18,16 +17,16 @@ A powerful FastAPI web server that exposes ClickUp functionality through a REST 
 Pull the Docker image:
 
 ```bash
-docker pull chisanan232/clickup-mcp-server:latest
+docker pull chisanan232/test-coverage-mcp:latest
 ```
 
-Run the container with minimal configuration:
+Run the container with default configuration (integrated mode with SSE transport):
 
 ```bash
-docker run -d -p 8000:8000 -e CLICKUP_API_TOKEN=your_token_here chisanan232/clickup-mcp-server
+docker run -d -p 8000:8000 chisanan232/test-coverage-mcp
 ```
 
-Access the API documentation at `http://localhost:8000/docs`
+Access the health check endpoint at `http://localhost:8000/health`
 
 ### 🔧 Configuration Options
 
@@ -35,110 +34,159 @@ The Docker container can be configured using environment variables:
 
 | Environment Variable | Description                                                     | Default   |
 |----------------------|-----------------------------------------------------------------|-----------|
-| `CLICKUP_API_TOKEN`  | Your ClickUp API token (required)                               | -         |
-| `SERVER_HOST`        | Host to bind the server to                                      | `0.0.0.0` |
-| `SERVER_PORT`        | Port to bind the server to                                      | `8000`    |
-| `MCP_TRANSPORT`      | Transport mode (`sse`, `streamable-http`)                       | `sse`     |
-| `LOG_LEVEL`          | Logging level (`debug`, `info`, `warning`, `error`, `critical`) | `info`    |
-| `RELOAD`             | Enable auto-reload for development                              | -         |
+| `TRANSPORT`          | MCP transport mode (`sse`, `stdio`, `streamable-http`)          | `sse`     |
+| `HOST`               | Host to bind the server to                                      | `0.0.0.0` |
+| `PORT`               | Port to bind the server to                                      | `8000`    |
+| `INTEGRATED`         | Run integrated mode (MCP + webhook server) (`true`/`false`)     | `true`    |
+| `LOG_LEVEL`          | Logging level (`debug`, `info`, `warning`, `error`)             | `info`    |
+| `RELOAD`             | Enable auto-reload for development (`true`/`false`)             | `false`   |
 
-### 📝 Using Environment Files
+### 📝 Using Environment Variables
 
-You can use a `.env` file for configuration instead of passing environment variables directly:
+Configure the server by passing environment variables to the Docker container:
 
-1. Create a `.env` file with your configuration:
-
-```
-CLICKUP_API_TOKEN=your_clickup_api_token_here
-LOG_LEVEL=debug
-```
-
-2. Mount the file when running the container:
-
+**Default configuration (integrated mode with SSE transport)**:
 ```bash
-docker run -d -p 8000:8000 -v $(pwd)/.env:/app/.env chisanan232/clickup-mcp-server
+docker run -d -p 8000:8000 chisanan232/test-coverage-mcp
 ```
 
-### 🔄 Custom Port Configuration
-
-To use a custom port:
-
+**Custom transport (stdio)**:
 ```bash
-docker run -d -p 9000:9000 -e SERVER_PORT=9000 -e CLICKUP_API_TOKEN=your_token_here chisanan232/clickup-mcp-server
+docker run -e TRANSPORT=stdio chisanan232/test-coverage-mcp
 ```
 
-### 🛡️ Securing Your API Token
+**Custom port**:
+```bash
+docker run -d -p 9000:9000 -e PORT=9000 chisanan232/test-coverage-mcp
+```
 
-For production environments, consider using Docker secrets or a secure environment management solution rather than passing the API token directly.
+**Standalone mode (MCP only, no webhook)**:
+```bash
+docker run -d -p 8000:8000 -e INTEGRATED=false chisanan232/test-coverage-mcp
+```
+
+**Debug logging**:
+```bash
+docker run -d -p 8000:8000 -e LOG_LEVEL=debug chisanan232/test-coverage-mcp
+```
+
+**Multiple configuration options**:
+```bash
+docker run -d -p 8000:8000 \
+  -e TRANSPORT=sse \
+  -e LOG_LEVEL=debug \
+  -e INTEGRATED=true \
+  chisanan232/test-coverage-mcp
+```
 
 ### 🔍 Health Check
 
-The container includes a health check endpoint at `/health` that can be used to verify the server is running correctly.
+The container includes a health check endpoint at `/health` that can be used to verify the server is running correctly:
+
+```bash
+curl http://localhost:8000/health
+```
+
+### 📊 Accessing the Server
+
+**MCP SSE Endpoint** (for HTTP-based MCP clients):
+```bash
+curl http://localhost:8000/sse
+```
+
+**Webhook Server** (when in integrated mode):
+The webhook server is available at `http://localhost:8000` with health check at `/health`
 
 ## 📚 Python Usage
 
 ### Installation
 
+Install the package and its dependencies using `uv`:
+
 ```bash
-pip install -e .
+uv sync
 ```
 
-### Configuration
+Or with pip:
 
-There are two ways to configure your ClickUp API token:
-
-1. **Environment variable**: Set the `CLICKUP_API_TOKEN` environment variable
-2. **Environment file**: Create a `.env` file with your ClickUp API token:
-
+```bash
+pip install -e test-coverage-mcp/
 ```
-CLICKUP_API_TOKEN=your_clickup_api_token_here
-```
-
-See the `.env.example` file for an example configuration.
 
 ### Starting the server
 
+Run the MCP server with default configuration:
+
 ```bash
-python -m clickup_mcp
+test-coverage-mcp
 ```
 
 ### Command Line Options
 
 The server accepts the following command line options:
 
-- `--host`: Host to bind the server to (default: 0.0.0.0)
-- `--port`: Port to bind the server to (default: 8000)
-- `--log-level`: Logging level (choices: debug, info, warning, error, critical; default: info)
+- `--integrated`: Run in integrated mode (MCP + webhook server) (default: enabled)
+- `--transport`: Transport protocol to use (`sse`, `stdio`, `streamable-http`) (default: `sse`)
+- `--host`: Host to bind the server to (default: `0.0.0.0`)
+- `--port`: Port to bind the server to (default: `8000`)
+- `--log-level`: Logging level (`debug`, `info`, `warning`, `error`) (default: `info`)
 - `--reload`: Enable auto-reload for development
-- `--env`: Path to a custom .env file for environment variables (default: .env)
-- `--token`: ClickUp API token (overrides token from .env file if provided)
-- `--transport`: Transport protocol to use (sse or http-streaming)
+- `--env-file`: Path to a custom .env file for environment variables (default: `.env`)
 
-Example:
+Examples:
+
+**Run with SSE transport on port 8000**:
 ```bash
-python -m clickup_mcp --host 127.0.0.1 --port 8080 --log-level debug --env custom.env
+test-coverage-mcp --transport sse --port 8000
+```
+
+**Run in standalone mode (MCP only)**:
+```bash
+test-coverage-mcp --transport stdio
+```
+
+**Run with debug logging**:
+```bash
+test-coverage-mcp --log-level debug
+```
+
+**Run with custom configuration**:
+```bash
+test-coverage-mcp --integrated --transport sse --host 0.0.0.0 --port 9000 --log-level debug
 ```
 
 ## 📋 Requirements
 
-- Python 3.13+
+- Python 3.12+
 - Docker (for container deployment)
-
-## 📖 Documentation
-
-API documentation is available at `http://localhost:8000/docs` when the server is running.
+- uv (recommended for development)
 
 ## 🌟 Features
 
-- 🔒 Secure API token handling via environment variables or files
-- 🔄 Multiple transport protocols (SSE, HTTP streaming)
-- 📊 Comprehensive ClickUp API coverage
+- 🔬 Provider-extensible architecture for multiple coverage sources
+- 🔄 Multiple transport protocols (SSE, stdio, HTTP streaming)
+- 🎯 Stable capability-driven tool contract
 - 🚀 Fast and efficient FastAPI implementation
+- 📊 Comprehensive test coverage analysis
+- 🔌 Plugin system for provider discovery
+- 🏥 Health check endpoints
 - 📝 Interactive API documentation with Swagger UI
+- 🐳 Docker support with environment variable configuration
+
+## 🔌 Supported Providers
+
+- **Codecov**: Analyze coverage from Codecov API
+- **More providers coming soon!**
 
 ## 🔨 Development
 
-Want to contribute? Great! Check out our [GitHub repository](https://github.com/Chisanan232/clickup-mcp-server) for contribution guidelines.
+Want to contribute? Great! Check out our [GitHub repository](https://github.com/Chisanan232/test-coverage-mcp) for contribution guidelines.
+
+## 📖 Documentation
+
+Full documentation is available in the [GitHub repository](https://github.com/Chisanan232/test-coverage-mcp/tree/master/docs).
+
+Health check endpoint: `http://localhost:8000/health`
 
 ## 📜 License
 

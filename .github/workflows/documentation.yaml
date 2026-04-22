@@ -97,7 +97,7 @@ jobs:
     uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_docusaurus_operations.yaml@master
     with:
       operation: build
-      node-version: '22'
+      node-version: '24'
       working-directory: docs
       upload-artifacts: true
 
@@ -117,7 +117,7 @@ jobs:
         uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./docs/build
 

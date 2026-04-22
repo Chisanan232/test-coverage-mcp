@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  test-coverage-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-coverage-mcp-prod
+    ports:
+      - "8000:8000"
+    environment:
+      TRANSPORT: sse
+      HOST: 0.0.0.0
+      PORT: 8000
+      LOG_LEVEL: info
+      RELOAD: "false"
+      CODECOV_TOKEN: ${CODECOV_TOKEN}
+      COVERALLS_TOKEN: ${COVERALLS_TOKEN}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    networks:
+      - test-coverage-mcp
+    # Resource limits for production
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    read_only_root_filesystem: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+
+networks:
+  test-coverage-mcp:
+    driver: bridge

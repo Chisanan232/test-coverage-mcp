@@ -46,6 +46,8 @@ dependencies = [
     "mcp[cli]>=1.26.0",
     # HTTP API client feature
     "httpx>=0.28.1",
+    # CLI framework
+    "click>=8.3.1",
 ]
 
 [project.urls]
@@ -53,14 +55,14 @@ Homepage = "https://github.com/Chisanan232/test-coverage-mcp"
 Repository = "https://github.com/Chisanan232/test-coverage-mcp"
 
 [project.scripts]
-test-coverage-mcp = "src.entry:main"
+test-coverage-mcp = "test_coverage_mcp.entry:main"
 
 [tool.hatch.build.targets.sdist]
 include = ["src/"]
-packages = ["src"]
-artifacts = ["src/py.typed"]
+packages = ["src/test_coverage_mcp"]
+artifacts = ["src/test_coverage_mcp/py.typed"]
 
 [tool.hatch.build.targets.wheel]
 include = ["src/"]
-packages = ["src"]
-artifacts = ["src/py.typed"]
+packages = ["src/test_coverage_mcp"]
+artifacts = ["src/test_coverage_mcp/py.typed"]

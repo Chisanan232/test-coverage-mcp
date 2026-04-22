@@ -130,6 +130,10 @@ const config: Config = {
         indexDocs: true,
         indexBlog: true,
         indexPages: true,
+        searchResultLimits: 8,
+        searchResultContextMaxLength: 50,
+        removeDefaultStopWordFilter: false,
+        removeDefaultStemmer: false,
       },
     ],
   ],
@@ -142,9 +146,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/python_logo_icon.png',
     navbar: {
-      title: 'UV-Template',
+      title: 'test-coverage-mcp',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'test-coverage-mcp Logo',
         src: 'img/python_logo_icon.png',
       },
       items: [
@@ -249,6 +253,76 @@ const config: Config = {
       attributes: {
         rel: 'canonical',
         href: 'https://chisanan232.github.io/test-coverage-mcp/docs/introduction',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:title',
+        content: 'test-coverage-mcp - Provider-Extensible MCP Server for Test Coverage Intelligence',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:description',
+        content: '🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:url',
+        content: 'https://chisanan232.github.io/test-coverage-mcp/',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:type',
+        content: 'website',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:image',
+        content: 'https://chisanan232.github.io/test-coverage-mcp/img/python_logo_icon.png',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:title',
+        content: 'test-coverage-mcp - Provider-Extensible MCP Server for Test Coverage Intelligence',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:description',
+        content: '🔬 A provider-extensible MCP server for test coverage intelligence, with a stable capability-driven tool contract and provider-specific enrichments.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:image',
+        content: 'https://chisanan232.github.io/test-coverage-mcp/img/python_logo_icon.png',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:creator',
+        content: '@Chisanan232',
       },
     },
   ],
