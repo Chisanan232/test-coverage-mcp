@@ -5,7 +5,7 @@ members = ["test-coverage-mcp", "test-coverage-mcp-codecov"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
-    "pytest-cov>=5.0.0,<8",
+    "pytest-cov>=7.1.0,<8",
     "pytest-asyncio>=1.1.0",
     "coverage>=7.10.6",
     "pytest-rerunfailures>=16.1",
