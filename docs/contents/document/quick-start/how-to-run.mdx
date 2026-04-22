@@ -9,114 +9,95 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-# Customizing Your New Project
+# Running test-coverage-mcp
 
-This guide explains how to customize and configure your new Python project after creating it from the template.
+This guide explains how to run, configure, and use test-coverage-mcp.
 
-## Step 1: Update Project Metadata
+## Step 1: Configure Coverage Providers
 
-After creating your project from the template, customize the `pyproject.toml` file with your project details:
+Before running test-coverage-mcp, configure at least one coverage provider:
 
-```toml title="pyproject.toml"
-[project]
-name = "your-project-name"  # ← Update this
-version = "0.1.0"  # ← Set initial version
-description = "Your project description"  # ← Update this
-authors = [{ name = "Your Name", email = "your.email@example.com" }]  # ← Update this
-requires-python = ">=3.12,<4.0"
-readme = "README.md"
-license = { file = "LICENSE" }
-keywords = ["your", "project", "keywords"]  # ← Add relevant keywords
-```
-
-## Step 2: Set Up Development Environment
-
-### Install Dependencies and Activate Environment
+### Codecov Provider Setup
 
 ```bash
-# Install all dependencies (including dev tools)
-uv sync
+# Set environment variables
+export CODECOV_API_TOKEN="your-codecov-token"
+export CODECOV_OWNER="your-org"
+export CODECOV_REPO="your-repo"
 
-# Activate the virtual environment (optional, uv run handles this automatically)
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate     # Windows
+# Or create .env file
+cat > .env << EOF
+CODECOV_API_TOKEN=your-codecov-token
+CODECOV_OWNER=your-org
+CODECOV_REPO=your-repo
+EOF
 ```
 
-### Set Up Pre-commit Hooks
+See [Configuration Guide](../guides/configuration.md) for detailed setup.
+
+## Step 2: Start the MCP Server
+
+### Using stdio Transport (Recommended for Claude)
 
 ```bash
-# Install pre-commit hooks for code quality
-uv run pre-commit install
+# Start server with stdio transport
+test-coverage-mcp serve --transport stdio
 
-# Test pre-commit setup
-uv run pre-commit run --all-files
+# Or with uv
+uv run test-coverage-mcp serve --transport stdio
 ```
 
-## Step 3: Customize Project Structure
-
-### Update README.md
-
-Replace the template placeholders in `README.md`:
-
-```markdown title="README.md"
-# Your Project Name
-
-## Overview
-Brief description of what your project does
-
-## Installation
-pip install your-package-name
-# or
-uv add your-package-name
-
-## Quick Start
-```python
-from your_project import main_function
-
-result = main_function()
-print(result)
-```
-
-Replace `<you lib name>` placeholders with your actual project name.
-
-### Add Your Source Code
-
-<Tabs>
-<TabItem value="package" label="Package Structure">
+### Using HTTP Transport
 
 ```bash
-# Create your main package
-mkdir src/your_project_name
-touch src/your_project_name/__init__.py
-touch src/your_project_name/main.py
+# Start server with HTTP transport
+test-coverage-mcp serve --transport http --host 0.0.0.0 --port 8000
 
-# Example main.py content
-echo 'def hello_world():
-    return "Hello from your project!"
-
-if __name__ == "__main__":
-    print(hello_world())' > src/your_project_name/main.py
+# Or with uv
+uv run test-coverage-mcp serve --transport http --host 0.0.0.0 --port 8000
 ```
 
-</TabItem>
-<TabItem value="module" label="Single Module">
+### Using SSE Transport
 
 ```bash
-# Create a single module
-touch src/your_module.py
-
-# Example module content
-echo 'def main():
-    """Main function of your project."""
-    print("Welcome to your new project!")
-
-if __name__ == "__main__":
-    main()' > src/your_module.py
+# Start server with SSE transport
+test-coverage-mcp serve --transport sse --host 0.0.0.0 --port 8000
 ```
 
-</TabItem>
-</Tabs>
+## Step 3: Using MCP Tools
+
+Once the server is running, you can use the MCP tools:
+
+### List Available Providers
+
+```bash
+# Using MCP client
+tool: coverage.providers.list
+parameters:
+  include_capabilities: true
+  include_health: true
+```
+
+### Get Repository Health
+
+```bash
+tool: coverage.repository.health
+parameters:
+  repo_slug: "owner/repo"
+  threshold: 80.0
+```
+
+### Compare Coverage Between Branches
+
+```bash
+tool: coverage.comparison.refs
+parameters:
+  repo_slug: "owner/repo"
+  base_ref: "main"
+  head_ref: "feature-branch"
+```
+
+See [MCP Tools Overview](../mcp-tools/overview.md) for complete tool documentation.
 
 ## Step 4: Development Workflow
 
@@ -127,23 +108,23 @@ if __name__ == "__main__":
 uv run pytest
 
 # Run tests with coverage
-uv run pytest --cov=src --cov-report=html
+uv run pytest --cov=test-coverage-mcp/src --cov-report=html
 
 # Run specific test file
-uv run pytest test/unit_test/test_example.py
+uv run pytest test-coverage-mcp/test/unit_test/test_tools.py
 ```
 
 ### Code Quality Checks
 
 ```bash
 # Format code with black
-uv run black src/ test/
+uv run black test-coverage-mcp/src test-coverage-mcp/test
 
-# Lint code with pylint
-uv run pylint src/
+# Lint code with ruff
+uv run ruff check test-coverage-mcp/
 
 # Type checking with mypy
-uv run mypy src/
+uv run mypy test-coverage-mcp/src
 
 # Run all pre-commit hooks
 uv run pre-commit run --all-files
@@ -151,141 +132,138 @@ uv run pre-commit run --all-files
 
 ### Adding Dependencies
 
-<Tabs>
-<TabItem value="production" label="Production Dependencies">
-
 ```bash
 # Add production dependencies
-uv add requests pandas numpy
+uv add requests
 
-# Add with version constraints
-uv add "fastapi>=0.100.0,<1.0.0"
-```
-
-</TabItem>
-<TabItem value="development" label="Development Dependencies">
-
-```bash
 # Add development dependencies
-uv add --dev black pylint mypy
+uv add --dev pytest-mock
 
 # Add to specific dependency group
-uv add --group test pytest-mock
+uv add --group test pytest-asyncio
 ```
 
-</TabItem>
-</Tabs>
+## Step 5: Docker Deployment
 
-## Step 5: Configure CI/CD
-
-The template includes GitHub Actions workflows in `.github/workflows/`:
-
-### Update GitHub Secrets (if needed)
-
-For advanced workflows, you may need to configure repository secrets:
-
-1. Go to your GitHub repository → Settings → Secrets and variables → Actions
-2. Add any required secrets (e.g., PyPI tokens, deployment keys)
-
-### Customize Workflows
-
-Edit `.github/workflows/ci.yaml` to match your project needs:
-
-```yaml title=".github/workflows/ci.yaml"
-name: CI
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12", "3.13"]  # Customize Python versions
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up uv
-        uses: ./.github/actions/setup-python-uv
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      # Your custom test steps here
-```
-
-## Step 6: Documentation Setup
-
-### Docusaurus Documentation (Optional)
+### Build Docker Image
 
 ```bash
-# Navigate to documentation directory
-cd docs_with_docusarus
+# Build image
+docker build -t test-coverage-mcp:latest .
 
-# Install documentation dependencies
-npm install
-
-# Start development server
-npm start
-
-# Build static documentation
-npm run build
+# Or with specific Python version
+docker build --build-arg PYTHON_VERSION=3.13 -t test-coverage-mcp:latest .
 ```
 
-### MkDocs Documentation (Alternative)
+### Run Docker Container
 
 ```bash
-# Navigate to MkDocs directory
-cd docs_with_mkdocs
+# Run with stdio transport
+docker run -e CODECOV_API_TOKEN=your-token test-coverage-mcp:latest
 
-# Install MkDocs dependencies
-uv run pip install -r requirements.txt
-
-# Start development server
-uv run mkdocs serve
-
-# Build documentation
-uv run mkdocs build
+# Run with HTTP transport
+docker run -p 8000:8000 \
+  -e CODECOV_API_TOKEN=your-token \
+  test-coverage-mcp:latest \
+  serve --transport http --host 0.0.0.0 --port 8000
 ```
 
-## Step 7: Final Setup
-
-### Initialize Git Repository
+### Using Docker Compose
 
 ```bash
-# If you used Method 2 (manual setup) from installation
-git add .
-git commit -m "Initial commit from Python UV template"
+# Start services
+docker-compose up
 
-# Connect to remote repository
-git remote add origin https://github.com/YOUR-USERNAME/YOUR-PROJECT.git
-git push -u origin main
+# Stop services
+docker-compose down
 ```
 
-### Clean Up Template References
+## Step 6: Integration Examples
 
-1. Remove or update template-specific files you don't need
-2. Update documentation to reflect your project
-3. Customize GitHub issue templates in `.github/ISSUE_TEMPLATE/`
+### Python Integration
 
-## Running Your Project
+```python
+from test_coverage_mcp.mcp_server.tools import (
+    list_coverage_providers,
+    get_repository_test_health,
+    compare_coverage_between_refs
+)
 
-After customization, test that everything works:
+# List providers
+providers = list_coverage_providers()
+
+# Check repository health
+health = get_repository_test_health(
+    repo_slug="owner/repo",
+    threshold=80.0
+)
+
+# Compare coverage
+comparison = compare_coverage_between_refs(
+    repo_slug="owner/repo",
+    base_ref="main",
+    head_ref="feature-branch"
+)
+```
+
+### CI/CD Integration
+
+```yaml
+# GitHub Actions example
+- name: Check Coverage
+  run: |
+    test-coverage-mcp serve --transport stdio << 'EOF'
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "tools/call",
+      "params": {
+        "name": "coverage.repository.health",
+        "arguments": {
+          "repo_slug": "owner/repo"
+        }
+      }
+    }
+    EOF
+```
+
+## Step 7: Troubleshooting
+
+### Provider Not Found
 
 ```bash
-# Run your main module
-uv run python -m src.your_project_name
+# List available providers
+test-coverage-mcp list-providers
 
-# Or run directly
-uv run python src/your_project_name/main.py
-
-# Install in editable mode for development
-uv sync --dev
+# Check provider health
+test-coverage-mcp health-check --provider codecov
 ```
 
-🎉 **Congratulations!** Your Python project with uv management is now ready for development!
+### Configuration Issues
+
+```bash
+# Verify configuration
+test-coverage-mcp config validate
+
+# Show current configuration
+test-coverage-mcp config show
+```
+
+### Connection Issues
+
+```bash
+# Test provider connectivity
+test-coverage-mcp test-provider --provider codecov
+
+# Check API token
+test-coverage-mcp verify-token --provider codecov
+```
 
 ## Next Steps
 
-- Set up your IDE/editor with Python and uv support
-- Configure additional development tools as needed
-- Start building your amazing Python project!
-- Consider setting up automated releases using the included GitHub Actions
+- **[MCP Tools Overview](../mcp-tools/overview.md)** - Learn about available tools
+- **[Configuration Guide](../guides/configuration.md)** - Detailed configuration
+- **[Provider Development](../guides/provider-development.md)** - Create custom providers
+- **[Troubleshooting](../troubleshooting.md)** - Common issues and solutions
+
+🎉 **Ready to analyze coverage!** Start using test-coverage-mcp for intelligent coverage analysis!
