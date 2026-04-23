@@ -39,6 +39,48 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: '🛠️ Guides',
+      items: [
+        {
+          type: 'doc',
+          id: 'guides/configuration',
+          label: '⚙️ Configuration Guide',
+        },
+        {
+          type: 'doc',
+          id: 'guides/provider-development',
+          label: '🔌 Provider Development',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🧰 MCP Tools',
+      items: [
+        {
+          type: 'doc',
+          id: 'mcp-tools/overview',
+          label: '📚 Tools Overview',
+        },
+        {
+          type: 'doc',
+          id: 'mcp-tools/provider-discovery',
+          label: '🔍 Provider Discovery',
+        },
+        {
+          type: 'doc',
+          id: 'mcp-tools/coverage-analysis',
+          label: '📊 Coverage Analysis',
+        },
+        {
+          type: 'doc',
+          id: 'mcp-tools/tools-categorization',
+          label: '📋 Tools Categorization',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: '🏗️ Architecture',
       items: [
         {
