@@ -279,4 +279,4 @@ update_dashboard(providers)
 - **[Provider Discovery Tools](./provider-discovery.md)** - Detailed tool documentation
 - **[Coverage Analysis Tools](./coverage-analysis.md)** - Analysis tool documentation
 - **[Configuration Guide](../guides/configuration.md)** - Set up your environment
-- **[API Reference](./reference.md)** - Complete API specifications
+- **[Provider Development](../guides/provider-development.md)** - Create custom providers
