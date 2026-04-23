@@ -16,12 +16,12 @@ The server currently implements **5 core tools** organized into two categories:
 
 Tools for discovering and managing coverage providers:
 
-1. **[List Coverage Providers](./list-providers.md)** (`coverage.providers.list`)
+1. **List Coverage Providers** (`coverage.providers.list`)
    - Discover all available coverage providers
    - View provider capabilities and health status
    - Filter by support level and analysis depth
 
-2. **[Describe Coverage Provider](./describe-provider.md)** (`coverage.providers.describe`)
+2. **Describe Coverage Provider** (`coverage.providers.describe`)
    - Get detailed information about a specific provider
    - View supported capabilities and limitations
    - Check provider health and status
@@ -30,17 +30,17 @@ Tools for discovering and managing coverage providers:
 
 Tools for analyzing repository coverage and generating insights:
 
-3. **[Get Repository Test Health](./repository-health.md)** (`coverage.repository.health`)
+3. **Get Repository Test Health** (`coverage.repository.health`)
    - Analyze repository test coverage health
    - Get coverage metrics and test counts
    - Assess coverage risk levels
 
-4. **[Get Commit Coverage Summary](./commit-summary.md)** (`coverage.commit.summary`)
+4. **Get Commit Coverage Summary** (`coverage.commit.summary`)
    - Retrieve coverage for specific commits
    - Track coverage changes per commit
    - Identify affected files and coverage impact
 
-5. **[Compare Coverage Between Refs](./compare-refs.md)** (`coverage.comparison.refs`)
+5. **Compare Coverage Between Refs** (`coverage.comparison.refs`)
    - Compare coverage between git references
    - Identify coverage regressions
    - Analyze coverage trends across branches
