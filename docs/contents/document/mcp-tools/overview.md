@@ -158,9 +158,9 @@ comparison = compare_coverage_between_refs(
 
 ## Next Steps
 
-- **[Provider Discovery Tools](./list-providers.md)** - Learn about provider management
-- **[Coverage Analysis Tools](./repository-health.md)** - Analyze coverage metrics
-- **[API Reference](./reference.md)** - Detailed tool specifications
+- **[Provider Discovery Tools](./provider-discovery.md)** - Learn about provider management
+- **[Coverage Analysis Tools](./coverage-analysis.md)** - Analyze coverage metrics
+- **[Tools Categorization](./tools-categorization.md)** - Tool selection guide
 - **[Configuration Guide](../guides/configuration.md)** - Set up providers
 
 ## Tool Statistics

@@ -468,4 +468,4 @@ For questions or issues:
 
 - **[Configuration Guide](./configuration.md)** - Configure your provider
 - **[MCP Tools Overview](../mcp-tools/overview.md)** - Tool specifications
-- **[Contributing Guide](../contribute/contribute.md)** - Contribution guidelines
+- **[Contributing Guide](../contribute/)** - Contribution guidelines
