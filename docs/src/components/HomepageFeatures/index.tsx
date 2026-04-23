@@ -11,21 +11,21 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Provider-Extensible',
     image: require('@site/static/img/easy_to_use.png').default,
     description: (
       <>
-        UV-Template is very easy to use. Just import and everything is ready to go.
+        Support multiple coverage providers through a plugin system. Easily extend with custom providers for your specific needs.
       </>
     ),
   },
   {
-    title: 'Base on Python',
+    title: 'Intelligent Analysis',
     image: require('@site/static/img/python_base.png').default,
     description: (
       <>
-        Built with Python for excellent readability and maintainability.
-        Leverage Python's extensive ecosystem and simplicity for your project automation needs.
+        Get comprehensive coverage analysis, trend tracking, and intelligent recommendations.
+        Leverage MCP tools for detailed coverage intelligence and insights.
       </>
     ),
   },
