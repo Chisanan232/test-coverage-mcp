@@ -274,6 +274,6 @@ if codecov['provider']['capabilities']['file_coverage'] == 'ADVANCED':
 
 ## Next Steps
 
-- **[Coverage Analysis Tools](./repository-health.md)** - Analyze coverage metrics
+- **[Coverage Analysis Tools](./coverage-analysis.md)** - Analyze coverage metrics
 - **[Configuration Guide](../guides/configuration.md)** - Set up providers
-- **[API Reference](./reference.md)** - Detailed specifications
+- **[Tools Categorization](./tools-categorization.md)** - Tool selection guide
