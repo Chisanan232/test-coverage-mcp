@@ -467,5 +467,5 @@ For questions or issues:
 ## Next Steps
 
 - **[Configuration Guide](./configuration.md)** - Configure your provider
-- **[API Reference](../mcp-tools/reference.md)** - Tool specifications
-- **[Testing Guide](../development/testing.md)** - Write tests
+- **[MCP Tools Overview](../mcp-tools/overview.md)** - Tool specifications
+- **[Contributing Guide](../contribute/contribute.md)** - Contribution guidelines
