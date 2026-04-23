@@ -6,14 +6,14 @@ sidebar_position: 1
 
 # Requirements
 
-Before using this Python project template, ensure your development environment meets the following requirements:
+Before using test-coverage-mcp, ensure your development environment meets the following requirements.
 
 ## System Requirements
 
 - **Operating System**: Linux, macOS, or Windows
 - **Memory**: Minimum 512MB RAM (1GB+ recommended for development)
-- **Disk Space**: Minimum 500MB for full template with dependencies
-- **Internet Connection**: Required for downloading dependencies and packages
+- **Disk Space**: Minimum 200MB for installation and dependencies
+- **Internet Connection**: Required for downloading dependencies and accessing coverage providers
 
 ## Core Prerequisites
 
@@ -29,29 +29,43 @@ If you don't have Python installed:
 - **Windows**: Download from [python.org](https://www.python.org/) or use `winget install Python.Python.3.13`
 :::
 
-### Package Manager: uv (Required)
+### Package Manager
 
-This template is specifically designed for **[uv]** - a fast, modern Python package manager written in Rust.
+Choose one of the following:
 
-**Why uv?**
-- ⚡ **10-100x faster** than pip/poetry for dependency resolution
-- 🔒 **Deterministic builds** with lockfile support
-- 🛠️ **All-in-one tool** for project management, virtual environments, and Python installation
-- 📦 **Drop-in replacement** for pip with better dependency resolution
-
-[uv]: https://docs.astral.sh/uv/
+- **pip** (included with Python): Standard Python package manager
+- **uv** (recommended): Fast, modern Python package manager
+  - Install: `pip install uv` or see [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
+  - Benefits: 10-100x faster dependency resolution, deterministic builds
 
 ### Version Control
 
-- **Git**: Version 2.20 or higher
-- **GitHub Account**: For template creation and repository management (recommended)
+- **Git**: Version 2.20 or higher (for development/contribution)
 
-## Development Tools (Included in Template)
+## Coverage Provider Requirements
 
-These tools are automatically configured when you use this template:
+test-coverage-mcp requires at least one coverage provider to be configured:
 
-- **Testing**: pytest, pytest-cov, pytest-asyncio, pytest-rerunfailures
-- **Code Quality**: pylint, mypy, black formatting
+### Codecov Provider
+
+- **API Token**: Required for authentication
+- **Repository**: Must be registered with Codecov
+- **Permissions**: API token must have read access to coverage data
+
+### Coveralls Provider
+
+- **API Token**: Required for authentication
+- **Repository**: Must be registered with Coveralls
+- **Permissions**: API token must have read access to coverage data
+
+See [Configuration Guide](../guides/configuration.md) for provider setup instructions.
+
+## Development Tools (Included)
+
+These tools are automatically configured when you install test-coverage-mcp:
+
+- **Testing**: pytest, pytest-cov, pytest-asyncio
+- **Code Quality**: ruff (linting), mypy (type checking), black (formatting)
 - **Pre-commit Hooks**: Automated code quality checks
 - **CI/CD**: GitHub Actions workflows
 
@@ -60,26 +74,27 @@ These tools are automatically configured when you use this template:
 ### For Documentation Development
 
 - **Node.js**: Version 16+ (for Docusaurus documentation)
-- **npm/yarn**: For managing documentation dependencies
+- **npm/pnpm**: For managing documentation dependencies
 
-### For Containerized Deployment
+### For Docker Deployment
 
 - **Docker**: Version 20.10.0 or later
 - **Docker Compose**: Version 2.0+ (for multi-service applications)
 
-### For Advanced Development
+### For Development/Contributing
 
-- **IDE Extensions**: Python, pylint, mypy support (VS Code, PyCharm recommended)
-- **Terminal**: Modern terminal with color support for better uv output
+- **IDE Extensions**: Python, Ruff, MyPy support (VS Code, PyCharm recommended)
+- **Terminal**: Modern terminal with color support
 
 ## Compatibility Matrix
 
 | Component | Minimum Version | Recommended | Notes |
 |-----------|----------------|-------------|-------|
-| Python | 3.12 | 3.13 | Template supports 3.12-3.14 |
-| uv | 0.1.0 | Latest | Critical for dependency management |
-| Git | 2.20 | 2.40+ | Required for version control |
-| Docker | 20.10 | Latest | Optional, for containerization |
+| Python | 3.12 | 3.13 | Supports 3.12-3.14 |
+| pip | 21.0 | Latest | Standard package manager |
+| uv | 0.1.0 | Latest | Recommended for speed |
+| Git | 2.20 | 2.40+ | For development |
+| Docker | 20.10 | Latest | Optional, for deployment |
 
 ## Verification Commands
 
@@ -89,11 +104,14 @@ After installing prerequisites, verify your setup:
 # Check Python version
 python --version
 
-# Check uv installation
-uv --version
+# Check pip installation
+pip --version
 
-# Check Git
+# Check Git (if contributing)
 git --version
+
+# Verify test-coverage-mcp installation
+python -c "import test_coverage_mcp; print(test_coverage_mcp.__version__)"
 ```
 
-All commands should return version numbers without errors to proceed with template setup.
+All commands should return version numbers without errors to proceed with test-coverage-mcp setup.
