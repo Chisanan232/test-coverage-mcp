@@ -401,4 +401,4 @@ if comparison['comparison']['regression_detected']:
 
 - **[Provider Discovery Tools](./provider-discovery.md)** - Discover providers
 - **[Configuration Guide](../guides/configuration.md)** - Set up coverage analysis
-- **[API Reference](./reference.md)** - Detailed specifications
+- **[Tools Categorization](./tools-categorization.md)** - Tool selection guide
