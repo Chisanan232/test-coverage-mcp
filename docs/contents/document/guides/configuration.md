@@ -491,4 +491,4 @@ Before deploying, verify:
 
 - [Provider Specification](../architecture/provider-specification.md)
 - [Plugin System Architecture](../architecture/plugin-system.md)
-- [MCP Tools Reference](../mcp-tools/)
+- [MCP Tools Overview](../mcp-tools/overview.md)
