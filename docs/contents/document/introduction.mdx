@@ -4,144 +4,128 @@ title: Introduction
 sidebar_position: 1
 ---
 
-# Python UV Project Template
+# test-coverage-mcp
 
-Welcome to the **Python UV Project Template** - a modern, production-ready template for Python projects that leverages the power of [uv](https://docs.astral.sh/uv/) package management and industry best practices.
+Welcome to **test-coverage-mcp** - an intelligent Model Context Protocol (MCP) server for test coverage analysis with provider-extensible architecture and comprehensive coverage intelligence.
 
-## What is This Template?
+## What is test-coverage-mcp?
 
-This template provides a comprehensive foundation for Python projects, designed to eliminate the repetitive setup work that developers face when starting new projects. Instead of spending hours configuring tools, setting up CI/CD pipelines, and establishing project structure, you can focus immediately on building your application.
+test-coverage-mcp is a production-ready MCP server that provides intelligent test coverage analysis and recommendations. It features a provider-extensible architecture that supports multiple coverage platforms (Codecov, Coveralls, etc.) while maintaining a stable, capability-driven tool interface.
 
 ## The Problem It Solves
 
-Starting a new Python project often involves:
+Development teams need to:
 
-- 🔧 **Setting up package management** (pip, poetry, or uv)
-- 📁 **Creating proper project structure** with src layout
-- 🧪 **Configuring testing frameworks** (pytest, coverage)
-- ✅ **Setting up code quality tools** (black, pylint, mypy)
-- 🔄 **Establishing CI/CD workflows** for automation
-- 📚 **Creating documentation structure**
-- 🐳 **Adding containerization support**
-- ⚡ **Configuring pre-commit hooks**
+- 📊 **Monitor code coverage** across repositories and branches
+- 🔍 **Analyze coverage trends** and identify gaps
+- 🚨 **Detect coverage regressions** before merging code
+- 💡 **Get intelligent recommendations** for improving coverage
+- 🔌 **Integrate with multiple coverage providers** seamlessly
+- 📈 **Track coverage health** over time
+- 🤖 **Automate coverage analysis** in CI/CD pipelines
 
-This template eliminates all of these setup tasks, providing you with a battle-tested foundation that follows Python community best practices.
+test-coverage-mcp solves these challenges with an intelligent, extensible platform for coverage analysis.
 
-## Why Choose This Template?
+## Why Choose test-coverage-mcp?
 
-### ⚡ Lightning-Fast Package Management with uv
+### 🔌 Provider-Extensible Architecture
 
-Built around [uv](https://docs.astral.sh/uv/), the fastest Python package manager:
+Support multiple coverage platforms through a plugin system:
 
-- **10-100x faster** than pip and poetry for dependency resolution
-- **Deterministic builds** with reliable lock files
-- **Cross-platform compatibility** (Windows, macOS, Linux)
-- **Drop-in replacement** for existing pip workflows
+- **Built-in Providers**: Codecov, Coveralls, and more
+- **Custom Providers**: Easy to implement your own
+- **Capability-Driven Design**: Tools adapt to provider capabilities
+- **Stable Interface**: Consistent tool API across all providers
 
-### 🛠️ Complete Development Toolkit
+### 🛠️ Comprehensive MCP Tools
 
-Pre-configured with essential development tools:
-
-```bash
-# Testing & Coverage
-pytest, pytest-cov, pytest-asyncio, pytest-rerunfailures
-
-# Code Quality
-black (formatting), pylint (linting), mypy (type checking)
-
-# Development Workflow
-pre-commit hooks, GitHub Actions CI/CD
-```
-
-### 📦 Modern Project Structure
-
-Follows Python packaging best practices:
+11 powerful tools for coverage analysis:
 
 ```
-project/
-├── src/                    # Source code (src layout)
-├── test/                   # Test suites
-│   ├── unit_test/         # Unit tests
-│   └── integration_test/  # Integration tests
-├── docs_with_docusarus/   # Documentation (Docusaurus)
-├── docs_with_mkdocs/      # Alternative docs (MkDocs)
-├── .github/workflows/     # CI/CD automation
-├── pyproject.toml         # Project configuration
-└── uv.lock               # Dependency lock file
+Provider Management:
+- List Coverage Providers
+- Describe Coverage Provider
+
+Coverage Analysis:
+- Get Repository Test Health
+- Get Commit Coverage Summary
+- Compare Coverage Between Refs
+- Identify Coverage Gaps
+- Get Coverage Trends
+
+Recommendations:
+- Get Test Recommendations
+- Analyze Coverage Risk
+- Generate Coverage Report
+- Validate Coverage Thresholds
+```
+
+### 📦 Modern Architecture
+
+Built with industry best practices:
+
+```
+test-coverage-mcp/
+├── src/                    # Core source code
+├── test/                   # Comprehensive test suite
+├── docs/                   # Complete documentation
+├── .github/workflows/      # CI/CD automation
+├── pyproject.toml          # Project configuration
+└── uv.lock                 # Dependency lock file
 ```
 
 ### 🚀 Production-Ready Features
 
-- **Automated Testing**: Multi-Python version testing (3.12-3.14)
-- **Code Quality Gates**: Automatic formatting, linting, and type checking
-- **Security Scanning**: Built-in security checks and dependency updates
-- **Release Automation**: Automated versioning and PyPI publishing
-- **Documentation**: Both Docusaurus and MkDocs options
-- **Containerization**: Docker support for deployment
-
-## Who Should Use This Template?
-
-### Perfect For:
-
-- **Python developers** starting new projects
-- **Teams** wanting consistent project structure
-- **Open source maintainers** needing professional project setup
-- **Data scientists** building reproducible analysis projects
-- **DevOps engineers** requiring containerized Python applications
-- **Students** learning modern Python development practices
-
-### Project Types:
-
-- 📦 **Python libraries and packages**
-- 🌐 **Web applications and APIs**
-- 🤖 **CLI tools and utilities**
-- 📊 **Data science and analysis projects**
-- 🧠 **Machine learning projects**
-- 🔧 **Internal tools and scripts**
+- **Multiple Transports**: stdio, HTTP, SSE support
+- **Web API**: FastAPI-based REST interface
+- **Docker Support**: Production-ready containerization
+- **Comprehensive Testing**: 576+ unit tests
+- **Full Documentation**: Complete guides and API reference
+- **CI/CD Integration**: Automated testing and deployment
 
 ## Key Features at a Glance
 
 | Feature | Description | Benefit |
 |---------|-------------|---------|
-| **uv Package Management** | Fast, reliable dependency management | 10-100x faster installs |
-| **Src Layout** | Modern Python project structure | Better import organization |
-| **Multi-Python Support** | Python 3.12, 3.13, 3.14 | Future-proof compatibility |
-| **Comprehensive Testing** | pytest with coverage and async support | Reliable, well-tested code |
+| **Provider-Extensible** | Plugin system for coverage providers | Support any coverage platform |
+| **11 MCP Tools** | Comprehensive coverage analysis suite | Complete coverage intelligence |
+| **Multiple Transports** | stdio, HTTP, SSE support | Flexible integration options |
+| **Web API** | FastAPI-based REST interface | Easy HTTP integration |
+| **Docker Support** | Production-ready containerization | Easy deployment |
+| **Comprehensive Testing** | 576+ unit tests | Reliable, well-tested code |
 | **Code Quality Tools** | black, pylint, mypy pre-configured | Consistent, high-quality code |
-| **CI/CD Workflows** | GitHub Actions for automation | Automated testing and deployment |
-| **Documentation** | Docusaurus and MkDocs options | Professional documentation |
-| **Docker Support** | Ready-to-use containerization | Easy deployment and distribution |
-| **Pre-commit Hooks** | Automated quality checks | Catch issues before commit |
+| **CI/CD Integration** | GitHub Actions workflows | Automated testing and deployment |
+| **Full Documentation** | Complete guides and API reference | Professional documentation |
 
 ## Philosophy
 
-This template embodies several key principles:
+test-coverage-mcp embodies several key principles:
 
-1. **Developer Experience First**: Minimize setup friction, maximize productivity
-2. **Industry Standards**: Follow Python community best practices and PEPs
-3. **Modern Tooling**: Leverage the latest, fastest tools (uv, GitHub Actions)
-4. **Flexibility**: Provide options without being opinionated about your specific use case
-5. **Maintainability**: Structure code for long-term success
+1. **Provider Extensibility**: Support any coverage platform through plugins
+2. **Capability-Driven Design**: Tools adapt to provider capabilities
+3. **Stable Interface**: Consistent tool API across all providers
+4. **Developer Experience**: Easy integration and intuitive tools
+5. **Production-Ready**: Battle-tested, well-documented, fully tested
 6. **Quality by Default**: Built-in quality gates and automation
 
 ## Getting Started
 
-Ready to create your first project? Head over to our [Quick Start Guide](./quick-start/index.mdx) for step-by-step instructions on:
+Ready to use test-coverage-mcp? Head over to our [Quick Start Guide](./quick-start/index.mdx) for step-by-step instructions on:
 
-1. **Creating a new project** from this template
-2. **Installing dependencies** with uv
-3. **Customizing the template** for your needs
-4. **Setting up your development workflow**
+1. **Installing** test-coverage-mcp
+2. **Configuring** coverage providers
+3. **Using MCP tools** for coverage analysis
+4. **Integrating** with your workflow
 
 ## Community and Support
 
-This template is actively maintained and continuously improved based on:
+test-coverage-mcp is actively maintained and continuously improved based on:
 
 - **Community feedback** and contributions
-- **Industry best practices** evolution
-- **Python ecosystem** developments
+- **Coverage platform** developments
+- **MCP ecosystem** evolution
 - **Security updates** and dependency management
 
 ---
 
-*Ready to build something amazing? Let's get started with modern Python development! 🐍✨*
+*Ready to analyze your coverage? Let's get started with intelligent coverage analysis! 📊✨*

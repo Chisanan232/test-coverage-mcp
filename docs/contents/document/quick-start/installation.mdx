@@ -9,94 +9,37 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-# Creating a New Project from Template
+# Installing test-coverage-mcp
 
-This guide provides step-by-step instructions for creating a new Python project using this template.
+This guide provides step-by-step instructions for installing and setting up test-coverage-mcp.
 
-## Method 1: Using GitHub Template (Recommended)
+## Method 1: Install from PyPI (Recommended)
 
-### Step 1: Create Repository from Template
-
-1. Navigate to the [template repository](https://github.com/Chisanan232/Template-Python-UV-Project)
-2. Click the **"Use this template"** button (green button)
-3. Select **"Create a new repository"**
-4. Configure your new repository:
-   - **Repository name**: Enter your project name
-   - **Description**: Brief description of your project
-   - **Visibility**: Choose Public or Private
-   - **Include all branches**: Leave unchecked (recommended)
-
-### Step 2: Clone Your New Repository
+The easiest way to install test-coverage-mcp is from PyPI:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-PROJECT-NAME.git
-cd YOUR-PROJECT-NAME
+# Install core package
+pip install test-coverage-mcp
+
+# Or with uv
+uv pip install test-coverage-mcp
 ```
 
-## Method 2: Manual Setup
+## Method 2: Development Installation
 
-### Step 1: Download or Clone Template
+For development or contributing to test-coverage-mcp:
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/Chisanan232/test-coverage-mcp.git
+cd test-coverage-mcp
+```
+
+### Step 2: Install Development Dependencies
 
 <Tabs>
-<TabItem value="git-clone" label="Git Clone">
-
-```bash
-git clone https://github.com/Chisanan232/Template-Python-UV-Project.git my-new-project
-cd my-new-project
-rm -rf .git  # Remove template's git history
-git init     # Initialize new git repository
-```
-
-</TabItem>
-<TabItem value="download" label="Download ZIP">
-
-1. Go to the [template repository](https://github.com/Chisanan232/Template-Python-UV-Project)
-2. Click **"Code"** → **"Download ZIP"**
-3. Extract the ZIP file to your desired location
-4. Rename the folder to your project name
-
-</TabItem>
-</Tabs>
-
-### Step 2: Install uv Package Manager
-
-<Tabs>
-<TabItem value="macos" label="macOS">
-
-```bash
-# Using Homebrew
-brew install uv
-
-# Or using curl
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-</TabItem>
-<TabItem value="linux" label="Linux">
-
-```bash
-# Using curl
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Or using pip
-pip install uv
-```
-
-</TabItem>
-<TabItem value="windows" label="Windows">
-
-```powershell
-# Using PowerShell
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# Or using pip
-pip install uv
-```
-
-</TabItem>
-</Tabs>
-
-### Step 3: Initialize Project Dependencies
+<TabItem value="uv" label="Using uv (Recommended)">
 
 ```bash
 # Install all dependencies including dev tools
@@ -106,27 +49,70 @@ uv sync
 uv sync --no-dev
 ```
 
-## Next Steps
+</TabItem>
+<TabItem value="pip" label="Using pip">
 
-After completing the installation:
+```bash
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-1. **Customize the project** - See [How to Run](./how-to-run.mdx) for customization steps
-2. **Update project metadata** - Modify `pyproject.toml` with your project details
-3. **Set up development environment** - Configure pre-commit hooks and IDE settings
+# Install in development mode
+pip install -e ".[dev]"
+```
+
+</TabItem>
+</Tabs>
+
+## Installing Coverage Providers
+
+test-coverage-mcp supports multiple coverage providers. Install the providers you need:
+
+```bash
+# Install Codecov provider
+pip install test-coverage-mcp-codecov
+
+# Install Coveralls provider (when available)
+pip install test-coverage-mcp-coveralls
+
+# Or install all providers
+pip install test-coverage-mcp[all-providers]
+```
+
+## Configuration
+
+After installation, configure your coverage providers:
+
+```bash
+# Set environment variables for your provider
+export CODECOV_API_TOKEN="your-token-here"
+export CODECOV_OWNER="your-org"
+export CODECOV_REPO="your-repo"
+```
+
+See the [Configuration Guide](../guides/configuration.md) for detailed setup instructions.
 
 ## Verification
 
 Verify your installation by running:
 
 ```bash
-# Check uv installation
-uv --version
+# Check test-coverage-mcp installation
+python -c "import test_coverage_mcp; print(test_coverage_mcp.__version__)"
 
 # Check Python environment
-uv run python --version
+python --version
 
-# Run tests to ensure everything works
+# Run tests to ensure everything works (development installation only)
 uv run pytest
 ```
 
-If all commands execute successfully, your project template is ready for development! 🎉
+## Next Steps
+
+After completing the installation:
+
+1. **Configure providers** - See [Configuration Guide](../guides/configuration.md)
+2. **Learn about tools** - See [MCP Tools Overview](../mcp-tools/overview.md)
+3. **Set up your workflow** - See [How to Run](./how-to-run.mdx)
+
+If all commands execute successfully, test-coverage-mcp is ready to use! 🎉
