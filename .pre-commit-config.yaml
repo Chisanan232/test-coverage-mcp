@@ -23,7 +23,7 @@ repos:
 
   # Backend Python Hooks (Core + Codecov packages)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: v0.16.6
     hooks:
       - id: ruff
         name: Ruff Linter (Backend Packages)
@@ -34,7 +34,7 @@ repos:
         files: ^(test-coverage-mcp|test-coverage-mcp-codecov)/.*\.pyi?$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.2
+    rev: v2.3.1
     hooks:
       - id: mypy
         name: MyPy Type Checking (Backend Packages)
@@ -92,7 +92,7 @@ repos:
         args: [--autofix]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: v0.11.0.1-1
     hooks:
       - id: shellcheck
         name: ShellCheck (Scripts)
@@ -107,7 +107,7 @@ repos:
 
   # Frontend Documentation Hooks (Docusaurus)
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.3.0
+    rev: v10.10.0
     hooks:
       - id: eslint
         name: ESLint (Documentation Frontend)
@@ -141,7 +141,7 @@ repos:
         pass_filenames: false
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.1
     hooks:
       - id: markdownlint
         name: Markdownlint (Documentation)
@@ -152,7 +152,7 @@ repos:
 
   # Advanced Infrastructure Hooks
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.14.0
+    rev: v2.15.1
     hooks:
       - id: hadolint-docker
         name: Hadolint (Dockerfile)
@@ -162,7 +162,7 @@ repos:
 
   # UV Lock Check (Workspace)
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.8
+    rev: 0.12.10
     hooks:
       - id: uv-lock
         name: UV Lock Check (Workspace)
